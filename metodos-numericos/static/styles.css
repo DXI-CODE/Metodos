@@ -1,26 +1,122 @@
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
-h1 {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
     color: #333;
+    background: #f4f4f4;
 }
 
-form {
-    margin-top: 20px;
+header {
+    background: #4CAF50;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
 }
 
-input {
-    margin-right: 10px;
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background: #45a049;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 textarea {
     width: 100%;
-    max-width: 600px;
-    height: 150px;
-    resize: vertical; /* Permitir redimensionar */
-    overflow-y: scroll; /* Habilitar scroll */
-    padding: 10px;
-    font-family: Arial, sans-serif;
+    height: auto;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: monospace;
+}
+
+button {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+#result {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+#result pre {
+    background: #f0f0f0;
+    padding: 0.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #4CAF50;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 0.5rem 0;
+    }
+
+    main {
+        margin: 1rem;
+        padding: 1rem;
+    }
 }

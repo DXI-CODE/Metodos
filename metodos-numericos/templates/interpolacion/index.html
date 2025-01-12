@@ -3,22 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Métodos Numéricos</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <title>Calculadora de Métodos Numéricos</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <h1>Métodos Numéricos con Flask</h1>
-    <br>
-    <form id="formulario">
-        <label for="puntos">Ingresa pares de puntos (x, y), separados por comas, una pareja por línea:</label>
-        <br><br>
-        <textarea id="puntos" rows="10" placeholder="Ejemplo:\n1,2\n3,5\n9,5"></textarea>
-        <br><br>
-        <button type="submit">Calcular Interpolación</button>
-    </form>
-    <p id="resultado"></p>
-    
-    <p id="resultado"></p>
-    <script src="/static/script.js"></script>
+    <header>
+        <h1>Calculadora de Métodos Numéricos</h1>
+        <nav>
+            <ul>
+                <li><a href="#interpolacion">Interpolación</a></li>
+                <li><a href="#ec_nolineales">Ecuaciones No Lineales</a></li>
+                <li><a href="#sistemas_ec">Sistemas de Ecuaciones</a></li>
+                <li><a href="#diferenciacion_integracion">Diferenciación e Integración</a></li>
+                <li><a href="#aproximacion">Aproximación</a></li>
+                <li><a href="#ecuaciones_diferenciales">Ecuaciones Diferenciales</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="interpolacion">
+            <h2>Interpolación</h2>
+            <p>Ingrese un conjunto de puntos (x, y) separados por comas:</p>
+            <textarea id="input-points" placeholder="Ejemplo:\n1,2\n3,5\n9,5" rows="8"></textarea>
+            <button id="calculate-btn">Calcular</button>
+
+            <h3>Resultado:</h3>
+            <div id="result">
+                <p>La función interpolada aparecerá aquí.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Calculadora de Métodos Numéricos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', async () => {
+            const input = document.getElementById('input-points').value;
+
+            // Parse the input into an array of points
+            const points = input.split('\n').map(line => {
+                const [x, y] = line.split(',').map(Number);
+                return [x, y];
+            });
+
+            // Send data to the server
+            try {
+                const response = await fetch('/calcular', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ puntos: points })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = `<p><strong>Función interpolada:</strong></p><pre>${result.funcion}</pre>`;
+                } else {
+                    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color:red;">Error en la conexión con el servidor.</p>`;
+            }
+        });
+    </script>
 </body>
 </html>
