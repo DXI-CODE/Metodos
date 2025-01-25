@@ -70,7 +70,6 @@ def calcular_gauss_inversa_get():
 def calcular_gauss_inversa_post():
     datos = request.json 
     matriz = datos.get('matrix')  
-
     if not matriz:
         return jsonify({'error': 'Se requiere una matriz válida.'}), 400
 
@@ -81,10 +80,7 @@ def calcular_gauss_inversa_post():
             return jsonify({'error': 'La matriz debe ser cuadrada.'}), 400
         
         inversa = np.linalg.inv(matriz_np)
-
         inversa_html = convertir_matriz_a_html(inversa)
-
-
         return jsonify({'matriz_inversa_html': inversa_html})
     except np.linalg.LinAlgError:
         return jsonify({'error': 'La matriz no es invertible.'}), 400
