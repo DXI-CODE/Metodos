@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Método de Punto Fijo</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- Librería Gráfica -->
 </head>
+<style>
+    #grafica {
+        margin-top: 30px;
+        width: 100%;
+        height: 400px;
+    }
+</style>
 <body>
     <h1>Método de Punto Fijo</h1>
     <form id="punto-fijo-form">
@@ -24,53 +32,70 @@
     </form>
 
     <div id="resultado" class="result" style="display: none;"></div>
+    <div id="grafica"></div>
 
     <script>
         document.getElementById("punto-fijo-form").addEventListener("submit", async function(event) {
-        event.preventDefault();
+            event.preventDefault();
 
-        const funcion = document.getElementById("funcion").value;
-        const x0 = parseFloat(document.getElementById("valor-inicial").value);
-        const tolerancia = parseFloat(document.getElementById("tolerancia").value);
-        const iteraciones = parseInt(document.getElementById("iteraciones").value);
+            const funcion = document.getElementById("funcion").value;
+            const x0 = parseFloat(document.getElementById("valor-inicial").value);
+            const tolerancia = parseFloat(document.getElementById("tolerancia").value);
+            const iteraciones = parseInt(document.getElementById("iteraciones").value);
 
-        if (isNaN(x0) || isNaN(tolerancia) || isNaN(iteraciones) || !funcion.trim()) {
-            alert("Por favor, complete todos los campos correctamente.");
-            return;
-        }
-
-        try {
-            // Asegurarse de que las funciones trigonométricas sean reconocidas
-            const funcionConTrig = funcion.replace(/sin/g, "math.sin").replace(/cos/g, "math.cos").replace(/tan/g, "math.tan");
-
-            const response = await fetch('/metodo-punto-fijo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ funcion: funcionConTrig, x0, tolerancia, iteraciones }),
-            });
-
-            const data = await response.json();
-
-            const resultadoDiv = document.getElementById("resultado");
-            if (data.error) {
-                resultadoDiv.style.display = "block";
-                resultadoDiv.innerHTML = `<strong>Error:</strong> ${data.error}`;
-            } else {
-                resultadoDiv.style.display = "block";
-                resultadoDiv.innerHTML = `
-                    <br><strong>Resultado del Método de Punto Fijo:</strong><br>
-                    Raíz aproximada: ${data.raiz}<br>
-                    Iteraciones realizadas: ${data.iteraciones}<br>
-                    Error: ${data.error_aproximado}
-                `;
+            if (isNaN(x0) || isNaN(tolerancia) || isNaN(iteraciones) || !funcion.trim()) {
+                alert("Por favor, complete todos los campos correctamente.");
+                return;
             }
-        } catch (error) {
-            alert("Hubo un error al realizar el cálculo. Intente nuevamente.");
-            console.error("Error al calcular:", error);
-        }
-    });
+
+            try {
+                const funcionConTrig = funcion.replace(/sin/g, "math.sin").replace(/cos/g, "math.cos").replace(/tan/g, "math.tan");
+
+                const response = await fetch('/metodo-punto-fijo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ funcion: funcionConTrig, x0, tolerancia, iteraciones }),
+                });
+
+                const data = await response.json();
+
+                const resultadoDiv = document.getElementById("resultado");
+                if (data.error) {
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `<strong>Error:</strong> ${data.error}`;
+                } else {
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `
+                        <br><strong>Resultado del Método de Punto Fijo:</strong><br>
+                        Raíz aproximada: ${data.raiz}<br>
+                        Iteraciones realizadas: ${data.iteraciones}<br>
+                        Error: ${data.error_aproximado}
+                    `;
+
+                    // Graficar las iteraciones
+                    const trace1 = {
+                        x: Array.from({ length: data.iteraciones }, (_, i) => i + 1),
+                        y: data.iteraciones_data,
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        name: 'Raíz Aproximada',
+                    };
+
+                    const layout = {
+                        title: `Convergencia del Método de Punto Fijo`,
+                        xaxis: { title: 'Iteración' },
+                        yaxis: { title: 'Valor de la Raíz' },
+                    };
+
+                    Plotly.newPlot('grafica', [trace1], layout);
+                }
+            } catch (error) {
+                alert("Hubo un error al realizar el cálculo. Intente nuevamente.");
+                console.error("Error al calcular:", error);
+            }
+        });
     </script>
 </body>
 </html>
