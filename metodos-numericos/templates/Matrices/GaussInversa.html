@@ -117,7 +117,7 @@
             }
 
             try {
-                const response = await fetch('/calcular_inversa', {
+                const response = await fetch('/matriz_inversa', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -128,8 +128,8 @@
                 const data = await response.json();
                 const resultadoDiv = document.getElementById("ResultadoInversa");
 
-                if (data.matriz_inversa_html) {
-                    resultadoDiv.innerHTML = `<h2>Inversa:</h2>${data.matriz_inversa_html}`;
+                if (data.resultado_matriz) { //matriz_inversa_html
+                    resultadoDiv.innerHTML = `<h2>Inversa:</h2>${data.resultado_matriz}`;
                 } else if (data.error) {
                     resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
                 } else {

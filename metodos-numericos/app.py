@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
-from calculos.gaussinversa import convertir_matriz_a_html
+from calculos.gaussinversa import validar_matriz, calcular_inversa
 from calculos.puntofijo import metodo_punto_fijo
 from calculos.interpolacionlagrange import lagrange
 
@@ -12,12 +12,17 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
 ##______________________________________________
-
-
+##PAGINA DE INICIO
 @app.route('/')
 def home():
-    return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')   ##SI REQUIEREN PROBAR SUS METODOS CAMBIEN EL NOMBRE DE LA RUTA
-
+    rutas_get = [
+        {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
+        {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
+        {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
+        {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
+        {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+    ]
+    return render_template('principal/inicio.html', rutas = rutas_get)
 
 ##______________________________________________
 
@@ -41,8 +46,8 @@ def calcular_taylor_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
-
 ##______________________________________________
+
 
 #METODO DE SERIE DE MC LAURIN
 @app.route('/serie-mclaurin', methods=['GET'])
@@ -74,30 +79,23 @@ def calcular_mclaurin_post():
 
 ##METODO DE MATRIZ INVERSA
 
-@app.route('/matriz-inversa', methods=['GET'])
+@app.route('/matriz_inversa', methods=['GET'])
 def calcular_gauss_inversa_get():
     return render_template('Matrices/GaussInversa.html')
-@app.route('/matriz-inversa', methods=['POST'])
+@app.route('/matriz_inversa', methods=['POST'])
 def calcular_gauss_inversa_post():
-    datos = request.json 
-    matriz = datos.get('matrix')  
-    if not matriz:
-        return jsonify({'error': 'Se requiere una matriz válida.'}), 400
+    datos = request.json
+    matriz = datos.get('matrix') 
 
-    try:
-        ##matriz_np = np.array(matriz, dtype=float)
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
 
-        ##if matriz_np.shape[0] != matriz_np.shape[1]:
-        ##    return jsonify({'error': 'La matriz debe ser cuadrada.'}), 400
-        
-        inversa = np.linalg.inv(matriz_np)
-        inversa_html = convertir_matriz_a_html(inversa)
-        return jsonify({'matriz_inversa_html': inversa_html})
-    except np.linalg.LinAlgError:
-        return jsonify({'error': 'La matriz no es invertible.'}), 400
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la matriz inversa: {str(e)}'}), 500
-    
+    resultado, error = calcular_inversa(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
 ##______________________________________________
 
 
@@ -115,49 +113,31 @@ def calcular_punto_fijo_post():
         x0 = float(data.get('x0'))
         tolerancia = float(data.get('tolerancia'))
         iteraciones_max = int(data.get('iteraciones'))
-
         resultado = metodo_punto_fijo(funcion_str, x0, tolerancia, iteraciones_max)
+        return jsonify(resultado)
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+
+##______________________________________________
+
+##______________________________________________
+##LINEALIZACION A RAZON DE CRECIMIENTO
+@app.route('/linealizacion-a-razon-crecimiento', methods=['GET'])
+def calcular_linealizacion_razon_crecimiento_get():
+    return render_template('Linealizacion/RazonCrecimiento.html')
+@app.route('/linealizacion-a-razon-crecimiento', methods=['POST'])
+def calcular_linealizacion_razon_crecimiento_post():
+    try:
+        data = request.get_json()
+        datos = data.get('data')
+
+        resultado = metodo_linealizacion_crecimiento(datos)
 
         return jsonify(resultado)
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
-##______________________________________________
-   
-#METODO DE INTERPOLACION DE LAGRANGE
-
-@app.route('/calcular_lagrange', methods=['GET'])
-def calcular_lagrange_get():
-    return render_template('interpolacion/lagrange.html')
-@app.route('/calcular_lagrange', methods=['POST'])
-def calcular_lagrange_post():
-    datos = request.json
-    puntos = datos.get('puntos')
-    grado = datos.get('grado')
-    valorx = datos.get('valorx')
-
-    # Log received data for debugging
-    ##print(f"Received data: puntos={puntos}, grado={grado}, valorx={valorx}")
-
-    # Check if all required fields are present
-    if not puntos or grado is None or valorx is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-
-    try:
-        # Assuming you have defined 'lagrange' function somewhere
-        serie = lagrange(puntos, grado, valorx)
-        return jsonify({'funcion': serie})
-    except ValueError as e:
-        # Handle specific error for invalid Lagrange interpolation calculation
-        ##print(f"ValueError: {e}")
-        return jsonify({'error': str(e)}), 400
-    except Exception as e:
-        # Catch any other exceptions
-        ##print(f"Exception: {e}")
-        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
-
-##______________________________________________
     
 if __name__ == '__main__':
     app.run(debug=True)
