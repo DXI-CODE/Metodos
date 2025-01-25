@@ -17,7 +17,7 @@ def home():
         {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
         {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
         {"nombre": "Matriz Inversa", "url": "/matriz-inversa"},
-        # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
+        {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
 
@@ -126,6 +126,25 @@ def calcular_punto_fijo_post():
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
 ##______________________________________________
+
+##______________________________________________
+##LINEALIZACION A RAZON DE CRECIMIENTO
+@app.route('/linealizacion-a-razon-crecimiento', methods=['GET'])
+def calcular_linealizacion_razon_crecimiento_get():
+    return render_template('Linealizacion/RazonCrecimiento.html')
+@app.route('/linealizacion-a-razon-crecimiento', methods=['POST'])
+def calcular_linealizacion_razon_crecimiento_post():
+    try:
+        data = request.get_json()
+        datos = data.get('data')
+
+        resultado = metodo_linealizacion_crecimiento(datos)
+
+        return jsonify(resultado)
+
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+
 
     
 if __name__ == '__main__':
