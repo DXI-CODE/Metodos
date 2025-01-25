@@ -16,7 +16,7 @@ def home():
     rutas_get = [
         {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
         {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
-        {"nombre": "Matriz Inversa", "url": "/matriz-inversa"},
+        {"nombre": "Matriz Inversa", "url": "/calcular_inversa"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
