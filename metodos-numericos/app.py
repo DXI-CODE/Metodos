@@ -19,7 +19,7 @@ def home():
         {"nombre": "Matriz Inversa", "url": "/matriz-inversa"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
-    return render_template('principal/inicio.html')
+    return render_template('principal/inicio.html', rutas = rutas_get)
 
 ##______________________________________________
 
