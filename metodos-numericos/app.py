@@ -94,7 +94,7 @@ def calcular_gauss_inversa_post():
         
         inversa = np.linalg.inv(matriz_np)
         inversa_html = convertir_matriz_a_html(inversa)
-        return jsonify({'matriz_inversa_html': inversa_html})
+        return jsonify({'resultado_matriz': inversa_html})
     except np.linalg.LinAlgError:
         return jsonify({'error': 'La matriz no es invertible.'}), 400
     except Exception as e:
