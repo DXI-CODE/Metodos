@@ -68,7 +68,6 @@ def calcular_taylor():
         serie_taylor = sp.series(funcion, x, expansion, numero_n)
         serie_formateada = str(serie_taylor).replace('**', '^').replace('O(', 'O(')
 
-
         return jsonify({'funcion_taylor': serie_formateada})
 
     except Exception as e:
