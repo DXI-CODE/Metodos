@@ -4,8 +4,10 @@ from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import convertir_matriz_a_html
 from calculos.puntofijo import metodo_punto_fijo
+from calculos.interpolacionlagrange import lagrange
 
 app = Flask(__name__)
+app.debug = True  # Enable debug mode
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
@@ -122,7 +124,40 @@ def calcular_punto_fijo_post():
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
 ##______________________________________________
+   
+#METODO DE INTERPOLACION DE LAGRANGE
 
+@app.route('/calcular_lagrange', methods=['GET'])
+def calcular_lagrange_get():
+    return render_template('interpolacion/lagrange.html')
+@app.route('/calcular_lagrange', methods=['POST'])
+def calcular_lagrange_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+    grado = datos.get('grado')
+    valorx = datos.get('valorx')
+
+    # Log received data for debugging
+    ##print(f"Received data: puntos={puntos}, grado={grado}, valorx={valorx}")
+
+    # Check if all required fields are present
+    if not puntos or grado is None or valorx is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        # Assuming you have defined 'lagrange' function somewhere
+        serie = lagrange(puntos, grado, valorx)
+        return jsonify({'funcion': serie})
+    except ValueError as e:
+        # Handle specific error for invalid Lagrange interpolation calculation
+        ##print(f"ValueError: {e}")
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        # Catch any other exceptions
+        ##print(f"Exception: {e}")
+        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
+
+##______________________________________________
     
 if __name__ == '__main__':
     app.run(debug=True)
