@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método Simpson 3/8</title>
+</head>
+<body>
+    <h1>Método de Simpson 3/8</h1>
+    <form id="simpson-form" action="#" method="POST">
+        <label for="funcion">Función:</label>
+        <input type="text" id="funcion" name="funcion" required><br><br>
+
+        <label for="limite_inferior">Límite Inferior:</label>
+        <input type="text" id="limite_inferior" name="limite_inferior" required><br><br>
+
+        <label for="limite_superior">Límite Superior:</label>
+        <input type="text" id="limite_superior" name="limite_superior" required><br><br>
+
+        <label for="subintervalos">Número de Subintervalos (Múltiplo de 3):</label>
+        <input type="number" id="subintervalos" name="subintervalos" required><br><br>
+
+        <button type="submit">Calcular</button>
+    </form>
+    <h2>Resultado Simpson 3/8</h2>
+    <div id="ResultadoSimpson38"></div>
+
+    <script>
+        document.getElementById('simpson-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const subintervalos = document.getElementById('subintervalos').value;
+            if (subintervalos % 3 !== 0) {
+                alert('El número de subintervalos debe ser múltiplo de 3.');
+                return;
+            }
+
+            calcularSimpson38(); 
+        });
+
+        async function calcularSimpson38() {
+            const funcion = document.getElementById("funcion").value;
+            const limite_inferior = parseFloat(document.getElementById("limite_inferior").value);
+            const limite_superior = parseFloat(document.getElementById("limite_superior").value);
+            const subintervalos = parseInt(document.getElementById("subintervalos").value);
+
+            const funcionConTrig = funcion.replace(/sin/g, "math.sin").replace(/cos/g, "math.cos").replace(/tan/g, "math.tan").replace(/log/g, "math.log") .replace(/exp/g, "math.exp");;
+            const response = await fetch('/metodo-simpson-3_8', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    funcion: funcionConTrig,
+                    limite_inferior: limite_inferior,
+                    limite_superior: limite_superior,
+                    subintervalos: subintervalos
+                })
+            });
+
+            const data = await response.json();
+            if (data.resultado_num) {
+                document.getElementById("ResultadoSimpson38").innerHTML = `${data.resultado_num}`;
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, "ResultadoSimpson38"]);
+            } else {
+                document.getElementById("ResultadoSimpson38").innerText = data.error;
+            }
+        }
+    </script>
+</body>
+</html>
