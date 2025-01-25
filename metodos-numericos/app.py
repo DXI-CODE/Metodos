@@ -5,6 +5,8 @@ from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
 from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
+from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
+from calculos.interpolacionlagrange import lagrange
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -20,6 +22,7 @@ def home():
         {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
         {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
+         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
