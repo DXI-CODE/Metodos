@@ -16,7 +16,8 @@ def home():
     rutas_get = [
         {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
         {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
-        {"nombre": "Matriz Inversa", "url": "/calcular_inversa"},
+        {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
+        {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -76,10 +77,10 @@ def calcular_mclaurin_post():
 
 ##METODO DE MATRIZ INVERSA
 
-@app.route('/calcular_inversa', methods=['GET'])
+@app.route('/matriz_inversa', methods=['GET'])
 def calcular_gauss_inversa_get():
     return render_template('Matrices/GaussInversa.html')
-@app.route('/calcular_inversa', methods=['POST'])
+@app.route('/matriz_inversa', methods=['POST'])
 def calcular_gauss_inversa_post():
     datos = request.json
     matriz = datos.get('matrix') 
@@ -110,11 +111,8 @@ def calcular_punto_fijo_post():
         x0 = float(data.get('x0'))
         tolerancia = float(data.get('tolerancia'))
         iteraciones_max = int(data.get('iteraciones'))
-
         resultado = metodo_punto_fijo(funcion_str, x0, tolerancia, iteraciones_max)
-
         return jsonify(resultado)
-
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
