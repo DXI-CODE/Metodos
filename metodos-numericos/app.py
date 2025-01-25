@@ -11,11 +11,9 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 ##______________________________________________
 
-
 @app.route('/')
 def home():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')   ##SI REQUIEREN PROBAR SUS METODOS CAMBIEN EL NOMBRE DE LA RUTA
-
 
 ##______________________________________________
 
@@ -39,8 +37,8 @@ def calcular_taylor_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
-
 ##______________________________________________
+
 
 #METODO DE SERIE DE MC LAURIN
 @app.route('/serie-mclaurin', methods=['GET'])
