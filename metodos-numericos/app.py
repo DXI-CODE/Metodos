@@ -15,7 +15,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 def home():
     rutas_get = [
         {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
-        {"nombre": "Serie de McLaren", "url": "/serie-mclaren"},
+        {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
         {"nombre": "Matriz Inversa", "url": "/matriz-inversa"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
