@@ -33,7 +33,7 @@
             const funcion = document.getElementById("funcion").value;
             const numero_n = parseInt(document.getElementById("numero_n").value);
     
-            const response = await fetch('/calcular_mclaurin', {
+            const response = await fetch('/serie-mclaurin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
-from calculos.gaussinversa import convertir_matriz_a_html
+from calculos.gaussinversa import validar_matriz, calcular_inversa
 from calculos.puntofijo import metodo_punto_fijo
 
 app = Flask(__name__)
@@ -10,13 +10,14 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
 ##______________________________________________
-
+##PAGINA DE INICIO
 @app.route('/')
 def home():
     rutas_get = [
         {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
         {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
-        {"nombre": "Matriz Inversa", "url": "/matriz-inversa"},
+        {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
+        {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -76,30 +77,23 @@ def calcular_mclaurin_post():
 
 ##METODO DE MATRIZ INVERSA
 
-@app.route('/matriz-inversa', methods=['GET'])
+@app.route('/matriz_inversa', methods=['GET'])
 def calcular_gauss_inversa_get():
     return render_template('Matrices/GaussInversa.html')
-@app.route('/matriz-inversa', methods=['POST'])
+@app.route('/matriz_inversa', methods=['POST'])
 def calcular_gauss_inversa_post():
-    datos = request.json 
-    matriz = datos.get('matrix')  
-    if not matriz:
-        return jsonify({'error': 'Se requiere una matriz válida.'}), 400
+    datos = request.json
+    matriz = datos.get('matrix') 
 
-    try:
-        ##matriz_np = np.array(matriz, dtype=float)
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
 
-        ##if matriz_np.shape[0] != matriz_np.shape[1]:
-        ##    return jsonify({'error': 'La matriz debe ser cuadrada.'}), 400
-        
-        inversa = np.linalg.inv(matriz_np)
-        inversa_html = convertir_matriz_a_html(inversa)
-        return jsonify({'resultado_matriz': inversa_html})
-    except np.linalg.LinAlgError:
-        return jsonify({'error': 'La matriz no es invertible.'}), 400
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la matriz inversa: {str(e)}'}), 500
-    
+    resultado, error = calcular_inversa(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
 ##______________________________________________
 
 
@@ -117,11 +111,8 @@ def calcular_punto_fijo_post():
         x0 = float(data.get('x0'))
         tolerancia = float(data.get('tolerancia'))
         iteraciones_max = int(data.get('iteraciones'))
-
         resultado = metodo_punto_fijo(funcion_str, x0, tolerancia, iteraciones_max)
-
         return jsonify(resultado)
-
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 

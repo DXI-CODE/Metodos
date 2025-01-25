@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Método de Punto Fijo</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- Librería Gráfica -->
 </head>
+<style>
+    #grafica {
+        margin-top: 30px;
+        width: 100%;
+        height: 400px;
+    }
+</style>
 <body>
     <h1>Método de Punto Fijo</h1>
     <form id="punto-fijo-form">
@@ -24,6 +32,7 @@
     </form>
 
     <div id="resultado" class="result" style="display: none;"></div>
+    <div id="grafica"></div>
 
     <script>
         document.getElementById("punto-fijo-form").addEventListener("submit", async function(event) {
@@ -40,12 +49,14 @@
             }
 
             try {
-                const response = await fetch('/calcular_punto_fijo', {
+                const funcionConTrig = funcion.replace(/sin/g, "math.sin").replace(/cos/g, "math.cos").replace(/tan/g, "math.tan");
+
+                const response = await fetch('/metodo-punto-fijo', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ funcion, x0, tolerancia, iteraciones }),
+                    body: JSON.stringify({ funcion: funcionConTrig, x0, tolerancia, iteraciones }),
                 });
 
                 const data = await response.json();
@@ -62,6 +73,23 @@
                         Iteraciones realizadas: ${data.iteraciones}<br>
                         Error: ${data.error_aproximado}
                     `;
+
+                    // Graficar las iteraciones
+                    const trace1 = {
+                        x: Array.from({ length: data.iteraciones }, (_, i) => i + 1),
+                        y: data.iteraciones_data,
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        name: 'Raíz Aproximada',
+                    };
+
+                    const layout = {
+                        title: `Convergencia del Método de Punto Fijo`,
+                        xaxis: { title: 'Iteración' },
+                        yaxis: { title: 'Valor de la Raíz' },
+                    };
+
+                    Plotly.newPlot('grafica', [trace1], layout);
                 }
             } catch (error) {
                 alert("Hubo un error al realizar el cálculo. Intente nuevamente.");
