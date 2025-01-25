@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora YB</title>
+    <title>Página de Inicio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .btn {
+            background-color: #4CAF50; /* Color verde */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 5px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido a Calculadora YB</h1>
+    <h1>Bienvenido a las Rutas de tu Aplicación</h1>
+    
+    <div>
+        {% for ruta in rutas %}
+            <a href="{{ ruta.url }}" class="btn">{{ ruta.nombre }}</a>
+        {% endfor %}
+    </div>
 </body>
 </html>

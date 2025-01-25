@@ -13,7 +13,13 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/')
 def home():
-    return render_template('principal/inicio.html')   ##SI REQUIEREN PROBAR SUS METODOS CAMBIEN EL NOMBRE DE LA RUTA
+    rutas_get = [
+        {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
+        {"nombre": "Serie de McLaren", "url": "/serie-mclaren"},
+        {"nombre": "Matriz Inversa", "url": "/matriz-inversa"},
+        # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
+    ]
+    return render_template('principal/inicio.html')
 
 ##______________________________________________
 
