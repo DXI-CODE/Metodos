@@ -8,10 +8,16 @@ from calculos.puntofijo import metodo_punto_fijo
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
+
+##______________________________________________
+
+
 @app.route('/')
 def home():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')   ##SI REQUIEREN PROBAR SUS METODOS CAMBIEN EL NOMBRE DE LA RUTA
 
+
+##______________________________________________
 
 ##METODO DE SERIE DE TAYLOR
 @app.route('/serie-taylor', methods=['GET'])
@@ -33,7 +39,10 @@ def calcular_taylor_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
-#METODO DE SERIE DE mclaurin
+
+##______________________________________________
+
+#METODO DE SERIE DE MC LAURIN
 @app.route('/serie-mclaurin', methods=['GET'])
 def calcular_mclaurin_get():
     return render_template('series/seriemclaurin.html')
@@ -55,6 +64,13 @@ def calcular_mclaurin_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de mclaurin: {str(e)}'}), 500
 
+##______________________________________________
+
+
+
+##______________________________________________
+
+##METODO DE MATRIZ INVERSA
 
 @app.route('/matriz-inversa', methods=['GET'])
 def calcular_gauss_inversa_get():
@@ -80,7 +96,12 @@ def calcular_gauss_inversa_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular la matriz inversa: {str(e)}'}), 500
     
-    
+##______________________________________________
+
+
+##______________________________________________
+##METODO DE PUNTO FIJO
+
 @app.route('/metodo-punto-fijo', methods=['GET'])
 def calcular_punto_fijo_get():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')
@@ -99,7 +120,9 @@ def calcular_punto_fijo_post():
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-    
+
+##______________________________________________
+
     
 if __name__ == '__main__':
     app.run(debug=True)
