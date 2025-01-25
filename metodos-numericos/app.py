@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 import numpy as np
+import sympy as sp 
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('interpolacion/index.html')
+    print("Entre a home")
+    return render_template('interpolacion/SerieTaylor.html')
 
 @app.route('/calcular', methods=['POST'])
 def calcular():
@@ -47,6 +49,28 @@ def calcular():
         return jsonify({'error': 'El sistema no tiene solución única: los puntos pueden ser colineales o no bien definidos.'}), 400
     except Exception as e:
         return jsonify({'error': f'Error inesperado: {str(e)}'}), 500
+
+@app.route('/calcular_taylor', methods=['POST'])
+def calcular_taylor():
+    datos = request.json
+    funcion_str = datos.get('funcion')
+    expansion = datos.get('expansion')
+    numero_n = datos.get('numero_n')
+
+    if not funcion_str or not expansion or not numero_n:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        x = sp.symbols('x')
+        funcion = sp.sympify(funcion_str) 
+
+        # Calcular la serie de Taylor
+        serie_taylor = sp.series(funcion, x, expansion, numero_n)
+
+        return jsonify({'funcion_taylor': str(serie_taylor)})
+
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
 
 if __name__ == '__main__':
