@@ -4,6 +4,7 @@ from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
 from calculos.puntofijo import metodo_punto_fijo
+from calculos.simpson3_8 import calcular_simpson_3_8
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -18,6 +19,7 @@ def home():
         {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
         {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
         {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
+        {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -118,6 +120,29 @@ def calcular_punto_fijo_post():
 
 ##______________________________________________
 
+    
+##______________________________________________
+##METODO DE SIMPSON 3/8
+
+@app.route('/metodo-simpson-3_8', methods=['GET'])
+def metodo_simpson_38_get():
+    return render_template('Integracion/Simpson3-8.html')
+@app.route('/metodo-simpson-3_8', methods=['POST'])
+def metodo_simpson_38_post():
+    try:
+        data = request.get_json()
+        funcion_str = data.get('funcion')
+        limite_inferior = float(data.get('limite_inferior'))
+        limite_superior = float(data.get('limite_superior'))
+        subintervalos = int(data.get('subintervalos'))
+
+        resultado = calcular_simpson_3_8(funcion_str, limite_inferior, limite_superior, subintervalos)
+        return jsonify({"resultado_num": resultado})
+
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+
+##______________________________________________
     
 if __name__ == '__main__':
     app.run(debug=True)
