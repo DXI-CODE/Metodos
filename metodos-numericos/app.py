@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
-from calculos.gaussinversa import convertir_matriz_a_html
+from calculos.gaussinversa import validar_matriz, calcular_inversa
 from calculos.puntofijo import metodo_punto_fijo
 
 app = Flask(__name__)
@@ -69,30 +69,23 @@ def calcular_mclaurin_post():
 
 ##METODO DE MATRIZ INVERSA
 
-@app.route('/matriz-inversa', methods=['GET'])
+@app.route('/calcular_inversa', methods=['GET'])
 def calcular_gauss_inversa_get():
     return render_template('Matrices/GaussInversa.html')
-@app.route('/matriz-inversa', methods=['POST'])
+@app.route('/calcular_inversa', methods=['POST'])
 def calcular_gauss_inversa_post():
-    datos = request.json 
-    matriz = datos.get('matrix')  
-    if not matriz:
-        return jsonify({'error': 'Se requiere una matriz válida.'}), 400
+    datos = request.json
+    matriz = datos.get('matrix') 
 
-    try:
-        ##matriz_np = np.array(matriz, dtype=float)
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
 
-        ##if matriz_np.shape[0] != matriz_np.shape[1]:
-        ##    return jsonify({'error': 'La matriz debe ser cuadrada.'}), 400
-        
-        inversa = np.linalg.inv(matriz_np)
-        inversa_html = convertir_matriz_a_html(inversa)
-        return jsonify({'resultado_matriz': inversa_html})
-    except np.linalg.LinAlgError:
-        return jsonify({'error': 'La matriz no es invertible.'}), 400
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la matriz inversa: {str(e)}'}), 500
-    
+    resultado, error = calcular_inversa(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
 ##______________________________________________
 
 
