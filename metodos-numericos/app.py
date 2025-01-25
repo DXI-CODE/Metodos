@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
-from calculos.seriemclaren import calcular_serie_mclaren
+from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import convertir_matriz_a_html
 from calculos.puntofijo import metodo_punto_fijo
 
@@ -14,10 +14,10 @@ def home():
 
 
 ##METODO DE SERIE DE TAYLOR
-@app.route('/calcular_taylor', methods=['GET'])
+@app.route('/serie-taylor', methods=['GET'])
 def calcular_taylor_get():
-    return render_template('series/SerieTaylor.html')
-@app.route('/calcular_taylor', methods=['POST'])
+    return render_template('series/serietaylor.html')
+@app.route('/serie-taylor', methods=['POST'])
 def calcular_taylor_post():
     datos = request.json
     funcion_str = datos.get('funcion')
@@ -33,12 +33,12 @@ def calcular_taylor_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
-#METODO DE SERIE DE MCLAREN
-@app.route('/calcular_mclaren', methods=['GET'])
-def calcular_mclaren_get():
-    return render_template('series/SerieMcLaren.html')
-@app.route('/calcular_mclaren', methods=['POST'])
-def calcular_mclaren_post():
+#METODO DE SERIE DE mclaurin
+@app.route('/serie-mclaurin', methods=['GET'])
+def calcular_mclaurin_get():
+    return render_template('series/seriemclaurin.html')
+@app.route('/serie-mclaurin', methods=['POST'])
+def calcular_mclaurin_post():
     datos = request.json
     funcion_str = datos.get('funcion')
     numero_n = datos.get('numero_n')
@@ -47,19 +47,19 @@ def calcular_mclaren_post():
         return jsonify({'error': 'Todos los campos son necesarios.'}), 400
 
     try:
-        resultado = calcular_serie_mclaren(funcion_str, numero_n) 
+        resultado = calcular_serie_mclaurin(funcion_str, numero_n) 
         print(resultado)
 
         return jsonify({'resultado_funcion': resultado})
 
     except Exception as e:
-        return jsonify({'error': f'Error al calcular la serie de McLaren: {str(e)}'}), 500
+        return jsonify({'error': f'Error al calcular la serie de mclaurin: {str(e)}'}), 500
 
 
-@app.route('/calcular_inversa', methods=['GET'])
+@app.route('/matriz-inversa', methods=['GET'])
 def calcular_gauss_inversa_get():
     return render_template('Matrices/GaussInversa.html')
-@app.route('/calcular_inversa', methods=['POST'])
+@app.route('/matriz-inversa', methods=['POST'])
 def calcular_gauss_inversa_post():
     datos = request.json 
     matriz = datos.get('matrix')  
@@ -81,10 +81,10 @@ def calcular_gauss_inversa_post():
         return jsonify({'error': f'Error al calcular la matriz inversa: {str(e)}'}), 500
     
     
-@app.route('/calcular_punto_fijo', methods=['GET'])
+@app.route('/metodo-punto-fijo', methods=['GET'])
 def calcular_punto_fijo_get():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')
-@app.route('/calcular_punto_fijo', methods=['POST'])
+@app.route('/metodo-punto-fijo', methods=['POST'])
 def calcular_punto_fijo_post():
     try:
         data = request.get_json()

@@ -1,6 +1,6 @@
 from sympy import symbols, sympify, diff, factorial
 
-def calcular_serie_mclaren(function_str, numero_n):
+def calcular_serie_mclaurin(function_str, numero_n):
     # Variables simbólicas
     x = symbols('x')
     function = sympify(function_str)  # Convierte el string en una expresión simbólica
