@@ -6,13 +6,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('interpolacion/index.html')
+    return render_template('interpolacion/SerieTaylor.html')
 
 @app.route('/calcular', methods=['POST'])
 def calcular():
     datos = request.json
     puntos = datos.get('puntos')  # Lista de pares de puntos [(x1, y1), (x2, y2), ...]
-
     if not puntos or len(puntos) < 2:
         return jsonify({'error': 'Se necesitan al menos dos puntos para la interpolación.'}), 400
 
@@ -56,20 +55,23 @@ def calcular_taylor():
     expansion = datos.get('expansion')
     numero_n = datos.get('numero_n')
 
-    if not funcion_str or not expansion or not numero_n:
+    # Verificar que los datos recibidos sean válidos
+    if not funcion_str or expansion is None or numero_n is None:
         return jsonify({'error': 'Todos los campos son necesarios.'}), 400
 
     try:
-        x = sp.symbols('x')
-        funcion = sp.sympify(funcion_str) 
+        x = sp.symbols('x')  # Definir la variable simbólica x
+        funcion = sp.sympify(funcion_str)  # Convertir la cadena a una expresión simbólica
 
-        # Calcular la serie de Taylor
+        # Calcular la serie de Taylor hasta el número n de términos
         serie_taylor = sp.series(funcion, x, expansion, numero_n)
 
+        # Devolver la serie de Taylor como una cadena
         return jsonify({'funcion_taylor': str(serie_taylor)})
 
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
+
 
 
 if __name__ == '__main__':
