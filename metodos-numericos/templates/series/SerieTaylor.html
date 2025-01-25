@@ -48,8 +48,8 @@
             });
     
             const data = await response.json();
-            if (data.funcion_taylor) {
-                document.getElementById("ResultadoSerieTaylor").innerHTML = `$$ ${data.funcion_taylor} $$`;
+            if (data.resultado_funcion) {
+                document.getElementById("ResultadoSerieTaylor").innerHTML = `$$ ${data.resultado_funcion} $$`;
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, "ResultadoSerieTaylor"]);
             } else {
                 document.getElementById("ResultadoSerieTaylor").innerText = data.error;
