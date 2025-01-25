@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serie Taylor</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
 </head>
 <body>
     <h1>Serie De Taylor</h1>
@@ -22,20 +25,16 @@
     <div id="ResultadoSerieTaylor"></div>
 
     <script>
-        // Función para manejar el envío del formulario
-        document.getElementById("formulario").addEventListener("submit", async function(event) {
-            event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+        document.getElementById("formulario").addEventListener("submit", function(event) {
+            event.preventDefault();
+            calcularSerieTaylor(); 
+        });
 
+        async function calcularSerieTaylor() {
             const funcion = document.getElementById("funcion").value;
             const expansion = parseFloat(document.getElementById("expansion").value);
             const numero_n = parseInt(document.getElementById("numero_n").value);
-
-             // Verifica que todos los datos sean válidos
-            if (isNaN(expansion) || isNaN(numero_n)) {
-                alert("Por favor, ingrese valores válidos para todos los campos.");
-                return;
-            }
-
+    
             const response = await fetch('/calcular_taylor', {
                 method: 'POST',
                 headers: {
@@ -47,14 +46,15 @@
                     numero_n: numero_n
                 })
             });
-
+    
             const data = await response.json();
             if (data.funcion_taylor) {
-                document.getElementById("ResultadoSerieTaylor").innerText = data.funcion_taylor;
+                document.getElementById("ResultadoSerieTaylor").innerHTML = `$$ ${data.funcion_taylor} $$`;
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, "ResultadoSerieTaylor"]);
             } else {
                 document.getElementById("ResultadoSerieTaylor").innerText = data.error;
             }
-        });
+        }
     </script>
 </body>
 </html>
