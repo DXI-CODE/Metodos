@@ -10,11 +10,18 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
 ##______________________________________________
-
+##PAGINA DE INICIO
 @app.route('/')
 def home():
-    return render_template('Matrices/GaussInversa.html')   ##SI REQUIEREN PROBAR SUS METODOS CAMBIEN EL NOMBRE DE LA RUTA
-#MetodosEcuacionesNoLineales/MetodoPuntoFijo.html
+    rutas_get = [
+        {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
+        {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
+        {"nombre": "Matriz Inversa", "url": "/matriz-inversa"},
+        # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
+    ]
+    return render_template('principal/inicio.html', rutas = rutas_get)
+
+##______________________________________________
 
 ##METODO DE SERIE DE TAYLOR
 @app.route('/serie-taylor', methods=['GET'])
