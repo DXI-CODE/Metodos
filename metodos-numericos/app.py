@@ -55,23 +55,24 @@ def calcular_taylor():
     expansion = datos.get('expansion')
     numero_n = datos.get('numero_n')
 
-    # Verificar que los datos recibidos sean válidos
     if not funcion_str or expansion is None or numero_n is None:
         return jsonify({'error': 'Todos los campos son necesarios.'}), 400
 
     try:
-        x = sp.symbols('x')  # Definir la variable simbólica x
-        funcion = sp.sympify(funcion_str)  # Convertir la cadena a una expresión simbólica
+        expansion = float(expansion) 
+        numero_n = int(numero_n)  
 
-        # Calcular la serie de Taylor hasta el número n de términos
+        x = sp.symbols('x')
+        funcion = sp.sympify(funcion_str)
+
         serie_taylor = sp.series(funcion, x, expansion, numero_n)
+        serie_formateada = str(serie_taylor).replace('**', '^').replace('O(', 'O(')
 
-        # Devolver la serie de Taylor como una cadena
-        return jsonify({'funcion_taylor': str(serie_taylor)})
+
+        return jsonify({'funcion_taylor': serie_formateada})
 
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
-
 
 
 if __name__ == '__main__':
