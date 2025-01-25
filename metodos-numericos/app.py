@@ -7,7 +7,6 @@ from calculos.puntofijo import metodo_punto_fijo
 from calculos.interpolacionlagrange import lagrange
 
 app = Flask(__name__)
-app.debug = True  # Enable debug mode
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
@@ -21,6 +20,7 @@ def home():
         {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
         {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+        {"nombre": "Interpolación de Lagrange", "url":"/calcular_lagrange"},
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
 
@@ -138,6 +138,32 @@ def calcular_linealizacion_razon_crecimiento_post():
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
+##______________________________________________
+   
+#METODO DE INTERPOLACION DE LAGRANGE
+
+@app.route('/calcular_lagrange', methods=['GET'])
+def calcular_lagrange_get():
+    return render_template('interpolacion/lagrange.html')
+@app.route('/calcular_lagrange', methods=['POST'])
+def calcular_lagrange_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+    grado = datos.get('grado')
+    valorx = datos.get('valorx')
+
+    if not puntos or grado is None or valorx is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        serie = lagrange(puntos, grado, valorx)
+        return jsonify({'funcion': serie})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
+
+##______________________________________________
     
 if __name__ == '__main__':
     app.run(debug=True)
