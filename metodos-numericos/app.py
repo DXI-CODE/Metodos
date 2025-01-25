@@ -6,8 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    print("Entre a home")
-    return render_template('interpolacion/SerieTaylor.html')
+    return render_template('interpolacion/index.html')
 
 @app.route('/calcular', methods=['POST'])
 def calcular():
