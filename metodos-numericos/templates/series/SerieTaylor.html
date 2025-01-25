@@ -35,7 +35,7 @@
             const expansion = parseFloat(document.getElementById("expansion").value);
             const numero_n = parseInt(document.getElementById("numero_n").value);
     
-            const response = await fetch('/calcular_taylor', {
+            const response = await fetch('/serie-taylor', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
