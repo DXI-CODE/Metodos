@@ -1,29 +1,19 @@
-import sympy as sp
+from sympy import symbols, sympify, diff, factorial
 
-def calcular_serie_mclaren(funcion_str, expansion, numero_n):
-    """
-    Calcula la serie de McLaren de una función dada.
+def calcular_serie_mclaren(function_str, numero_n):
+    # Variables simbólicas
+    x = symbols('x')
+    function = sympify(function_str)  # Convierte el string en una expresión simbólica
+    print(function)
 
-    Args:
-    - funcion_str (str): La función como cadena, por ejemplo, 'sin(x)'
-    - expansion (float): El valor alrededor del cual expandir (a)
-    - numero_n (int): Número de términos en la expansión (n)
+    # Calcula la serie de Maclaurin (a = 0)
+    a = 0
+    maclaurin_expansion = 0
+    for i in range(numero_n):
+        derivative = diff(function, x, i)  # Derivada de orden i
+        term = (derivative.subs(x, a) / factorial(i)) * (x - a)**i
+        maclaurin_expansion += term
+    print(maclaurin_expansion)
 
-    Returns:
-    - str: Expansión en serie de McLaren en formato LaTeX
-    """
-
-    # Crear la variable simbólica x
-    x = sp.symbols('x')
-
-    # Convertir la función de cadena a una función simbólica
-    try:
-        funcion = sp.sympify(funcion_str)
-    except sp.SympifyError:
-        raise ValueError("La función proporcionada no es válida.")
-
-    # Calcular la serie de McLaren (expansión alrededor de 'expansion')
-    serie_mclaren = sp.series(funcion, x, expansion, numero_n).removeO()
-
-    # Convertir la serie a formato LaTeX para MathJax
-    return sp.latex(serie_mclaren)
+    # Devuelve el resultado como string en formato legible
+    return str(maclaurin_expansion).replace('**', '^')
