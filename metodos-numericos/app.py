@@ -11,8 +11,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')   ##SI REQUIEREN PROBAR SUS METODOS CAMBIEN EL NOMBRE DE LA RUTA
-
+    return render_template('Matrices/GaussInversa.html')   ##SI REQUIEREN PROBAR SUS METODOS CAMBIEN EL NOMBRE DE LA RUTA
+#MetodosEcuacionesNoLineales/MetodoPuntoFijo.html
 
 ##METODO DE SERIE DE TAYLOR
 @app.route('/calcular_taylor', methods=['GET'])
@@ -82,7 +82,7 @@ def calcular_gauss_inversa_post():
         
         inversa = np.linalg.inv(matriz_np)
         inversa_html = convertir_matriz_a_html(inversa)
-        return jsonify({'matriz_inversa_html': inversa_html})
+        return jsonify({'resultado_matriz': inversa_html})
     except np.linalg.LinAlgError:
         return jsonify({'error': 'La matriz no es invertible.'}), 400
     except Exception as e:
