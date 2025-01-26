@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integración por Trapecios</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+<body>
+    <h1>Integración por Trapecios</h1>
+    
+    <!-- Formulario de entrada -->
+    <form id="integracion_trapecio_form">
+        <label for="funcion">Función (en términos de x): </label><br>
+        <input type="text" id="funcion" name="funcion" required><br><br>
+
+        <label for="valor_a">Valor de a: </label><br>
+        <input type="number" step="any" id="valor_a" name="valor_a" required><br><br>
+
+        <label for="valor_b">Valor de b: </label><br>
+        <input type="number" step="any" id="valor_b" name="valor_b" required><br><br>
+
+        <label for="subintervalos">Número de subintervalos (n): </label><br>
+        <input type="number" id="subintervalos" name="subintervalos" required><br><br>
+
+        <button type="submit">Calcular Integral</button>
+    </form>
+
+    <h2>Resultado</h2>
+    
+    <p><strong>Resultado de la integral: </strong></p>
+    <div id="resultado"></div>
+    
+    <!-- Mostrar gráfica -->
+    <img id="grafico" alt="Gráfica del método de trapecios">
+
+    <script>
+        document.getElementById('integracion_trapecio_form').onsubmit = async function(event) {
+            event.preventDefault();
+            
+            const datos = {
+                funcion: document.getElementById('funcion').value,
+                valor_a: document.getElementById('valor_a').value,
+                valor_b: document.getElementById('valor_b').value,
+                subintervalos: document.getElementById('subintervalos').value
+            };
+            
+            const response = await fetch('/metodo-trapecio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            });
+
+            const result = await response.json();
+            
+            if (response.ok) {
+                // Mostrar el resultado de la integral
+                document.getElementById('resultado').innerHTML = `$$ ${result.resultado} $$`;
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, "resultado"]);
+                
+                // Mostrar la gráfica
+                const img = document.getElementById('grafico');
+                img.src = 'data:image/png;base64,' + result.grafico;
+            } else {
+                document.getElementById('resultado').innerHTML = result.error;
+            }
+        };
+    </script>
+</body>
+</html>

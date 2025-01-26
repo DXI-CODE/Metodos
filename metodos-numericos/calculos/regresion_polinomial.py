@@ -1,6 +1,6 @@
 import numpy as np
+import sympy as sp
 import matplotlib.pyplot as plt
-from sympy import symbols, latex, Poly
 from io import BytesIO
 import base64
 
@@ -25,10 +25,12 @@ def regresion_polinomial(x_values, y_values, grado):
     coeficientes = np.polyfit(x_values, y_values, grado)
     polinomio = np.poly1d(coeficientes)
 
-    # Generar formato simbólico para LaTeX
-    x = symbols('x')
-    polinomio_simbolico = Poly(polinomio.coeffs, x)
-    polinomio_latex = latex(polinomio_simbolico)
+    # Crear una expresión simbólica para el polinomio
+    x = sp.symbols('x')
+    polinomio_simbolico = sum(round(coef, 3) * x**i for i, coef in enumerate(reversed(coeficientes)))
+
+    # Convertir el polinomio a LaTeX usando sympy
+    polinomio_latex = sp.latex(polinomio_simbolico)
 
     # Generar gráfica
     x_min, x_max = min(x_values), max(x_values)
@@ -52,4 +54,4 @@ def regresion_polinomial(x_values, y_values, grado):
     grafico_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
     plt.close(fig)
 
-    return {'polinomio_latex': polinomio_latex, 'grafico_base64': grafico_base64}
+    return {'resultado': polinomio_latex, 'grafico': grafico_base64}

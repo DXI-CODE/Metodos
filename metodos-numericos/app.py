@@ -11,6 +11,7 @@ from calculos.regresionmultilineal import calcular_regresion
 from calculos.simpson1_3 import simpson1_3
 from calculos.falsaposicion import calcular_falsa_posicion
 from calculos.regresion_polinomial import regresion_polinomial
+from calculos.trapecio import metodo_trapecio
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -31,6 +32,7 @@ def home():
         {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
         {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
         {"nombre": "Regresión Polinomial", "url":"/regresion-polinomial"},
+        {"nombre": "Integración por Método de Trapecio", "url":"/metodo-trapecio"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -102,7 +104,7 @@ def calcular_falsa_posicion_post():
 
 ##______________________________________________
 @app.route('/regresion-polinomial', methods=['GET'])
-def regresion_polinomia_get():
+def regresion_polinomial_get():
     return render_template('regresion/RegresionPolinomial.html')
 
 @app.route('/regresion-polinomial', methods=['POST'])
@@ -123,7 +125,39 @@ def regresion_polinomial_post():
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
-        return jsonify({'error': 'Error interno del servidor.'}), 500
+        return jsonify({'error': 'Error interno del servidor. '}), 500
+
+##______________________________________________
+
+
+## METODO DE INTEGRACION POR TRAPECIO
+
+##______________________________________________
+@app.route('/metodo-trapecio', methods=['GET'])
+def metodo_trapecio_get():
+    return render_template('integracion/Trapecio.html')
+
+@app.route('/metodo-trapecio', methods=['POST'])
+def metodo_trapecio_post():
+    try:
+        datos = request.json
+        funcion_str = datos.get('funcion')
+        valor_a = float(datos.get('valor_a'))
+        valor_b = float(datos.get('valor_b'))
+        subintervalos = int(datos.get('subintervalos'))
+
+
+        if funcion_str is None or valor_a is None or valor_b is None or subintervalos is None:
+            return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+        # Calcular la regresión polinomial
+        resultado = metodo_trapecio(funcion_str, valor_a, valor_b, subintervalos)
+
+        # Responder con los resultados
+        return jsonify(resultado)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 ##______________________________________________
 

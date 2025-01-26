@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión Multilineal</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
     <title>Regresión Polinomial</title>
 </head>
 <body>
@@ -23,7 +27,7 @@
 
     <h2>Resultados</h2>
     <p><strong>Ecuación Polinómica (Formato LaTeX):</strong></p>
-    <p id="latex_equation"></p>
+    <div id="resultado"></div>
 
     <h3>Gráfica</h3>
     <img id="grafica" alt="Gráfica de regresión polinomial" style="display: none;">
@@ -48,9 +52,11 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('latex_equation').textContent = result.polinomio_latex;
+                    document.getElementById('resultado').innerHTML = `$$ ${result.resultado} $$`;
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, "resultado"]);
+
                     const img = document.getElementById('grafica');
-                    img.src = 'data:image/png;base64,' + result.grafico_base64;
+                    img.src = 'data:image/png;base64,' + result.grafico;
                     img.style.display = 'block';
                 } else {
                     alert(result.error || "Ocurrió un error en el servidor.");
