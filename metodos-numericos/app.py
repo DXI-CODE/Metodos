@@ -13,6 +13,7 @@ from calculos.falsaposicion import calcular_falsa_posicion
 from calculos.regresion_polinomial import regresion_polinomial
 from calculos.trapecio import metodo_trapecio
 from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
+from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -35,33 +36,12 @@ def home():
         {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
         {"nombre": "Regresión Polinomial", "url":"/regresion-polinomial"},
         {"nombre": "Integración por Método de Trapecio", "url":"/metodo-trapecio"},
+        {"nombre": "E.c Diferenciales Runge Kutta Orden 4", "url":"/runge-kutta"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
 
-##______________________________________________
-
-##METODO DE SERIE DE TAYLOR
-@app.route('/serie-taylor', methods=['GET'])
-def calcular_taylor_get():
-    return render_template('series/serietaylor.html')
-@app.route('/serie-taylor', methods=['POST'])
-def calcular_taylor_post():
-    datos = request.json
-    funcion_str = datos.get('funcion')
-    expansion = datos.get('expansion')
-    numero_n = datos.get('numero_n')
-
-    if not funcion_str or expansion is None or numero_n is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-    
-    try:
-        serie = calcular_serie_taylor(funcion_str, expansion, numero_n)
-        return jsonify({'resultado_funcion': serie})
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
-
-##______________________________________________
+##_____________________________________________
 
 
 #METODO DE SERIE DE MC LAURIN
@@ -177,6 +157,60 @@ def metodo_trapecio_post():
         return jsonify({'error': str(e)}), 400
 
 ##______________________________________________
+
+
+##METODO DE RUNGE KUTTA ORDEN 4
+
+##______________________________________________
+
+@app.route('/runge-kutta', methods=['GET'])
+def runge_kutta_get():
+    return render_template('ecuaciones_diferenciales/runge_kutta.html')
+
+@app.route('/runge-kutta', methods=['POST'])
+def runge_kutta_post():
+    try:
+        datos = request.json
+        ecuaciones = datos.get('ecuaciones', [])
+        variables = datos.get('variables', [])
+        x0 = float(datos.get('x0'))
+        valores_iniciales = [float(v) for v in datos.get('valores_iniciales', [])]
+        h = float(datos.get('h'))
+        n = int(datos.get('n'))
+
+
+        print("Valores recibidos")
+        print(ecuaciones)
+        print(variables)
+        print(x0)
+        print(valores_iniciales)
+        print(h)
+        print(n)
+
+        if not ecuaciones or not variables or len(ecuaciones) != len(variables):
+            return jsonify({'error': 'Debe haber tantas ecuaciones como variables dependientes.'}), 400
+        if len(valores_iniciales) != len(variables):
+            return jsonify({'error': 'Debe proporcionar valores iniciales para todas las variables dependientes.'}), 400
+        if h <= 0 or n <= x0:
+            return jsonify({'error': 'El tamaño del paso debe ser positivo y x_n > x_0.'}), 400
+
+        # Validar ecuaciones
+        ecuaciones_validadas = validar_ecuaciones(ecuaciones, variables)
+
+        print("Ecuaciones validadas: ")
+        print(ecuaciones_validadas)
+
+        # Calcular método de Runge-Kutta
+        resultado = runge_kutta_4(ecuaciones_validadas, variables, x0, valores_iniciales, h, n)
+
+        return jsonify(resultado)
+        
+    except Exception as e:
+        return jsonify({'error': "Error en el metodo post (app.py)" + str(e)}), 400
+
+##______________________________________________
+
+
 
 ##[
 
