@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método de Falsa Posiciónn</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Método de Falsa Posición</h1>
+        
+        <!-- Formulario de entrada -->
+        <form id="falsa_posicion_form">
+            <label for="funcion">Función (en términos de x):</label><br>
+            <input type="text" id="funcion" name="funcion" required><br>
+
+            <label for="valor_a">Valor de a:</label><br>
+            <input type="number" id="valor_a" name="valor_a" required><br>
+
+            <label for="valor_b">Valor de b:</label><br>
+            <input type="number" id="valor_b" name="valor_b" required><br>
+
+            <label for="tolerancia">Tolerancia:</label><br>
+            <input type="number" step="any" id="tolerancia" name="tolerancia" required><br>
+
+            <label for="iteraciones">Número de iteraciones:</label><br>
+            <input type="number" id="iteraciones" name="iteraciones" required><br>
+
+            <button type="submit">Calcular</button>
+        </form>
+
+        <div class="result" id="resultado_raiz">Raíz encontrada: <span id="raiz"></span></div>
+        
+        <!-- Mostrar gráfica -->
+        <img id="grafica" alt="Gráfica del método de falsa posición" style="display: none;">
+    </div>
+
+    <script>
+        document.getElementById('falsa_posicion_form').onsubmit = async function(event) {
+            event.preventDefault();
+            
+            const datos = {
+                funcion: document.getElementById('funcion').value,
+                valor_a: parseFloat(document.getElementById('valor_a').value),
+                valor_b: parseFloat(document.getElementById('valor_b').value),
+                tolerancia: parseFloat(document.getElementById('tolerancia').value),
+                iteraciones: parseInt(document.getElementById('iteraciones').value, 10)
+            };
+
+            try {
+                const response = await fetch('/metodo-falsa-posicion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Mostrar la raíz
+                    document.getElementById('raiz').textContent = result.resultados.raiz.toFixed(6);
+
+                    // Mostrar la gráfica
+                    const img = document.getElementById('grafica');
+                    img.src = 'data:image/png;base64,' + result.resultados.graph_url;
+                    img.style.display = 'block';
+                } else {
+                    alert(result.error);
+                }
+            } catch (error) {
+                alert("Ocurrió un error al procesar la solicitud. Inténtalo nuevamente.");
+                console.error(error);
+            }
+        };
+    </script>
+</body>
+</html>
