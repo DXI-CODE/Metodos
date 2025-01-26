@@ -13,6 +13,8 @@ from calculos.falsaposicion import calcular_falsa_posicion
 from calculos.regresion_polinomial import regresion_polinomial
 from calculos.trapecio import metodo_trapecio
 from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
+from calculos.linealizacionexponencial import exponencial
+from calculos.linealizacionpotencial import potencial
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -38,6 +40,15 @@ def home():
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
+
+##______________________________________________
+
+
+##[
+
+    ##METODOS DE JOAN
+
+##]
 
 
 #METODO DE SERIE DE MC LAURIN
@@ -234,6 +245,14 @@ def metodo_punto_fijo():
         return jsonify({"error": str(e)}), 400
 ##______________________________________________
 
+
+##[
+
+    ##METODOS DE JEYCSON
+
+##]
+
+
 ##______________________________________________
 ##LINEALIZACION A RAZON DE CRECIMIENTO
 @app.route('/linealizacion-a-razon-crecimiento', methods=['GET'])
@@ -255,32 +274,6 @@ def calcular_linealizacion_razon_crecimiento_post():
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
-##______________________________________________
-   
-#METODO DE INTERPOLACION DE LAGRANGE
-
-@app.route('/calcular_lagrange', methods=['GET'])
-def calcular_lagrange_get():
-    return render_template('interpolacion/lagrange.html')
-@app.route('/calcular_lagrange', methods=['POST'])
-def calcular_lagrange_post():
-    datos = request.json
-    puntos = datos.get('puntos')
-    grado = datos.get('grado')
-    valorx = datos.get('valorx')
-
-    if not puntos or grado is None or valorx is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-
-    try:
-        serie = lagrange(puntos, grado, valorx)
-        return jsonify({'funcion': serie})
-    except ValueError as e:
-        return jsonify({'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
-
-##______________________________________________
     
 ##______________________________________________
 ##METODO DE SIMPSON 3/8
@@ -357,6 +350,12 @@ def regresion_multilineal():
     })
 ##______________________________________________
 
+##[
+
+    ##METODOS DE JUAN
+
+##]
+
 ##______________________________________________
         
 #METODO DE INTEGRACIÓN POR SIMPSON 1/3  
@@ -385,6 +384,85 @@ def calcular_simpson1_3_post():
         return jsonify({'error': f'Error al calcular la integración por Simpson 1/3: {str(e)}'}), 500
 
 ##______________________________________________
+
+##______________________________________________
+   
+#METODO DE INTERPOLACION DE LAGRANGE
+
+@app.route('/calcular_lagrange', methods=['GET'])
+def calcular_lagrange_get():
+    return render_template('interpolacion/lagrange.html')
+@app.route('/calcular_lagrange', methods=['POST'])
+def calcular_lagrange_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+    grado = datos.get('grado')
+    valorx = datos.get('valorx')
+
+    if not puntos or grado is None or valorx is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        serie = lagrange(puntos, grado, valorx)
+        return jsonify({'funcion': serie})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
+
+##______________________________________________
+
+##______________________________________________
+        
+#METODO DE LINEALIZACIÓN EXPONENCIAL  
+
+@app.route('/exponencial', methods=['GET'])
+def calcular_exponencial_get():
+    return render_template('Linealizacion/Exponencial.html')
+@app.route('/exponencial', methods=['POST'])
+def calcular_exponencial_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+
+    if not puntos:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        expo = exponencial(puntos)
+        return jsonify({'funcion': expo})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la función por linealización exponencial: {str(e)}'}), 500
+
+##______________________________________________
+
+##______________________________________________
+        
+#METODO DE LINEALIZACIÓN POTENCIAL  
+
+@app.route('/potencial', methods=['GET'])
+def calcular_potencial_get():
+    return render_template('Linealizacion/Potencial.html')
+@app.route('/potencial', methods=['POST'])
+def calcular_potencial_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+
+    if not puntos:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        expo = potencial(puntos)
+        return jsonify({'funcion': expo})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la función por linealización potencial: {str(e)}'}), 500
+
+##______________________________________________
+
+
 
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
