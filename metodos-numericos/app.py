@@ -224,6 +224,7 @@ def calcular_gauss_inversa_post():
 ##______________________________________________
 ##METODO DE PUNTO FIJO
 
+
 @app.route('/metodo-punto-fijo', methods=['GET'])
 def calcular_punto_fijo_get():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')
