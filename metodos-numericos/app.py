@@ -3,7 +3,7 @@ from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
-#from calculos.puntofijo import metodo_punto_fijo
+from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
@@ -344,7 +344,8 @@ def calcular_regresion_saturado_post():
             "resultado_funcion": resultado["funcion"],
             "resultado_tabla_ycal" : resultado["tabla_ycal"],
             "resultado_tabla_y" : resultado["tabla_y"],
-            "resultado_tabla_x" : resultado["tabla_x"]
+            "resultado_tabla_x" : resultado["tabla_x"],
+            "resultado_grafico" : resultado["grafico"]
         })
 
     except Exception as e:
