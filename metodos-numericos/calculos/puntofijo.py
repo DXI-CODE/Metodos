@@ -68,14 +68,14 @@ def metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max):
     error = float('inf')
     x = x0
 
-    print("Iteración | x          | x_next     | error")
-    print("------------------------------------------")
+    ##print("Iteración | x          | x_next     | error")
+    ##print("------------------------------------------")
 
     while iteracion < iteraciones_max and error > tolerancia:
         try:
             x_next = g(x)
             error = abs(x_next - x)
-            print(f"{iteracion:9} | {x:.8f} | {x_next:.8f} | {error:.8f}")
+            ##print(f"{iteracion:9} | {x:.8f} | {x_next:.8f} | {error:.8f}")
             x = x_next
             iteracion += 1
         except Exception as e:
