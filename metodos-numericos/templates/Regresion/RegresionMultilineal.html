@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión Multilineal</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+</head>
+<body>
+    <h1>Regresión Multilineal</h1>
+    <form id="regresion-form">
+        <label for="num-muestras">Número de muestras:</label>
+        <input type="number" id="num-muestras" name="num-muestras" required>
+        <button type="button" onclick="generarFormulario()">Generar formulario</button>
+    </form>
+    <div id="formulario-muestras"></div>
+    <h2>Resultados de la Regresión</h2>
+    <div id="resultado"></div>
+
+    <script>
+        function generarFormulario() {
+            const contenedor = document.getElementById("formulario-muestras");
+            const numMuestras = parseInt(document.getElementById("num-muestras").value);
+
+            contenedor.innerHTML = "";
+
+            if (isNaN(numMuestras) || numMuestras <= 0) {
+                alert("Por favor, introduce un número válido de muestras.");
+                return;
+            }
+
+            for (let i = 1; i <= numMuestras; i++) {
+                const muestraDiv = document.createElement("div");
+                muestraDiv.classList.add("muestra");
+
+                muestraDiv.innerHTML = `
+                    <h3>Muestra ${i}</h3>
+                    <label for="independientes-${i}">Variables independientes (separadas por comas):</label>
+                    <input type="text" id="independientes-${i}" name="independientes-${i}" required><br><br>
+                    
+                    <label for="dependiente-${i}">Variable dependiente:</label>
+                    <input type="number" id="dependiente-${i}" name="dependiente-${i}" required><br><br>
+                `;
+
+                contenedor.appendChild(muestraDiv);
+            }
+
+            const botonCalcular = document.createElement("button");
+            botonCalcular.type = "button";
+            botonCalcular.textContent = "Calcular Regresión";
+            botonCalcular.onclick = calcularRegresion;
+            contenedor.appendChild(botonCalcular);
+        }
+
+        async function calcularRegresion() {
+            const numMuestras = parseInt(document.getElementById("num-muestras").value);
+            const X = [];
+            const y = [];
+
+            for (let i = 1; i <= numMuestras; i++) {
+                const independientes = document.getElementById(`independientes-${i}`).value.split(',').map(parseFloat);
+                const dependiente = parseFloat(document.getElementById(`dependiente-${i}`).value);
+
+                if (independientes.some(isNaN) || isNaN(dependiente)) {
+                    alert(`Por favor, verifica los datos en la muestra ${i}.`);
+                    return;
+                }
+
+                X.push(independientes);
+                y.push(dependiente);
+            }
+
+            const response = await fetch('/regresion-multilineal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ X, y })
+            });
+
+            const data = await response.json();
+
+            if (data.coeficientes) {
+                let ecuacion = "Ecuación: $$y = ";
+
+                data.coeficientes.forEach((coef, index) => {
+                    // Cambiar la notación para que sea un exponente
+                    if (coef >= 0 && index > 0) {
+                        ecuacion += `+ ${coef.toFixed(4)} x^{${index + 1}} `;
+                    } else if (coef < 0) {
+                        ecuacion += `- ${Math.abs(coef).toFixed(4)} x^{${index + 1}} `;
+                    } else {
+                        ecuacion += `${coef.toFixed(4)} x^{${index + 1}} `;
+                    }
+                });
+
+                ecuacion += `+ ${data.intercepto.toFixed(4)}$$`;
+
+                document.getElementById("resultado").innerHTML = `
+                    <p><strong>${ecuacion}</strong></p>
+                `;
+
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, "resultado"]);
+            } else {
+                document.getElementById("resultado").innerText = data.error || "Ocurrió un error.";
+            }
+        }
+
+    </script>
+</body>
+</html>
