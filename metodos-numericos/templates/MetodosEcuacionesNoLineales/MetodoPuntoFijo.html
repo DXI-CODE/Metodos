@@ -1,21 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Método de Punto Fijo</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- Librería Gráfica -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        #grafica {
+            margin-top: 30px;
+            width: 50%;
+            height: 300px;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .result {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
 </head>
-<style>
-    #grafica {
-        margin-top: 30px;
-        width: 100%;
-        height: 400px;
-    }
-</style>
 <body>
-    <h1>Método de Punto Fijo</h1>
-    <form id="punto-fijo-form">
+    <h1 style="text-align: center; color: #333;">Método de Punto Fijo</h1>
+    
+    <form id="punto-fijo-form" style="max-width: 500px; margin: auto;">
         <label for="funcion">Ingrese la función g(x):</label>
         <input type="text" id="funcion" name="funcion" placeholder="Ejemplo: x**3 + 2*x" required><br><br>
 
@@ -28,11 +45,11 @@
         <label for="iteraciones">Número máximo de iteraciones:</label>
         <input type="number" id="iteraciones" name="iteraciones" placeholder="100" required><br><br>
 
-        <button type="submit">Calcular Punto Fijo</button>
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Calcular Punto Fijo</button>
     </form>
 
     <div id="resultado" class="result" style="display: none;"></div>
-    <div id="grafica"></div>
+    <center><div id="grafica"></div></center>
 
     <script>
         document.getElementById("punto-fijo-form").addEventListener("submit", async function(event) {
@@ -64,29 +81,40 @@
                 const resultadoDiv = document.getElementById("resultado");
                 if (data.error) {
                     resultadoDiv.style.display = "block";
-                    resultadoDiv.innerHTML = `<strong>Error:</strong> ${data.error}`;
+                    resultadoDiv.innerHTML = `<strong style="color: red;">Error:</strong> ${data.error}`;
                 } else {
                     resultadoDiv.style.display = "block";
                     resultadoDiv.innerHTML = `
                         <br><strong>Resultado del Método de Punto Fijo:</strong><br>
-                        Raíz aproximada: ${data.raiz}<br>
-                        Iteraciones realizadas: ${data.iteraciones}<br>
-                        Error: ${data.error_aproximado}
+                        Raíz aproximada: <strong>${data.raiz}</strong><br>
+                        Iteraciones realizadas: <strong>${data.iteraciones}</strong><br>
+                        Error: <strong>${data.error_aproximado}</strong>
                     `;
 
-                    // Graficar las iteraciones
                     const trace1 = {
                         x: Array.from({ length: data.iteraciones}, (_, i) => i + 1),
                         y: data.iteraciones_data,
                         type: 'scatter',
                         mode: 'lines+markers',
+                        marker: { color: '#FF5733' },  
                         name: 'Raíz Aproximada',
                     };
 
                     const layout = {
-                        title: `Convergencia del Método de Punto Fijo`,
-                        xaxis: { title: 'Iteración' },
-                        yaxis: { title: 'Valor de la Raíz' },
+                        title: 'Convergencia del Método de Punto Fijo',
+                        xaxis: { 
+                            title: 'Iteración', 
+                            titlefont: { family: 'Arial, sans-serif', size: 18, color: '#333' },
+                            tickfont: { size: 14, color: '#555' }
+                        },
+                        yaxis: { 
+                            title: 'Valor de la Raíz', 
+                            titlefont: { family: 'Arial, sans-serif', size: 18, color: '#333' },
+                            tickfont: { size: 14, color: '#555' }
+                        },
+                        plot_bgcolor: '#f4f4f9',  
+                        paper_bgcolor: '#fff',
+                        font: { family: 'Arial, sans-serif', size: 14 },
                     };
 
                     Plotly.newPlot('grafica', [trace1], layout);
