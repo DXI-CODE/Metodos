@@ -1,16 +1,14 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
-from calculos.puntofijo import calcular_y_graficar, metodo_punto_fijo_calculo
+#from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
-from calculos.regresionmultilineal import calcular_regresion
-from calculos.simpson1_3 import simpson1_3
-from calculos.falsaposicion import calcular_falsa_posicion
-from calculos.regresion_polinomial import regresion_polinomial
+#from calculos.regresionmultilineal import calcular_regresion
+from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -27,22 +25,36 @@ def home():
         {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+        {"nombre": "Regresion por crecimiento de saturación", "url":"/regresion-crecimiento-saturado"},
         {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
         {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
-        {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
-        {"nombre": "Regresión Polinomial", "url":"/regresion-polinomial"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
 
 ##______________________________________________
 
+##METODO DE SERIE DE TAYLOR
+@app.route('/serie-taylor', methods=['GET'])
+def calcular_taylor_get():
+    return render_template('series/serietaylor.html')
+@app.route('/serie-taylor', methods=['POST'])
+def calcular_taylor_post():
+    datos = request.json
+    funcion_str = datos.get('funcion')
+    expansion = datos.get('expansion')
+    numero_n = datos.get('numero_n')
 
-##[
+    if not funcion_str or expansion is None or numero_n is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+    
+    try:
+        serie = calcular_serie_taylor(funcion_str, expansion, numero_n)
+        return jsonify({'resultado_funcion': serie})
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
-    ##METODOS DE JOAN
-
-##]
+##______________________________________________
 
 
 #METODO DE SERIE DE MC LAURIN
@@ -66,94 +78,6 @@ def calcular_mclaurin_post():
 
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de mclaurin: {str(e)}'}), 500
-
-##______________________________________________
-
-
-## METODO DE FALSA POSICIÓN
-
-##______________________________________________
-@app.route('/metodo-falsa-posicion', methods=['GET'])
-def calcular_falsa_posicion_get():
-    return render_template('metodos_raices/falsaposicion.html')
-
-@app.route('/metodo-falsa-posicion', methods=['POST'])
-def calcular_falsa_posicion_post():
-    datos = request.json
-    funcion_str = datos.get('funcion')
-    valor_a = float(datos.get('valor_a'))
-    valor_b = float(datos.get('valor_b'))
-    tolerancia = float(datos.get('tolerancia'))
-    iteraciones = int(datos.get('iteraciones'))
-
-    if not funcion_str or valor_a is None or valor_b is None or tolerancia is None or iteraciones is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-
-    try:
-        resultados = calcular_falsa_posicion(funcion_str, valor_a, valor_b, tolerancia, iteraciones)
-        return jsonify({'resultados': resultados})
-
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular el método de Falsa Posición: {str(e)}'}), 500
-
-##______________________________________________
-
-## METODO DE REGRESIÓN POLINOMIAL
-
-##______________________________________________
-@app.route('/regresion-polinomial', methods=['GET'])
-def regresion_polinomia_get():
-    return render_template('regresion/RegresionPolinomial.html')
-
-@app.route('/regresion-polinomial', methods=['POST'])
-def regresion_polinomial_post():
-    try:
-        # Obtener datos del cliente
-        datos = request.get_json()
-        x_values = list(map(float, datos['x_values']))
-        y_values = list(map(float, datos['y_values']))
-        grado = int(datos['grado'])
-
-        # Calcular la regresión polinomial
-        resultado = regresion_polinomial(x_values, y_values, grado)
-
-        # Responder con los resultados
-        return jsonify(resultado)
-
-    except ValueError as e:
-        return jsonify({'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'error': 'Error interno del servidor.'}), 500
-
-##______________________________________________
-
-##[
-
-    ##METODOS DE JEOVANI
-
-##]
-
-
-##______________________________________________
-##METODO DE SERIE DE TAYLOR
-@app.route('/serie-taylor', methods=['GET'])
-def calcular_taylor_get():
-    return render_template('series/serietaylor.html')
-@app.route('/serie-taylor', methods=['POST'])
-def calcular_taylor_post():
-    datos = request.json
-    funcion_str = datos.get('funcion')
-    expansion = datos.get('expansion')
-    numero_n = datos.get('numero_n')
-
-    if not funcion_str or expansion is None or numero_n is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-    
-    try:
-        serie = calcular_serie_taylor(funcion_str, expansion, numero_n)
-        return jsonify({'resultado_funcion': serie})
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
 ##______________________________________________
 
@@ -190,32 +114,19 @@ def calcular_gauss_inversa_post():
 def calcular_punto_fijo_get():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')
 @app.route('/metodo-punto-fijo', methods=['POST'])
-def metodo_punto_fijo():
+def calcular_punto_fijo_post():
     try:
         data = request.get_json()
-        funcion_str = data['funcion']
-        x0 = float(data['x0'])
-        tolerancia = float(data['tolerancia'])
-        iteraciones_max = int(data['iteraciones'])
-        resultado, error = metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max)
-        
-        if error > tolerancia:
-            return jsonify({"error": "No se alcanzó la convergencia en el número máximo de iteraciones."}), 400
-        buffer = calcular_y_graficar(funcion_str, x0, tolerancia, iteraciones_max)
-        return send_file(buffer, mimetype='image/png')
-    
+        funcion_str = data.get('funcion')
+        x0 = float(data.get('x0'))
+        tolerancia = float(data.get('tolerancia'))
+        iteraciones_max = int(data.get('iteraciones'))
+        resultado = metodo_punto_fijo(funcion_str, x0, tolerancia, iteraciones_max)
+        return jsonify(resultado)
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
 ##______________________________________________
-
-
-##[
-
-    ##METODOS DE JEYCSON
-
-##]
-
 
 ##______________________________________________
 ##LINEALIZACION A RAZON DE CRECIMIENTO
@@ -230,7 +141,10 @@ def calcular_linealizacion_razon_crecimiento_post():
 
         resultado = metodo_linealizacion_crecimiento(datos)
 
-        return jsonify(resultado)
+        return jsonify({
+            "resultado_tabla_x": resultado["datos_lin_x"],
+            "resultado_tabla_y": resultado["datos_lin_y"],
+        })
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
@@ -285,6 +199,29 @@ def metodo_simpson_38_post():
 
 ##______________________________________________
     
+    
+##______________________________________________
+##REGRESION POR CRECIMIENTO DE SATURACION
+@app.route('/regresion-crecimiento-saturado', methods=['GET'])
+def calcular_regresion_saturado_get():
+    return render_template('Regresion/RegresionSaturado.html')
+@app.route('/regresion-crecimiento-saturado', methods=['POST'])
+def calcular_regresion_saturado_post():
+    try:
+        data = request.get_json()
+        datos = data.get('valores')
+
+        datos_lin = metodo_linealizacion_crecimiento(datos)
+        resultado = metodo_regresion_crecimiento_saturado(datos_lin, datos)
+        return jsonify({
+            "resultado_funcion": resultado["funcion"],
+            "resultado_tabla_ycal" : resultado["tabla_ycal"],
+            "resultado_tabla_y" : resultado["tabla_y"],
+            "resultado_tabla_x" : resultado["tabla_x"]
+        })
+
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
     
 ##______________________________________________
 ##REGRESION MULTILINEAL

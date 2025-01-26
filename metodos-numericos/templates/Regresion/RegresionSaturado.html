@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enviar Datos en Arreglo</title>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body>
+  <h1>Ingresar datos en X y Y</h1>
+
+  <!-- Primer formulario: Pedir la cantidad de datos -->
+  <form id="step1" onsubmit="prepareInputFields(event)">
+    <label for="dataCount">¿Cuántos datos desea ingresar?</label>
+    <input type="number" id="dataCount" min="1" required>
+    <button type="submit">Confirmar</button>
+  </form>
+
+  <!-- Contenedor para los campos dinámicos (oculto inicialmente) -->
+  <div id="step2" style="display: none;">
+    <h2>Ingrese los datos</h2>
+    <div id="inputsContainer"></div>
+    <button onclick="sendData()">Enviar Datos</button>
+  </div>
+  <div id="resultado" class="result" style="display: none;"></div>
+  <h2>Ecuacion de la regresion: </h2>
+  <div id="resultadoEc" class="result" style="display: none;"></div>
+  <h3>Gráfica</h3>
+  <img id="grafica" alt="Gráfica de regresión por crecimiento saturado" style="display: none;">
+  <script>
+    function prepareInputFields(event) {
+      event.preventDefault(); // Evita que el formulario se envíe
+
+      const dataCount = parseInt(document.getElementById('dataCount').value, 10);
+      if (isNaN(dataCount) || dataCount <= 0) {
+        alert('Por favor, ingrese un número válido.');
+        return;
+      }
+
+      // Limpiar contenedor previo
+      const inputsContainer = document.getElementById('inputsContainer');
+      inputsContainer.innerHTML = '';
+
+      // Generar los campos para X y Y
+      for (let i = 1; i <= dataCount; i++) {
+        const inputGroup = document.createElement('div');
+        inputGroup.innerHTML = `
+          <label for="x${i}">X${i}:</label>
+          <input type="number" id="x${i}" class="x-input" required>
+          <label for="y${i}">Y${i}:</label>
+          <input type="number" id="y${i}" class="y-input" required><br>
+        `;
+        inputsContainer.appendChild(inputGroup);
+      }
+
+      // Mostrar el contenedor de datos
+      document.getElementById('step1').style.display = 'none';
+      document.getElementById('step2').style.display = 'block';
+    }
+
+    async function sendData() {
+        // Recoger datos de los campos
+        const xValues = Array.from(document.querySelectorAll('.x-input')).map(input => {
+          if (input.value === '') throw new Error('Todos los campos de X deben estar llenos.');
+          return parseFloat(input.value);
+        });
+
+        const yValues = Array.from(document.querySelectorAll('.y-input')).map(input => {
+          if (input.value === '') throw new Error('Todos los campos de Y deben estar llenos.');
+          return parseFloat(input.value);
+        });
+
+        // Crear un objeto de datos para enviar
+        const valores = {
+          x: xValues,
+          y: yValues
+        };
+
+        try{
+            // Enviar los datos al servidor mediante fetch
+            const response = await fetch('/regresion-crecimiento-saturado', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ valores })
+            });
+
+            const result = await response.json();
+            
+            const resultadoDiv = document.getElementById("resultado");
+            if (result.error) {
+                resultadoDiv.style.display = "block";
+                resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
+            }else{
+              const ycal = result.resultado_tabla_ycal
+              const ec = result.resultado_funcion
+              const xori = result.resultado_tabla_x
+              const yori = result.resultado_tabla_y
+              resultadoDiv.style.display = "block";
+              resultadoDiv.innerHTML = `
+              <strong>Regresion por crecimiento de saturacion:</strong><br>
+              <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+                  <thead>
+                  <tr>
+                      <th>X ORIGINAL</th>  
+                      <th>Y ORIGINAL</th>  
+                      <th>Y CALCULADO</th>  
+                  </tr>
+                  </thead>
+                  <tbody>
+                  ${xori.map((x, index) => `
+                      <tr>
+                          <td>${x}</td>
+                          <td>${yori[index]}</td>
+                          <td>${ycal[index]}</td>
+                      </tr>
+                  `).join('')}
+                  </tbody>
+              </table>
+              `;
+              const resultadoEc = document.getElementById("resultadoEc");
+              resultadoEc.style.display = "block";
+              resultadoEc.innerHTML = `$$ ${ec} $$`;
+              MathJax.Hub.Queue(["Typeset", MathJax.Hub, "resultadoEc"]);
+              const img = document.getElementById('grafica');
+              img.src = 'data:image/png;base64,' + result.grafico_base64;
+              img.style.display = 'block';
+            }
+        } catch (error) {
+            // Manejo de errores
+            alert('Hubo un problema al enviar los datos');
+            console.error("Error al calcular:", error);
+        }
+    }
+  </script>
+</body>
+</html>
