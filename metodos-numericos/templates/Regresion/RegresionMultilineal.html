@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regresión Multilineal</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
 </head>
 <body>
     <h1>Regresión Multilineal</h1>
@@ -80,14 +83,31 @@
             const data = await response.json();
 
             if (data.coeficientes) {
+                let ecuacion = "Ecuación: $$y = ";
+
+                data.coeficientes.forEach((coef, index) => {
+                    // Cambiar la notación para que sea un exponente
+                    if (coef >= 0 && index > 0) {
+                        ecuacion += `+ ${coef.toFixed(4)} x^{${index + 1}} `;
+                    } else if (coef < 0) {
+                        ecuacion += `- ${Math.abs(coef).toFixed(4)} x^{${index + 1}} `;
+                    } else {
+                        ecuacion += `${coef.toFixed(4)} x^{${index + 1}} `;
+                    }
+                });
+
+                ecuacion += `+ ${data.intercepto.toFixed(4)}$$`;
+
                 document.getElementById("resultado").innerHTML = `
-                    <p><strong>Coeficientes:</strong> ${data.coeficientes.join(', ')}</p>
-                    <p><strong>Intercepto:</strong> ${data.intercepto}</p>
+                    <p><strong>${ecuacion}</strong></p>
                 `;
+
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, "resultado"]);
             } else {
                 document.getElementById("resultado").innerText = data.error || "Ocurrió un error.";
             }
         }
+
     </script>
 </body>
 </html>
