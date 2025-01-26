@@ -7,6 +7,7 @@ from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
+from calculos.regresionmultilineal import calcular_regresion
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -22,7 +23,8 @@ def home():
         {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
         {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
-         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+        {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+        {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -191,5 +193,25 @@ def metodo_simpson_38_post():
 
 ##______________________________________________
     
+    
+##______________________________________________
+##REGRESION MULTILINEAL
+@app.route('/regresion-multilineal', methods=['GET'])
+def regresion_multilineal_get():
+    return render_template('Regresion/RegresionMultilineal.html')
+@app.route("/regresion-multilineal", methods=["POST"])
+def regresion_multilineal():
+    # Obtener datos del cuerpo de la solicitud
+    data = request.get_json()
+    X = data.get("X")
+    y = data.get("y")
+
+    # Llamar a la función desde el archivo 'regresion.py'
+    resultado = calcular_regresion(X, y)
+
+    # Devolver el resultado como JSON
+    return jsonify(resultado)    
+##______________________________________________
+
 if __name__ == '__main__':
     app.run(debug=True)
