@@ -9,6 +9,7 @@ from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
 from calculos.regresionmultilineal import calcular_regresion
 from calculos.simpson1_3 import simpson1_3
+from calculos.falsaposicion import calcular_falsa_posicion
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -27,6 +28,7 @@ def home():
         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
         {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
         {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
+        {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
