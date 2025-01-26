@@ -4,14 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Método de Punto Fijo</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
-        #grafica {
-            margin-top: 30px;
-            width: 50%;
-            height: 300px;
-        }
-
         #resultado {
             margin-top: 20px;
             font-family: Arial, sans-serif;
@@ -49,7 +42,6 @@
     </form>
 
     <div id="resultado" class="result" style="display: none;"></div>
-    <center><div id="grafica"></div></center>
 
     <script>
         document.getElementById("punto-fijo-form").addEventListener("submit", async function(event) {
@@ -66,64 +58,34 @@
             }
 
             try {
-                const funcionConTrig = funcion.replace(/sin/g, "math.sin").replace(/cos/g, "math.cos").replace(/tan/g, "math.tan");
-
                 const response = await fetch('/metodo-punto-fijo', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ funcion: funcionConTrig, x0, tolerancia, iteraciones }),
+                    body: JSON.stringify({ funcion, x0, tolerancia, iteraciones }),
                 });
 
-                const data = await response.json();
-
-                const resultadoDiv = document.getElementById("resultado");
-                if (data.error) {
-                    resultadoDiv.style.display = "block";
-                    resultadoDiv.innerHTML = `<strong style="color: red;">Error:</strong> ${data.error}`;
-                } else {
-                    resultadoDiv.style.display = "block";
-                    resultadoDiv.innerHTML = `
-                        <br><strong>Resultado del Método de Punto Fijo:</strong><br>
-                        Raíz aproximada: <strong>${data.raiz}</strong><br>
-                        Iteraciones realizadas: <strong>${data.iteraciones}</strong><br>
-                        Error: <strong>${data.error_aproximado}</strong>
-                    `;
-
-                    const trace1 = {
-                        x: Array.from({ length: data.iteraciones}, (_, i) => i + 1),
-                        y: data.iteraciones_data,
-                        type: 'scatter',
-                        mode: 'lines+markers',
-                        marker: { color: '#FF5733' },  
-                        name: 'Raíz Aproximada',
-                    };
-
-                    const layout = {
-                        title: 'Convergencia del Método de Punto Fijo',
-                        xaxis: { 
-                            title: 'Iteración', 
-                            titlefont: { family: 'Arial, sans-serif', size: 18, color: '#333' },
-                            tickfont: { size: 14, color: '#555' }
-                        },
-                        yaxis: { 
-                            title: 'Valor de la Raíz', 
-                            titlefont: { family: 'Arial, sans-serif', size: 18, color: '#333' },
-                            tickfont: { size: 14, color: '#555' }
-                        },
-                        plot_bgcolor: '#f4f4f9',  
-                        paper_bgcolor: '#fff',
-                        font: { family: 'Arial, sans-serif', size: 14 },
-                    };
-
-                    Plotly.newPlot('grafica', [trace1], layout);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert("Error: " + errorData.error);  
+                    return;
                 }
+
+                const data = await response.blob();
+                const resultadoDiv = document.getElementById("resultado");
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(data);
+                resultadoDiv.style.display = "block";
+                resultadoDiv.innerHTML = "";
+                resultadoDiv.appendChild(img);
+
             } catch (error) {
                 alert("Hubo un error al realizar el cálculo. Intente nuevamente.");
                 console.error("Error al calcular:", error);
             }
         });
+
     </script>
 </body>
 </html>

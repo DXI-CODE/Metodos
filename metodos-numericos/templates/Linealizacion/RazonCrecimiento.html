@@ -83,14 +83,14 @@
         });
 
         const result = await response.json();
-        console.log(result);
+        
         const resultadoDiv = document.getElementById("resultado");
         if (result.error) {
             resultadoDiv.style.display = "block";
             resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
         }else{
-          const datosLinX = result.datos_lin_x || [];
-          const datosLinY = result.datos_lin_y || [];
+          const datosLinX = result.resultado_tabla_x || [];
+          const datosLinY = result.resultado_tabla_y || [];
           if (datosLinX.length !== datosLinY.length) {
             resultadoDiv.style.display = "block";
             resultadoDiv.innerHTML = `<strong>Error:</strong> Los arrays de X e Y no coinciden en longitud.`;
@@ -120,7 +120,7 @@
         }
       } catch (error) {
         // Manejo de errores
-        alert('Hubo un problema al enviar los datos: ');
+        alert('Hubo un problema al enviar los datos');
         console.error("Error al calcular:", error);
       }
     }

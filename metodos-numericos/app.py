@@ -3,7 +3,7 @@ from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
-from calculos.puntofijo import metodo_punto_fijo
+#from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
@@ -12,6 +12,7 @@ from calculos.simpson1_3 import simpson1_3
 from calculos.falsaposicion import calcular_falsa_posicion
 from calculos.regresion_polinomial import regresion_polinomial
 from calculos.trapecio import metodo_trapecio
+from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -28,6 +29,7 @@ def home():
         {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+        {"nombre": "Regresion por crecimiento de saturación", "url":"/regresion-crecimiento-saturado"},
         {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
         {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
         {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
@@ -39,12 +41,27 @@ def home():
 
 ##______________________________________________
 
+##METODO DE SERIE DE TAYLOR
+@app.route('/serie-taylor', methods=['GET'])
+def calcular_taylor_get():
+    return render_template('series/serietaylor.html')
+@app.route('/serie-taylor', methods=['POST'])
+def calcular_taylor_post():
+    datos = request.json
+    funcion_str = datos.get('funcion')
+    expansion = datos.get('expansion')
+    numero_n = datos.get('numero_n')
 
-##[
+    if not funcion_str or expansion is None or numero_n is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+    
+    try:
+        serie = calcular_serie_taylor(funcion_str, expansion, numero_n)
+        return jsonify({'resultado_funcion': serie})
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
-    ##METODOS DE JOAN
-
-##]
+##______________________________________________
 
 
 #METODO DE SERIE DE MC LAURIN
@@ -238,14 +255,6 @@ def calcular_punto_fijo_post():
 
 ##______________________________________________
 
-
-##[
-
-    ##METODOS DE JEYCSON
-
-##]
-
-
 ##______________________________________________
 ##LINEALIZACION A RAZON DE CRECIMIENTO
 @app.route('/linealizacion-a-razon-crecimiento', methods=['GET'])
@@ -259,7 +268,10 @@ def calcular_linealizacion_razon_crecimiento_post():
 
         resultado = metodo_linealizacion_crecimiento(datos)
 
-        return jsonify(resultado)
+        return jsonify({
+            "resultado_tabla_x": resultado["datos_lin_x"],
+            "resultado_tabla_y": resultado["datos_lin_y"],
+        })
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
@@ -314,6 +326,29 @@ def metodo_simpson_38_post():
 
 ##______________________________________________
     
+    
+##______________________________________________
+##REGRESION POR CRECIMIENTO DE SATURACION
+@app.route('/regresion-crecimiento-saturado', methods=['GET'])
+def calcular_regresion_saturado_get():
+    return render_template('Regresion/RegresionSaturado.html')
+@app.route('/regresion-crecimiento-saturado', methods=['POST'])
+def calcular_regresion_saturado_post():
+    try:
+        data = request.get_json()
+        datos = data.get('valores')
+
+        datos_lin = metodo_linealizacion_crecimiento(datos)
+        resultado = metodo_regresion_crecimiento_saturado(datos_lin, datos)
+        return jsonify({
+            "resultado_funcion": resultado["funcion"],
+            "resultado_tabla_ycal" : resultado["tabla_ycal"],
+            "resultado_tabla_y" : resultado["tabla_y"],
+            "resultado_tabla_x" : resultado["tabla_x"]
+        })
+
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
     
 ##______________________________________________
 ##REGRESION MULTILINEAL
