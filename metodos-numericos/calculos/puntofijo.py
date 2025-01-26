@@ -1,5 +1,7 @@
 import sympy as sp
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Backend no interactivo para evitar problemas en el servidor
 import matplotlib.pyplot as plt
 import io
 import math
@@ -8,6 +10,14 @@ def calcular_y_graficar(funcion_str, x0, tolerancia, iteraciones):
     try:
         x = sp.symbols('x')
         g = sp.sympify(funcion_str)
+
+        dg_dx = sp.diff(g, x)
+        dg_dx_numeric = sp.lambdify(x, dg_dx, 'numpy')
+        max_derivada = max(abs(dg_dx_numeric(np.linspace(x0 - 2, x0 + 2, 500))))
+
+        if max_derivada >= 1:
+            raise ValueError(f"La función g(x) no converge porque |g'(x)| = {max_derivada:.5f} >= 1")
+
         valores_x = [x0]
         for _ in range(iteraciones):
             x_next = float(g.subs(x, valores_x[-1]))
@@ -39,9 +49,8 @@ def calcular_y_graficar(funcion_str, x0, tolerancia, iteraciones):
         return buffer
     except Exception as e:
         raise ValueError(f"Error en el cálculo o graficación: {e}")
-    
-def metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max):
 
+def metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max):
     context = {
         'sin': math.sin,
         'cos': math.cos,
@@ -53,16 +62,27 @@ def metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max):
     }
 
     def g(x):
-        return eval(funcion_str, {"x": x}, context) 
+        return eval(funcion_str, {"x": x}, context)
 
     iteracion = 0
     error = float('inf')
     x = x0
 
+    print("Iteración | x          | x_next     | error")
+    print("------------------------------------------")
+
     while iteracion < iteraciones_max and error > tolerancia:
-        x_next = g(x)
-        error = abs(x_next - x)
-        x = x_next
-        iteracion += 1
+        try:
+            x_next = g(x)
+            error = abs(x_next - x)
+            print(f"{iteracion:9} | {x:.8f} | {x_next:.8f} | {error:.8f}")
+            x = x_next
+            iteracion += 1
+        except Exception as e:
+            print(f"Error en la iteración {iteracion}: {e}")
+            break
+
+    if iteracion == iteraciones_max and error > tolerancia:
+        print("Advertencia: No se alcanzó la tolerancia dentro del número máximo de iteraciones.")
 
     return x, error
