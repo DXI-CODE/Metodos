@@ -7,7 +7,7 @@ from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
-from calculos.regresionmultilineal import calcular_regresion
+#from calculos.regresionmultilineal import calcular_regresion
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -134,7 +134,7 @@ def calcular_linealizacion_razon_crecimiento_get():
 def calcular_linealizacion_razon_crecimiento_post():
     try:
         data = request.get_json()
-        datos = data.get('data')
+        datos = data.get('valores')
 
         resultado = metodo_linealizacion_crecimiento(datos)
 
@@ -210,4 +210,4 @@ def regresion_multilineal():
 ##______________________________________________
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,  host='127.0.0.1', port=5000)

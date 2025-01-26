@@ -58,36 +58,44 @@
         // Recoger datos de los campos
         const xValues = Array.from(document.querySelectorAll('.x-input')).map(input => {
           if (input.value === '') throw new Error('Todos los campos de X deben estar llenos.');
-          return input.value;
+          return parseFloat(input.value);
         });
 
         const yValues = Array.from(document.querySelectorAll('.y-input')).map(input => {
           if (input.value === '') throw new Error('Todos los campos de Y deben estar llenos.');
-          return input.value;
+          return parseFloat(input.value);
         });
 
         // Crear un objeto de datos para enviar
-        const data = {
+        const valores = {
           x: xValues,
           y: yValues
         };
 
       try{
         // Enviar los datos al servidor mediante fetch
-        const response = await fetch('/calcular_linealizacion_razon_crecimiento', {
+        const response = await fetch('/linealizacion-a-razon-crecimiento', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify({ valores })
         });
 
         const result = await response.json();
+        console.log(result);
         const resultadoDiv = document.getElementById("resultado");
         if (result.error) {
             resultadoDiv.style.display = "block";
             resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
-        } else {
+        }else{
+          const datosLinX = result.datos_lin_x || [];
+          const datosLinY = result.datos_lin_y || [];
+          if (datosLinX.length !== datosLinY.length) {
+            resultadoDiv.style.display = "block";
+            resultadoDiv.innerHTML = `<strong>Error:</strong> Los arrays de X e Y no coinciden en longitud.`;
+          } else {
+            // Generar la tabla con los valores de datos_lin_x y datos_lin_y
             resultadoDiv.style.display = "block";
             resultadoDiv.innerHTML = `
             <strong>Datos linealizados a razón de crecimiento:</strong><br>
@@ -99,17 +107,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                ${result
-                    .map(data => `
+                ${datosLinX.map((x, index) => `
                     <tr>
-                        <td>${data.datos_lin_x}</td>
-                        <td>${data.datos_lin_y}</td>
+                        <td>${x}</td>
+                        <td>${datosLinY[index]}</td>
                     </tr>
-                    `)
-                    .join('')}
+                `).join('')}
                 </tbody>
             </table>
             `;
+          }            
         }
       } catch (error) {
         // Manejo de errores
