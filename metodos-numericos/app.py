@@ -10,6 +10,7 @@ from calculos.interpolacionlagrange import lagrange
 from calculos.regresionmultilineal import calcular_regresion
 from calculos.simpson1_3 import simpson1_3
 from calculos.falsaposicion import calcular_falsa_posicion
+from calculos.regresion_polinomial import regresion_polinomial
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -29,6 +30,7 @@ def home():
         {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
         {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
         {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
+        {"nombre": "Regresión Polinomial", "url":"/regresion-polinomial"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -94,7 +96,34 @@ def calcular_falsa_posicion_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular el método de Falsa Posición: {str(e)}'}), 500
 
+##______________________________________________
 
+## METODO DE REGRESIÓN POLINOMIAL
+
+##______________________________________________
+@app.route('/regresion-polinomial', methods=['GET'])
+def regresion_polinomia_get():
+    return render_template('regresion/RegresionPolinomial.html')
+
+@app.route('/regresion-polinomial', methods=['POST'])
+def regresion_polinomial_post():
+    try:
+        # Obtener datos del cliente
+        datos = request.get_json()
+        x_values = list(map(float, datos['x_values']))
+        y_values = list(map(float, datos['y_values']))
+        grado = int(datos['grado'])
+
+        # Calcular la regresión polinomial
+        resultado = regresion_polinomial(x_values, y_values, grado)
+
+        # Responder con los resultados
+        return jsonify(resultado)
+
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': 'Error interno del servidor.'}), 500
 
 ##______________________________________________
 
