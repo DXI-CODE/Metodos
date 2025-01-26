@@ -33,7 +33,7 @@
         async function calcularSerieTaylor() {
             const funcion = document.getElementById("funcion").value;
             const expansion = parseFloat(document.getElementById("expansion").value);
-            const numero_n = parseInt(document.getElementById("numero_n").value);
+            const numero_n = parseInt(document.getElementById("numero_n").value) + 1;
     
             const response = await fetch('/serie-taylor', {
                 method: 'POST',
