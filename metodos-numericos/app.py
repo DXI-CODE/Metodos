@@ -201,12 +201,24 @@ def regresion_multilineal_get():
     return render_template('Regresion/RegresionMultilineal.html')
 @app.route("/regresion-multilineal", methods=["POST"])
 def regresion_multilineal():
-    data = request.get_json()
-    X = data.get("X")
+    data = request.get_json()  
+    X = data.get("X")  
     y = data.get("y")
-
     resultado = calcular_regresion(X, y)
-    return jsonify(resultado)    
+    if "error" in resultado:
+        return jsonify({"error": resultado["error"]})
+
+    coeficientes = resultado["coeficientes"]
+    intercepto = resultado["intercepto"]
+    ecuacion = " + ".join([f"{coef:.6f}*x{i+1}" for i, coef in enumerate(coeficientes) if coef >= 0])
+    ecuacion += " " + " ".join([f"{coef:.6f}*x{i+1}" for i, coef in enumerate(coeficientes) if coef < 0])
+    ecuacion += f" + {intercepto:.6f}"
+
+    return jsonify({
+        'ecuacion': ecuacion,
+        'coeficientes': coeficientes,
+        'intercepto': intercepto
+    })
 ##______________________________________________
 
 if __name__ == '__main__':
