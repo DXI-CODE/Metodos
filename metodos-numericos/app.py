@@ -7,6 +7,7 @@ from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
+from calculos.falsaposicion import calcular_falsa_posicion
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -22,34 +23,20 @@ def home():
         {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
         {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
         {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
-         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+        {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+        {"nombre": "Metodo de Falsa Posición", "url": "/metodo-falsa-posicion"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
 
 ##______________________________________________
 
-##METODO DE SERIE DE TAYLOR
-@app.route('/serie-taylor', methods=['GET'])
-def calcular_taylor_get():
-    return render_template('series/serietaylor.html')
-@app.route('/serie-taylor', methods=['POST'])
-def calcular_taylor_post():
-    datos = request.json
-    funcion_str = datos.get('funcion')
-    expansion = datos.get('expansion')
-    numero_n = datos.get('numero_n')
 
-    if not funcion_str or expansion is None or numero_n is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-    
-    try:
-        serie = calcular_serie_taylor(funcion_str, expansion, numero_n)
-        return jsonify({'resultado_funcion': serie})
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
+##[
 
-##______________________________________________
+    ##METODOS DE JOAN
+
+##]
 
 
 #METODO DE SERIE DE MC LAURIN
@@ -73,6 +60,67 @@ def calcular_mclaurin_post():
 
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de mclaurin: {str(e)}'}), 500
+
+##______________________________________________
+
+
+## METODO DE FALSA POSICIÓN
+
+##______________________________________________
+@app.route('/metodo-falsa-posicion', methods=['GET'])
+def calcular_falsa_posicion_get():
+    return render_template('metodos_raices/falsaposicion.html')
+
+@app.route('/metodo-falsa-posicion', methods=['POST'])
+def calcular_falsa_posicion_post():
+    datos = request.json
+    funcion_str = datos.get('funcion')
+    valor_a = float(datos.get('valor_a'))
+    valor_b = float(datos.get('valor_b'))
+    tolerancia = float(datos.get('tolerancia'))
+    iteraciones = int(datos.get('iteraciones'))
+
+    if not funcion_str or valor_a is None or valor_b is None or tolerancia is None or iteraciones is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        resultados = calcular_falsa_posicion(funcion_str, valor_a, valor_b, tolerancia, iteraciones)
+        return jsonify({'resultados': resultados})
+
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular el método de Falsa Posición: {str(e)}'}), 500
+
+
+
+##______________________________________________
+
+##[
+
+    ##METODOS DE JEOVANI
+
+##]
+
+
+##______________________________________________
+##METODO DE SERIE DE TAYLOR
+@app.route('/serie-taylor', methods=['GET'])
+def calcular_taylor_get():
+    return render_template('series/serietaylor.html')
+@app.route('/serie-taylor', methods=['POST'])
+def calcular_taylor_post():
+    datos = request.json
+    funcion_str = datos.get('funcion')
+    expansion = datos.get('expansion')
+    numero_n = datos.get('numero_n')
+
+    if not funcion_str or expansion is None or numero_n is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+    
+    try:
+        serie = calcular_serie_taylor(funcion_str, expansion, numero_n)
+        return jsonify({'resultado_funcion': serie})
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
 
 ##______________________________________________
 
@@ -122,6 +170,14 @@ def calcular_punto_fijo_post():
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
 ##______________________________________________
+
+
+##[
+
+    ##METODOS DE JEYCSON
+
+##]
+
 
 ##______________________________________________
 ##LINEALIZACION A RAZON DE CRECIMIENTO
