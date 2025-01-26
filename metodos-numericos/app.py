@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
-from calculos.puntofijo import metodo_punto_fijo
+from calculos.puntofijo import calcular_y_graficar, metodo_punto_fijo_calculo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
@@ -190,17 +190,22 @@ def calcular_gauss_inversa_post():
 def calcular_punto_fijo_get():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')
 @app.route('/metodo-punto-fijo', methods=['POST'])
-def calcular_punto_fijo_post():
+def metodo_punto_fijo():
     try:
         data = request.get_json()
-        funcion_str = data.get('funcion')
-        x0 = float(data.get('x0'))
-        tolerancia = float(data.get('tolerancia'))
-        iteraciones_max = int(data.get('iteraciones'))
-        resultado = metodo_punto_fijo(funcion_str, x0, tolerancia, iteraciones_max)
-        return jsonify(resultado)
+        funcion_str = data['funcion']
+        x0 = float(data['x0'])
+        tolerancia = float(data['tolerancia'])
+        iteraciones_max = int(data['iteraciones'])
+        resultado, error = metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max)
+        
+        if error > tolerancia:
+            return jsonify({"error": "No se alcanzó la convergencia en el número máximo de iteraciones."}), 400
+        buffer = calcular_y_graficar(funcion_str, x0, tolerancia, iteraciones_max)
+        return send_file(buffer, mimetype='image/png')
+    
     except Exception as e:
-        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+        return jsonify({"error": str(e)}), 400
 
 ##______________________________________________
 
