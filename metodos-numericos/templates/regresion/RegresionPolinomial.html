@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión Polinomial</title>
+</head>
+<body>
+    <h1>Regresión Polinomial</h1>
+    
+    <form id="regresion_form">
+        <label for="x_values">Valores de X (separados por comas):</label><br>
+        <input type="text" id="x_values" name="x_values" required><br><br>
+
+        <label for="y_values">Valores de Y (separados por comas):</label><br>
+        <input type="text" id="y_values" name="y_values" required><br><br>
+
+        <label for="grado">Grado del Polinomio:</label><br>
+        <input type="number" id="grado" name="grado" min="1" required><br><br>
+
+        <button type="submit">Calcular</button>
+    </form>
+
+    <h2>Resultados</h2>
+    <p><strong>Ecuación Polinómica (Formato LaTeX):</strong></p>
+    <p id="latex_equation"></p>
+
+    <h3>Gráfica</h3>
+    <img id="grafica" alt="Gráfica de regresión polinomial" style="display: none;">
+
+    <script>
+        document.getElementById('regresion_form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const x_values = document.getElementById('x_values').value.split(',').map(Number);
+            const y_values = document.getElementById('y_values').value.split(',').map(Number);
+            const grado = parseInt(document.getElementById('grado').value, 10);
+
+            const datos = { x_values, y_values, grado };
+
+            try {
+                const response = await fetch('/regresion-polinomial', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('latex_equation').textContent = result.polinomio_latex;
+                    const img = document.getElementById('grafica');
+                    img.src = 'data:image/png;base64,' + result.grafico_base64;
+                    img.style.display = 'block';
+                } else {
+                    alert(result.error || "Ocurrió un error en el servidor.");
+                }
+            } catch (error) {
+                alert("Ocurrió un error. Por favor, verifica los datos ingresados.");
+                console.error(error);
+            }
+        };
+    </script>
+</body>
+</html>
