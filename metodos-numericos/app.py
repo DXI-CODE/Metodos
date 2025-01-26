@@ -7,7 +7,8 @@ from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
-#from calculos.regresionmultilineal import calcular_regresion
+from calculos.regresionmultilineal import calcular_regresion
+from calculos.simpson1_3 import simpson1_3
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -25,6 +26,7 @@ def home():
         {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
         {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
         {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
+        {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -201,12 +203,53 @@ def regresion_multilineal_get():
     return render_template('Regresion/RegresionMultilineal.html')
 @app.route("/regresion-multilineal", methods=["POST"])
 def regresion_multilineal():
-    data = request.get_json()
-    X = data.get("X")
+    data = request.get_json()  
+    X = data.get("X")  
     y = data.get("y")
-
     resultado = calcular_regresion(X, y)
-    return jsonify(resultado)    
+    if "error" in resultado:
+        return jsonify({"error": resultado["error"]})
+
+    coeficientes = resultado["coeficientes"]
+    intercepto = resultado["intercepto"]
+    ecuacion = " + ".join([f"{coef:.6f}*x{i+1}" for i, coef in enumerate(coeficientes) if coef >= 0])
+    ecuacion += " " + " ".join([f"{coef:.6f}*x{i+1}" for i, coef in enumerate(coeficientes) if coef < 0])
+    ecuacion += f" + {intercepto:.6f}"
+
+    return jsonify({
+        'ecuacion': ecuacion,
+        'coeficientes': coeficientes,
+        'intercepto': intercepto
+    })
+##______________________________________________
+
+##______________________________________________
+        
+#METODO DE INTEGRACIÓN POR SIMPSON 1/3  
+
+@app.route('/simpson1_3', methods=['GET'])
+def calcular_simpson1_3_get():
+    return render_template('Integracion/Simpson1_3.html')
+@app.route('/simpson1_3', methods=['POST'])
+def calcular_simpson1_3_post():
+    datos = request.json
+    funcion = datos.get('funcion')
+    x0 = datos.get('x0')
+    xn = datos.get('xn')
+    numero_n = datos.get('numero_n')
+    
+
+    if not funcion or x0 is None or xn is None or numero_n is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        simpson = simpson1_3(funcion, x0, xn, numero_n)
+        return jsonify({'funcion': simpson})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la integración por Simpson 1/3: {str(e)}'}), 500
+
 ##______________________________________________
 
 if __name__ == '__main__':
