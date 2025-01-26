@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linealización exponencial</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+</head>
+<body>
+    <h1>Linealización exponencial</h1>
+
+    <form id="formulario">
+        <p>Ingrese un conjunto de puntos (x, y) separados por comas:</p>
+        <textarea id="input-points" placeholder="Ejemplo:\n1,2\n3,5\n9,5" rows="16"></textarea>
+        <button type="submit">Calcular</button>
+    </form>
+
+    <h2>Resultado Linealización</h2>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("formulario").addEventListener("submit", function(event) {
+            event.preventDefault();
+            calcularExponencial(); 
+        });
+
+        async function calcularExponencial() {
+            const input = document.getElementById('input-points').value;
+            const points = input.split('\n').map(line => {
+                const [x, y] = line.split(',').map(Number);
+                if (isNaN(x) || isNaN(y)) {
+                    return null;
+                }
+                return [x, y];
+            }).filter(Boolean); 
+    
+            try {
+                const response = await fetch('/exponencial', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ puntos: points})
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = `<p><strong>Resultado obtenido:</strong></p><pre>${result.funcion}</pre>`;
+                } else {
+                    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color:red;">Error en la conexión con el servidor.</p><p>${error}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
