@@ -201,15 +201,11 @@ def regresion_multilineal_get():
     return render_template('Regresion/RegresionMultilineal.html')
 @app.route("/regresion-multilineal", methods=["POST"])
 def regresion_multilineal():
-    # Obtener datos del cuerpo de la solicitud
     data = request.get_json()
     X = data.get("X")
     y = data.get("y")
 
-    # Llamar a la función desde el archivo 'regresion.py'
     resultado = calcular_regresion(X, y)
-
-    # Devolver el resultado como JSON
     return jsonify(resultado)    
 ##______________________________________________
 
