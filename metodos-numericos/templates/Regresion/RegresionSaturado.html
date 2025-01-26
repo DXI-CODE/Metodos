@@ -126,7 +126,7 @@
               resultadoEc.innerHTML = `$$ ${ec} $$`;
               MathJax.Hub.Queue(["Typeset", MathJax.Hub, "resultadoEc"]);
               const img = document.getElementById('grafica');
-              img.src = 'data:image/png;base64,' + result.grafico_base64;
+              img.src = 'data:image/png;base64,' + result.resultado_grafico;
               img.style.display = 'block';
             }
         } catch (error) {

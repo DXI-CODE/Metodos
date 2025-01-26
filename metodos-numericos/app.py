@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
-#from calculos.puntofijo import metodo_punto_fijo
+from calculos.puntofijo import calcular_y_graficar, metodo_punto_fijo_calculo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
@@ -14,6 +14,8 @@ from calculos.regresion_polinomial import regresion_polinomial
 from calculos.trapecio import metodo_trapecio
 from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
 from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
+from calculos.linealizacionexponencial import exponencial
+from calculos.linealizacionpotencial import potencial
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -271,23 +273,35 @@ def calcular_gauss_inversa_post():
 ##______________________________________________
 ##METODO DE PUNTO FIJO
 
+
 @app.route('/metodo-punto-fijo', methods=['GET'])
 def calcular_punto_fijo_get():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')
 @app.route('/metodo-punto-fijo', methods=['POST'])
-def calcular_punto_fijo_post():
+def metodo_punto_fijo():
     try:
         data = request.get_json()
-        funcion_str = data.get('funcion')
-        x0 = float(data.get('x0'))
-        tolerancia = float(data.get('tolerancia'))
-        iteraciones_max = int(data.get('iteraciones'))
-        resultado = metodo_punto_fijo(funcion_str, x0, tolerancia, iteraciones_max)
-        return jsonify(resultado)
+        funcion_str = data['funcion']
+        x0 = float(data['x0'])
+        tolerancia = float(data['tolerancia'])
+        iteraciones_max = int(data['iteraciones'])
+        resultado, error = metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max)
+        
+        if error > tolerancia:
+            return jsonify({"error": "No se alcanzó la convergencia en el número máximo de iteraciones."}), 400
+        buffer = calcular_y_graficar(funcion_str, x0, tolerancia, iteraciones_max)
+        return send_file(buffer, mimetype='image/png')
     except Exception as e:
-        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-
+        return jsonify({"error": str(e)}), 400
 ##______________________________________________
+
+
+##[
+
+    ##METODOS DE JEYCSON
+
+##]
+
 
 ##______________________________________________
 ##LINEALIZACION A RAZON DE CRECIMIENTO
@@ -310,32 +324,6 @@ def calcular_linealizacion_razon_crecimiento_post():
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
-##______________________________________________
-   
-#METODO DE INTERPOLACION DE LAGRANGE
-
-@app.route('/calcular_lagrange', methods=['GET'])
-def calcular_lagrange_get():
-    return render_template('interpolacion/lagrange.html')
-@app.route('/calcular_lagrange', methods=['POST'])
-def calcular_lagrange_post():
-    datos = request.json
-    puntos = datos.get('puntos')
-    grado = datos.get('grado')
-    valorx = datos.get('valorx')
-
-    if not puntos or grado is None or valorx is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-
-    try:
-        serie = lagrange(puntos, grado, valorx)
-        return jsonify({'funcion': serie})
-    except ValueError as e:
-        return jsonify({'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
-
-##______________________________________________
     
 ##______________________________________________
 ##METODO DE SIMPSON 3/8
@@ -378,7 +366,8 @@ def calcular_regresion_saturado_post():
             "resultado_funcion": resultado["funcion"],
             "resultado_tabla_ycal" : resultado["tabla_ycal"],
             "resultado_tabla_y" : resultado["tabla_y"],
-            "resultado_tabla_x" : resultado["tabla_x"]
+            "resultado_tabla_x" : resultado["tabla_x"],
+            "resultado_grafico" : resultado["grafico"]
         })
 
     except Exception as e:
@@ -411,6 +400,12 @@ def regresion_multilineal():
     })
 ##______________________________________________
 
+##[
+
+    ##METODOS DE JUAN
+
+##]
+
 ##______________________________________________
         
 #METODO DE INTEGRACIÓN POR SIMPSON 1/3  
@@ -439,6 +434,85 @@ def calcular_simpson1_3_post():
         return jsonify({'error': f'Error al calcular la integración por Simpson 1/3: {str(e)}'}), 500
 
 ##______________________________________________
+
+##______________________________________________
+   
+#METODO DE INTERPOLACION DE LAGRANGE
+
+@app.route('/calcular_lagrange', methods=['GET'])
+def calcular_lagrange_get():
+    return render_template('interpolacion/lagrange.html')
+@app.route('/calcular_lagrange', methods=['POST'])
+def calcular_lagrange_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+    grado = datos.get('grado')
+    valorx = datos.get('valorx')
+
+    if not puntos or grado is None or valorx is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        serie = lagrange(puntos, grado, valorx)
+        return jsonify({'funcion': serie})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
+
+##______________________________________________
+
+##______________________________________________
+        
+#METODO DE LINEALIZACIÓN EXPONENCIAL  
+
+@app.route('/exponencial', methods=['GET'])
+def calcular_exponencial_get():
+    return render_template('Linealizacion/Exponencial.html')
+@app.route('/exponencial', methods=['POST'])
+def calcular_exponencial_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+
+    if not puntos:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        expo = exponencial(puntos)
+        return jsonify({'funcion': expo})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la función por linealización exponencial: {str(e)}'}), 500
+
+##______________________________________________
+
+##______________________________________________
+        
+#METODO DE LINEALIZACIÓN POTENCIAL  
+
+@app.route('/potencial', methods=['GET'])
+def calcular_potencial_get():
+    return render_template('Linealizacion/Potencial.html')
+@app.route('/potencial', methods=['POST'])
+def calcular_potencial_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+
+    if not puntos:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        expo = potencial(puntos)
+        return jsonify({'funcion': expo})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la función por linealización potencial: {str(e)}'}), 500
+
+##______________________________________________
+
+
 
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
