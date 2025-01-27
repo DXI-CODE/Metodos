@@ -26,22 +26,45 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 @app.route('/')
 def home():
     rutas_get = [
-        {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
-        {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
-        {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
-        {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
-        {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
-        {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
-        {"nombre": "Regresion por crecimiento de saturación", "url":"/regresion-crecimiento-saturado"},
-        {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
-        {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
-        {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
-        {"nombre": "Regresión Polinomial", "url":"/regresion-polinomial"},
-        {"nombre": "Integración por Método de Trapecio", "url":"/metodo-trapecio"},
-        {"nombre": "E.c Diferenciales Runge Kutta Orden 4", "url":"/runge-kutta"},
-        # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
+        {
+            "categoria": "Series",
+            "metodos": [
+                {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
+                {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
+            ]
+        },
+        {
+            "categoria": "Métodos Numéricos",
+            "metodos": [
+                {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
+                {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
+                {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
+            ]
+        },
+        {
+            "categoria": "Regresiones",
+            "metodos": [
+                {"nombre": "Regresion por crecimiento de saturación", "url": "/regresion-crecimiento-saturado"},
+                {"nombre": "Regresion multilineal", "url": "/regresion-multilineal"},
+                {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
+            ]
+        },
+        {
+            "categoria": "Integración",
+            "metodos": [
+                {"nombre": "Integración por Simpson 1_3", "url": "/simpson1_3"},
+                {"nombre": "Integración por Método de Trapecio", "url": "/metodo-trapecio"},
+            ]
+        },
+        {
+            "categoria": "Ecuaciones Diferenciales",
+            "metodos": [
+                {"nombre": "E.c Diferenciales Runge Kutta Orden 4", "url": "/runge-kutta"},
+            ]
+        },
     ]
-    return render_template('principal/inicio.html', rutas = rutas_get)
+    return render_template('principal/inicio.html', rutas=rutas_get)
+
 
 ##_____________________________________________
 
