@@ -9,7 +9,7 @@
     <!-- Encabezado principal -->
     <header>
         <h1>Cálculo de Derivadas</h1>
-        <p>Selecciona si deseas ingresar una función o proporcionar datos.</p>
+        <p>Selecciona si deseas ingresar una función o proporcionar datos</p>
     </header>
 
     <!-- Sección principal -->
@@ -207,7 +207,7 @@
             const tipo = "Funcion"
 
             try{
-                const response = await fetch('/derivada-atras', {
+                const response = await fetch('/derivada-adelante', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -257,7 +257,7 @@
             const tipo = "Datos"
 
             try{
-                const response = await fetch('/derivada-atras', {
+                const response = await fetch('/derivada-adelante', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

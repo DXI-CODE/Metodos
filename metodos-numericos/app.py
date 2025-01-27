@@ -19,7 +19,7 @@ from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
 from calculos.gauss_simple import validar_matriz, gauss_simple
 from calculos.derivacionatras import calcular_derivacion_atras
-
+from calculos.derivacionadelante import calcular_derivacion_adelante
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -72,6 +72,7 @@ def home():
             "categoria": "Diferenciacion",
             "metodos": [
                 {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
+                {"nombre": "Diferenciacion numerica hacia adelante", "url":"/derivada-adelante"},
             ]
         },
         {
@@ -383,7 +384,27 @@ def calcular_derivada_atras_post():
         )
     except Exception as e:
         return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+
+
+##______________________________________________
+##DIFERENCIACION HACIA ADELANTE
+@app.route('/derivada-adelante', methods=['GET'])
+def calcular_derivada_adelante_get():
+    return render_template('Diferenciacion/HaciaAdelante.html')
+@app.route('/derivada-adelante', methods=['POST'])
+def calcular_derivada_adelante_post():
+    datos = request.json
+    valores = datos.get('datos')
+    tipo = datos.get('tipo')
     
+    try:
+        resultado = calcular_derivacion_adelante(valores, tipo)
+        return jsonify(
+            {'resultado_tabla': resultado["tabla"]}
+        )
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+ 
 ##______________________________________________
 ##REGRESION POR CRECIMIENTO DE SATURACION
 @app.route('/regresion-crecimiento-saturado', methods=['GET'])
