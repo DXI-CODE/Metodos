@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Derivadas</title>
+</head>
+<body>
+    <!-- Encabezado principal -->
+    <header>
+        <h1>Cálculo de Derivadas</h1>
+        <p>Selecciona si deseas ingresar una función, proporcionar datos o ambos para calcular la derivada.</p>
+    </header>
+
+    <!-- Sección principal -->
+    <main>
+        <section>
+            <h2>Selecciona una opción</h2>
+            <form id="opcionForm">
+                <label>
+                    <input type="radio" name="metodo" value="funcion" required>
+                    Ingresar una función
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="metodo" value="datos">
+                    Ingresar datos
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="metodo" value="funcionDatos">
+                    Ingresar función y datos
+                </label>
+                <br>
+                <button type="button" onclick="mostrarSeccion()">Continuar</button>
+            </form>
+        </section>
+
+        <!-- Sección para ingresar función -->
+        <section id="seccionFuncion" style="display: none;">
+            <h2>Ingreso de Función</h2>
+            <form id="funcionForm">
+                <label for="funcion">Función:</label>
+                <input type="text" id="funcion" name="funcion" placeholder="Ejemplo: x**2 + 3*x + 2" required>
+                <br>
+                <label for="valor">Valor para calcular la derivada:</label>
+                <input type="number" id="valor" name="valor" required>
+                <br>
+                <label for="paso">Tamaño de paso (h, precision):</label>
+                <input type="number" id="paso" name="paso" step="any" required>
+                <br>
+                <fieldset>
+                    <legend>Selecciona las derivadas a calcular:</legend>
+                    <label>
+                        <input type="checkbox" name="derivada" value="primera">
+                        Primera derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="segunda">
+                        Segunda derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="tercera">
+                        Tercera derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="cuarta">
+                        Cuarta derivada
+                    </label>
+                </fieldset>
+                <br>
+                <button type="submit">Calcular</button>
+            </form>
+        </section>
+
+        <!-- Sección para ingresar datos -->
+        <section id="seccionDatos" style="display: none;">
+            <h2>Ingreso de Datos</h2>
+            <form id="datosForm">
+                <label for="cantidadDatos">Cantidad de datos:</label>
+                <input type="number" id="cantidadDatos" name="cantidadDatos" required>
+                <br>
+                <button type="button" onclick="generarCamposDatos()">Generar campos</button>
+                <div id="camposDatos"></div>
+                <br>
+                <label for="valorDatos">Valor para calcular la derivada (opcional):</label>
+                <input type="number" id="valorDatos" name="valorDatos">
+                <br>
+                <fieldset>
+                    <legend>Selecciona las derivadas a calcular:</legend>
+                    <label>
+                        <input type="checkbox" name="derivada" value="primera">
+                        Primera derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="segunda">
+                        Segunda derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="tercera">
+                        Tercera derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="cuarta">
+                        Cuarta derivada
+                    </label>
+                </fieldset>
+                <br>
+                <button type="submit">Calcular</button>
+            </form>
+        </section>
+
+        <!-- Sección para ingresar función y datos -->
+        <section id="seccionFuncionDatos" style="display: none;">
+            <h2>Ingreso de Función y Datos</h2>
+            <form id="funcionDatosForm">
+                <label for="funcionDatos">Función:</label>
+                <input type="text" id="funcionDatos" name="funcionDatos" placeholder="Ejemplo: x**2 + 3*x + 2" required>
+                <br>
+                <label for="valorDatos">Valor para calcular la derivada (opcional):</label>
+                <input type="number" id="valorDatos" name="valorDatos">
+                <br>
+                <label for="cantidadDatosInput">Cantidad de datos:</label>
+                <input type="number" id="cantidadDatosInput" name="cantidadDatosInput" required>
+                <br>
+                <button type="button" onclick="generarCamposDatosFuncion()">Generar campos</button>
+                <div id="camposDatosFuncion"></div>
+                <br>
+                <fieldset>
+                    <legend>Selecciona las derivadas a calcular:</legend>
+                    <label>
+                        <input type="checkbox" name="derivada" value="primera">
+                        Primera derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="segunda">
+                        Segunda derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="tercera">
+                        Tercera derivada
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="derivada" value="cuarta">
+                        Cuarta derivada
+                    </label>
+                </fieldset>
+                <br>
+                <button type="submit">Calcular</button>
+            </form>
+        </section>
+    </main>
+    <div id="resultado" class="result" style="display: none;"></div>
+
+    <script>
+        // Mostrar la sección según la opción seleccionada
+        function mostrarSeccion() {
+            const metodo = document.querySelector('input[name="metodo"]:checked').value;
+            document.getElementById('seccionFuncion').style.display = metodo === 'funcion' ? 'block' : 'none';
+            document.getElementById('seccionDatos').style.display = metodo === 'datos' ? 'block' : 'none';
+            document.getElementById('seccionFuncionDatos').style.display = metodo === 'funcionDatos' ? 'block' : 'none';
+        }
+
+        // Generar los campos para ingresar los datos
+        function generarCamposDatos() {
+            const cantidad = document.getElementById('cantidadDatos').value;
+            const camposDiv = document.getElementById('camposDatos');
+            camposDiv.innerHTML = '';
+
+            for (let i = 1; i <= cantidad; i++) {
+                const inputGroup = document.createElement('div');
+                inputGroup.innerHTML = `
+                <label for="x${i}">X${i}:</label>
+                <input type="number" id="x${i}" class="x-input" required>
+                <label for="y${i}">Y${i}:</label>
+                <input type="number" id="y${i}" class="y-input" required><br>
+                `;
+                camposDiv.appendChild(inputGroup);
+            }
+        }
+
+        function generarCamposDatosFuncion() {
+            const cantidad = document.getElementById('cantidadDatosInput').value;
+            const camposDiv = document.getElementById('camposDatosFuncion');
+            camposDiv.innerHTML = '';
+
+            for (let i = 1; i <= cantidad; i++) {
+                const label = document.createElement('label');
+                label.textContent = `Dato ${i}:`;
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.name = `dato${i}`;
+                input.required = true;
+                camposDiv.appendChild(label);
+                camposDiv.appendChild(input);
+                camposDiv.appendChild(document.createElement('br'));
+            }
+        }
+
+        // Función para manejar la captura de datos de la opción seleccionada
+        function capturarDatosFormulario() {
+            const metodo = document.querySelector('input[name="metodo"]:checked').value;
+            let datosFormulario = null;
+            if (metodo === 'funcion') {
+                const funcion = document.getElementById('funcion').value;
+                const valor = document.getElementById('valor').value;
+                const paso = document.getElementById('paso').value;
+                const derivadasSeleccionadas = Array.from(document.querySelectorAll('input[name="derivada"]:checked'))
+                    .map(checkbox => checkbox.value);
+
+                datosFormulario = {
+                    funcion,
+                    valor,
+                    paso,
+                    derivadas: derivadasSeleccionadas
+                };
+            } else if (metodo === 'datos') {
+                const xValues = Array.from(document.querySelectorAll('.x-input')).map(input => {
+                    if (input.value === '') throw new Error('Todos los campos de X deben estar llenos.');
+                    return parseFloat(input.value);
+                });
+        
+                const yValues = Array.from(document.querySelectorAll('.y-input')).map(input => {
+                    if (input.value === '') throw new Error('Todos los campos de Y deben estar llenos.');
+                    return parseFloat(input.value);
+                });
+                
+                const valorDatos = document.getElementById('valorDatos').value || null;
+                const derivadasSeleccionadas = Array.from(document.querySelectorAll('input[name="derivada"]:checked'))
+                    .map(checkbox => checkbox.value);
+
+                datosFormulario = {
+                    xValues,
+                    yValues,
+                    valorDatos,
+                    derivadas: derivadasSeleccionadas
+                };
+            } else if (metodo === 'funcionDatos') {
+                const funcion = document.getElementById('funcionDatos').value;
+                const valor = document.getElementById('valorDatos').value || null;
+                const cantidadDatos = document.getElementById('cantidadDatosInput').value;
+                const datos = [];
+                
+                for (let i = 1; i <= cantidadDatos; i++) {
+                    const dato = document.querySelector(`input[name="dato${i}"]`).value;
+                    datos.push(dato);
+                }
+                
+                const derivadasSeleccionadas = Array.from(document.querySelectorAll('input[name="derivada"]:checked'))
+                    .map(checkbox => checkbox.value);
+
+                datosFormulario = {
+                    funcion,
+                    valor,
+                    paso,
+                    datos,
+                    derivadas: derivadasSeleccionadas
+                };
+                
+            }
+            return datosFormulario;
+        }
+
+        // Escuchar el evento de envío de los formularios para capturar los datos
+        document.getElementById('funcionForm').addEventListener('submit', async  function (e) {
+            e.preventDefault();
+            const datos = capturarDatosFormulario();
+            const tipo = "Funcion"
+
+            try{
+                const response = await fetch('/derivada-atras', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({datos,tipo})
+                });
+    
+                const result = await response.json();
+                
+                if (result.error) {
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
+                } else {
+                    const valores = result.resultado_tabla || []
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `
+                    <strong>Resultados de la(s) derivada(s):</strong><br>
+                    <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+                        <thead>
+                        <tr>
+                            <th>Derivada</th>
+                            <th>Valor</th>                    
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tbody>
+                            ${Object.entries(valores).map(([derivada, valor]) => `
+                                <tr>
+                                    <td>${derivada}</td>
+                                    <td>${valor}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    `;
+                }
+            }catch (error) {
+                // Manejo de errores
+                alert('Hubo un problema al enviar los datos');
+                console.error("Error al calcular:", error);
+            }
+        });
+
+        document.getElementById('datosForm').addEventListener('submit', async  function (e) {
+            const datos = capturarDatosFormulario();
+            const tipo = "Datos"
+
+            try{
+                const response = await fetch('/derivada-atras', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({datos,tipo})
+                });
+    
+                const result = await response.json();
+                console.log(result)
+                
+                if (result.error) {
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
+                } else {
+                    const valores = result.resultado_tabla || []
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `
+                    <strong>Resultados de la(s) derivada(s):</strong><br>
+                    <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+                        <thead>
+                        <tr>
+                            <th>Derivada</th>
+                            <th>Valor</th>                    
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tbody>
+                            ${Object.entries(valores).map(([derivada, valor]) => `
+                                <tr>
+                                    <td>${derivada}</td>
+                                    <td>${valor}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    `;
+                }
+            }catch (error) {
+                // Manejo de errores
+                alert('Hubo un problema al enviar los datos');
+                console.error("Error al calcular:", error);
+            }
+        });
+
+        document.getElementById('funcionDatosForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const datos = capturarDatosFormulario();
+        });
+    </script>
+</body>
+</html>
