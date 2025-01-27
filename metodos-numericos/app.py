@@ -3,16 +3,17 @@ from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
-from calculos.puntofijo import metodo_punto_fijo
+#from calculos.puntofijo import metodo_punto_fijo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
-from calculos.regresionmultilineal import calcular_regresion
+#from calculos.regresionmultilineal import calcular_regresion
 from calculos.simpson1_3 import simpson1_3
 from calculos.falsaposicion import calcular_falsa_posicion
 from calculos.regresion_polinomial import regresion_polinomial
 from calculos.trapecio import metodo_trapecio
 from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
+from calculos.derivacionatras import calcular_derivacion_atras
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -35,6 +36,7 @@ def home():
         {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
         {"nombre": "Regresión Polinomial", "url":"/regresion-polinomial"},
         {"nombre": "Integración por Método de Trapecio", "url":"/metodo-trapecio"},
+        {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
         # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
     ]
     return render_template('principal/inicio.html', rutas = rutas_get)
@@ -42,7 +44,7 @@ def home():
 ##______________________________________________
 
 ##METODO DE SERIE DE TAYLOR
-@app.route('/serie-taylor', methods=['GET'])
+""" @app.route('/serie-taylor', methods=['GET'])
 def calcular_taylor_get():
     return render_template('series/serietaylor.html')
 @app.route('/serie-taylor', methods=['POST'])
@@ -60,7 +62,7 @@ def calcular_taylor_post():
         return jsonify({'resultado_funcion': serie})
     except Exception as e:
         return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
-
+ """
 ##______________________________________________
 
 
@@ -407,5 +409,25 @@ def calcular_simpson1_3_post():
 
 ##______________________________________________
 
+#METODO DE DIFERENCIACION NUMERICA HACIA ATRAS 
+
+@app.route('/derivada-atras', methods=['GET'])
+def calcular_derivada_atras_get():
+    return render_template('Diferenciacion/HaciaAtras.html')
+@app.route('/derivada-atras', methods=['POST'])
+def calcular_derivada_atras_post():
+    datos = request.json
+    valores = datos.get('datos')
+    tipo = datos.get('tipo')
+    
+    try:
+        resultado = calcular_derivacion_atras(valores, tipo)
+        return jsonify(
+            {'resultado_tabla': resultado["tabla"]}
+        )
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+
+##______________________________________________
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
