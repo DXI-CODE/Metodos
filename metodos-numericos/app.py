@@ -7,7 +7,7 @@ from calculos.puntofijo import calcular_y_graficar, metodo_punto_fijo_calculo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
-#from calculos.regresionmultilineal import calcular_regresion
+from calculos.regresionmultilineal import calcular_regresion
 from calculos.simpson1_3 import simpson1_3
 from calculos.falsaposicion import calcular_falsa_posicion
 from calculos.regresion_polinomial import regresion_polinomial
@@ -48,6 +48,12 @@ def home():
             ]
         },
         {
+            "categoria": "Linealizacion",
+            "metodos": [
+                {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+            ]
+        },
+        {
             "categoria": "Regresiones",
             "metodos": [
                 {"nombre": "Regresion por crecimiento de saturación", "url": "/regresion-crecimiento-saturado"},
@@ -60,6 +66,12 @@ def home():
             "metodos": [
                 {"nombre": "Integración por Simpson 1_3", "url": "/simpson1_3"},
                 {"nombre": "Integración por Método de Trapecio", "url": "/metodo-trapecio"},
+            ]
+        },
+        {
+            "categoria": "Diferenciacion",
+            "metodos": [
+                {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
             ]
         },
         {
@@ -352,8 +364,26 @@ def calcular_linealizacion_razon_crecimiento_post():
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-
+##______________________________________________
+##DIFERENCIACION HACIA ATRAS
+@app.route('/derivada-atras', methods=['GET'])
+def calcular_derivada_atras_get():
+    return render_template('Diferenciacion/HaciaAtras.html')
+@app.route('/derivada-atras', methods=['POST'])
+def calcular_derivada_atras_post():
+    datos = request.json
+    valores = datos.get('datos')
+    tipo = datos.get('tipo')
     
+    try:
+        resultado = calcular_derivacion_atras(valores, tipo)
+        return jsonify(
+            {'resultado_tabla': resultado["tabla"]}
+        )
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+
+##Hasta aqui terminan mis metodos (Jeycson)
 ##______________________________________________
 ##METODO DE SIMPSON 3/8
 
