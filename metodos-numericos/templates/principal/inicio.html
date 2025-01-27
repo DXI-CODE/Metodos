@@ -1,38 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio</title>
+    <title>Menú de Métodos</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .btn {
-            background-color: #4CAF50; /* Color verde */
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px 2px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
+    .categoria {
+        display: inline-block;
+        width: 200px;
+        height: 50px;
+        background-color: #f0f0f0;
+        margin: 20px;
+        text-align: center;
+        border-radius: 8px;
+        cursor: pointer;
+        position: relative; /* Asegura que el contenedor de los métodos se posicione en relación a esta caja */
+        z-index: 1; /* Inicialmente está en el nivel más bajo */
+    }
+
+    .categoria:hover .metodos {
+        display: block;
+    }
+
+    .categoria .metodos {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        border-radius: 4px;
+        width: 100%;
+        min-width: 200px; /* Evita que la lista sea más estrecha que la categoría */
+    }
+
+    .metodos{
+        z-index: 10;
+    }
+
+    .metodo {
+        padding: 5px 0;
+    }
+
+    .metodo a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .metodo a:hover {
+        color: #007bff;
+    }
     </style>
 </head>
 <body>
-    <h1>Bienvenido a las Rutas de tu Aplicación</h1>
-    
-    <div>
-        {% for ruta in rutas %}
-            <a href="{{ ruta.url }}" class="btn">{{ ruta.nombre }}</a>
+    <h1>Bienvenido a los Métodos Matemáticos</h1>
+    <div class="container">
+        {% for categoria in rutas %}
+        <div class="categoria">
+            <h3>{{ categoria.categoria }}</h3>
+            <div class="metodos">
+                {% for metodo in categoria.metodos %}
+                <div class="metodo">
+                    <a href="{{ metodo.url }}">{{ metodo.nombre }}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
         {% endfor %}
     </div>
 </body>

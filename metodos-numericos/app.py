@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from calculos.interpolacion import calcular_interpolacion
 from calculos.serietaylor import calcular_serie_taylor
 from calculos.seriemclaurin import calcular_serie_mclaurin
 from calculos.gaussinversa import validar_matriz, calcular_inversa
-#from calculos.puntofijo import metodo_punto_fijo
+from calculos.puntofijo import calcular_y_graficar, metodo_punto_fijo_calculo
 from calculos.simpson3_8 import calcular_simpson_3_8
 from calculos.linealizacioncrecimiento import metodo_linealizacion_crecimiento
 from calculos.interpolacionlagrange import lagrange
@@ -13,7 +13,13 @@ from calculos.falsaposicion import calcular_falsa_posicion
 from calculos.regresion_polinomial import regresion_polinomial
 from calculos.trapecio import metodo_trapecio
 from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
-from calculos.derivacionatras import calcular_derivacion_atras
+from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
+from calculos.linealizacionexponencial import exponencial
+from calculos.linealizacionpotencial import potencial
+from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
+from calculos.gauss_simple import validar_matriz, gauss_simple
+
+
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -24,46 +30,49 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 @app.route('/')
 def home():
     rutas_get = [
-        {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
-        {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
-        {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
-        {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
-        {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
-        {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
-        {"nombre": "Regresion por crecimiento de saturación", "url":"/regresion-crecimiento-saturado"},
-        {"nombre": "Regresion multilineal", "url":"/regresion-multilineal"},
-        {"nombre": "Integración por Simpson 1_3", "url":"/simpson1_3"},
-        {"nombre": "Metodo Falsa Posicion", "url":"metodos_raices/falsaposicion.html"},
-        {"nombre": "Regresión Polinomial", "url":"/regresion-polinomial"},
-        {"nombre": "Integración por Método de Trapecio", "url":"/metodo-trapecio"},
-        {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
-        # AQUI AGREGUEN SUS RUTAS PARA SUS METODOS
+        {
+            "categoria": "Series",
+            "metodos": [
+                {"nombre": "Serie de Taylor", "url": "/serie-taylor"},
+                {"nombre": "Serie de McLaren", "url": "/serie-mclaurin"},
+            ]
+        },
+        {
+            "categoria": "Métodos Numéricos",
+            "metodos": [
+                {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
+                {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
+                {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
+                {"nombre": "Metodo Gauss-Jordan", "url": "/gauss_jordan"},
+                {"nombre": "Metodo Gauss Simple", "url": "/gauss_simple"},
+            ]
+        },
+        {
+            "categoria": "Regresiones",
+            "metodos": [
+                {"nombre": "Regresion por crecimiento de saturación", "url": "/regresion-crecimiento-saturado"},
+                {"nombre": "Regresion multilineal", "url": "/regresion-multilineal"},
+                {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
+            ]
+        },
+        {
+            "categoria": "Integración",
+            "metodos": [
+                {"nombre": "Integración por Simpson 1_3", "url": "/simpson1_3"},
+                {"nombre": "Integración por Método de Trapecio", "url": "/metodo-trapecio"},
+            ]
+        },
+        {
+            "categoria": "Ecuaciones Diferenciales",
+            "metodos": [
+                {"nombre": "E.c Diferenciales Runge Kutta Orden 4", "url": "/runge-kutta"},
+            ]
+        },
     ]
-    return render_template('principal/inicio.html', rutas = rutas_get)
+    return render_template('principal/inicio.html', rutas=rutas_get)
 
-##______________________________________________
 
-##METODO DE SERIE DE TAYLOR
-""" @app.route('/serie-taylor', methods=['GET'])
-def calcular_taylor_get():
-    return render_template('series/serietaylor.html')
-@app.route('/serie-taylor', methods=['POST'])
-def calcular_taylor_post():
-    datos = request.json
-    funcion_str = datos.get('funcion')
-    expansion = datos.get('expansion')
-    numero_n = datos.get('numero_n')
-
-    if not funcion_str or expansion is None or numero_n is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-    
-    try:
-        serie = calcular_serie_taylor(funcion_str, expansion, numero_n)
-        return jsonify({'resultado_funcion': serie})
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la serie de Taylor: {str(e)}'}), 500
- """
-##______________________________________________
+##_____________________________________________
 
 
 #METODO DE SERIE DE MC LAURIN
@@ -180,6 +189,60 @@ def metodo_trapecio_post():
 
 ##______________________________________________
 
+
+##METODO DE RUNGE KUTTA ORDEN 4
+
+##______________________________________________
+
+@app.route('/runge-kutta', methods=['GET'])
+def runge_kutta_get():
+    return render_template('ecuaciones_diferenciales/runge_kutta.html')
+
+@app.route('/runge-kutta', methods=['POST'])
+def runge_kutta_post():
+    try:
+        datos = request.json
+        ecuaciones = datos.get('ecuaciones', [])
+        variables = datos.get('variables', [])
+        x0 = float(datos.get('x0'))
+        valores_iniciales = [float(v) for v in datos.get('valores_iniciales', [])]
+        h = float(datos.get('h'))
+        n = int(datos.get('n'))
+
+
+        print("Valores recibidos")
+        print(ecuaciones)
+        print(variables)
+        print(x0)
+        print(valores_iniciales)
+        print(h)
+        print(n)
+
+        if not ecuaciones or not variables or len(ecuaciones) != len(variables):
+            return jsonify({'error': 'Debe haber tantas ecuaciones como variables dependientes.'}), 400
+        if len(valores_iniciales) != len(variables):
+            return jsonify({'error': 'Debe proporcionar valores iniciales para todas las variables dependientes.'}), 400
+        if h <= 0 or n <= x0:
+            return jsonify({'error': 'El tamaño del paso debe ser positivo y x_n > x_0.'}), 400
+
+        # Validar ecuaciones
+        ecuaciones_validadas = validar_ecuaciones(ecuaciones, variables)
+
+        print("Ecuaciones validadas: ")
+        print(ecuaciones_validadas)
+
+        # Calcular método de Runge-Kutta
+        resultado = runge_kutta_4(ecuaciones_validadas, variables, x0, valores_iniciales, h, n)
+
+        return jsonify(resultado)
+        
+    except Exception as e:
+        return jsonify({'error': "Error en el metodo post (app.py)" + str(e)}), 400
+
+##______________________________________________
+
+
+
 ##[
 
     ##METODOS DE JEOVANI
@@ -239,23 +302,35 @@ def calcular_gauss_inversa_post():
 ##______________________________________________
 ##METODO DE PUNTO FIJO
 
+
 @app.route('/metodo-punto-fijo', methods=['GET'])
 def calcular_punto_fijo_get():
     return render_template('MetodosEcuacionesNoLineales/MetodoPuntoFijo.html')
 @app.route('/metodo-punto-fijo', methods=['POST'])
-def calcular_punto_fijo_post():
+def metodo_punto_fijo():
     try:
         data = request.get_json()
-        funcion_str = data.get('funcion')
-        x0 = float(data.get('x0'))
-        tolerancia = float(data.get('tolerancia'))
-        iteraciones_max = int(data.get('iteraciones'))
-        resultado = metodo_punto_fijo(funcion_str, x0, tolerancia, iteraciones_max)
-        return jsonify(resultado)
+        funcion_str = data['funcion']
+        x0 = float(data['x0'])
+        tolerancia = float(data['tolerancia'])
+        iteraciones_max = int(data['iteraciones'])
+        resultado, error = metodo_punto_fijo_calculo(funcion_str, x0, tolerancia, iteraciones_max)
+        
+        if error > tolerancia:
+            return jsonify({"error": "No se alcanzó la convergencia en el número máximo de iteraciones."}), 400
+        buffer = calcular_y_graficar(funcion_str, x0, tolerancia, iteraciones_max)
+        return send_file(buffer, mimetype='image/png')
     except Exception as e:
-        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-
+        return jsonify({"error": str(e)}), 400
 ##______________________________________________
+
+
+##[
+
+    ##METODOS DE JEYCSON
+
+##]
+
 
 ##______________________________________________
 ##LINEALIZACION A RAZON DE CRECIMIENTO
@@ -278,32 +353,6 @@ def calcular_linealizacion_razon_crecimiento_post():
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
-##______________________________________________
-   
-#METODO DE INTERPOLACION DE LAGRANGE
-
-@app.route('/calcular_lagrange', methods=['GET'])
-def calcular_lagrange_get():
-    return render_template('interpolacion/lagrange.html')
-@app.route('/calcular_lagrange', methods=['POST'])
-def calcular_lagrange_post():
-    datos = request.json
-    puntos = datos.get('puntos')
-    grado = datos.get('grado')
-    valorx = datos.get('valorx')
-
-    if not puntos or grado is None or valorx is None:
-        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
-
-    try:
-        serie = lagrange(puntos, grado, valorx)
-        return jsonify({'funcion': serie})
-    except ValueError as e:
-        return jsonify({'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
-
-##______________________________________________
     
 ##______________________________________________
 ##METODO DE SIMPSON 3/8
@@ -380,6 +429,12 @@ def regresion_multilineal():
     })
 ##______________________________________________
 
+##[
+
+    ##METODOS DE JUAN
+
+##]
+
 ##______________________________________________
         
 #METODO DE INTEGRACIÓN POR SIMPSON 1/3  
@@ -409,25 +464,133 @@ def calcular_simpson1_3_post():
 
 ##______________________________________________
 
-#METODO DE DIFERENCIACION NUMERICA HACIA ATRAS 
+##______________________________________________
+   
+#METODO DE INTERPOLACION DE LAGRANGE
 
-@app.route('/derivada-atras', methods=['GET'])
-def calcular_derivada_atras_get():
-    return render_template('Diferenciacion/HaciaAtras.html')
-@app.route('/derivada-atras', methods=['POST'])
-def calcular_derivada_atras_post():
+@app.route('/calcular_lagrange', methods=['GET'])
+def calcular_lagrange_get():
+    return render_template('interpolacion/lagrange.html')
+@app.route('/calcular_lagrange', methods=['POST'])
+def calcular_lagrange_post():
     datos = request.json
-    valores = datos.get('datos')
-    tipo = datos.get('tipo')
-    
+    puntos = datos.get('puntos')
+    grado = datos.get('grado')
+    valorx = datos.get('valorx')
+
+    if not puntos or grado is None or valorx is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
     try:
-        resultado = calcular_derivacion_atras(valores, tipo)
-        return jsonify(
-            {'resultado_tabla': resultado["tabla"]}
-        )
+        serie = lagrange(puntos, grado, valorx)
+        return jsonify({'funcion': serie})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
     except Exception as e:
-        return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+        return jsonify({'error': f'Error al calcular la interpolación de Lagrange: {str(e)}'}), 500
 
 ##______________________________________________
+
+##______________________________________________
+        
+#METODO DE LINEALIZACIÓN EXPONENCIAL  
+
+@app.route('/exponencial', methods=['GET'])
+def calcular_exponencial_get():
+    return render_template('Linealizacion/Exponencial.html')
+@app.route('/exponencial', methods=['POST'])
+def calcular_exponencial_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+
+    if not puntos:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        expo = exponencial(puntos)
+        return jsonify({'funcion': expo})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la función por linealización exponencial: {str(e)}'}), 500
+
+##______________________________________________
+
+##______________________________________________
+        
+#METODO DE LINEALIZACIÓN POTENCIAL  
+
+@app.route('/potencial', methods=['GET'])
+def calcular_potencial_get():
+    return render_template('Linealizacion/Potencial.html')
+@app.route('/potencial', methods=['POST'])
+def calcular_potencial_post():
+    datos = request.json
+    puntos = datos.get('puntos')
+
+    if not puntos:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        expo = potencial(puntos)
+        return jsonify({'funcion': expo})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la función por linealización potencial: {str(e)}'}), 500
+
+##______________________________________________
+
+
+
+##[
+
+    ##METODOS DE wachomin
+
+##]
+
+##______________________________________________
+
+#______________Metodo de gauss jordan__________________
+
+@app.route('/gauss_jordan', methods=['GET'])
+def calcular_gauss_jordan_get():
+    return render_template('Matrices/GaussJordan.html')
+
+@app.route('/gauss_jordan', methods=['POST'])
+def calcular_gauss_jordan_post():
+    datos = request.json
+    matriz = datos.get('matrix') 
+
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
+
+    resultado, error = calcular_gauss_jordan(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
+#_____________________________________________________
+
+@app.route('/gauss_simple', methods=['POST'])
+def gauss_simple_post():
+    datos = request.json
+    matriz = datos.get('matrix')
+
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
+
+    resultado, error = gauss_simple(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify({
+        "soluciones": resultado["soluciones"],
+        "matriz_html": resultado["matriz_html"]
+    })
+#_________________________________________________________
+
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)

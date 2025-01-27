@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    <title>Runge-Kutta de Orden 4</title>
+</head>
+<body>
+    <h1>Método de Runge-Kutta de Orden 4</h1>
+    <form id="rk4-form">
+        <label for="funciones">Ecuaciones diferenciales:</label>
+        <textarea id="funciones" name="funciones" rows="4" cols="50" placeholder="Ingrese las ecuaciones aquí (por ejemplo, 'y\' = x + y')"></textarea>
+        <br>
+        <label for="variables">Variables dependientes (separadas por coma):</label>
+        <input type="text" id="variables" name="variables" placeholder="y, z, m">
+        <br>
+        <label for="x0">Valor inicial \( x_0 \):</label>
+        <input type="number" step="any" id="x0" name="x0" required>
+        <br>
+        <label for="valores_iniciales">Valores iniciales (separados por coma):</label>
+        <input type="text" id="valores_iniciales" name="valores_iniciales" placeholder="y0, z0, m0">
+        <br>
+        <label for="h">Tamaño del paso \( h \):</label>
+        <input type="number" step="any" id="h" name="h" required>
+        <br>
+        <label for="n">Número de pasos:</label>
+        <input type="number" id="n" name="n" required>
+        <br>
+        <button type="button" onclick="enviarDatos()">Calcular</button>
+    </form>
+
+    <h2>Últimos valores</h2>
+    <div id="resultados">
+        <!-- Los últimos valores de las variables se mostrarán aquí -->
+    </div>
+
+    <h2>Gráfica</h2>
+    <img id="grafica" alt="Gráfica del método de Runge-Kutta" style="display:none;">
+
+    <script>
+        function enviarDatos() {
+            const formData = {
+                ecuaciones: document.getElementById('funciones').value.split('\n').map(item => item.trim()),
+                variables: document.getElementById('variables').value.split(',').map(item => item.trim()),
+                x0: parseFloat(document.getElementById('x0').value), // Convertir a float
+                valores_iniciales: document.getElementById('valores_iniciales').value.split(',').map(item => {
+                    let value = parseFloat(item.trim());
+                    return isNaN(value) ? 0.0 : value; // Asegúrate de que todos los valores sean numéricos
+                }),
+                h: parseFloat(document.getElementById('h').value), // Convertir a float
+                n: parseInt(document.getElementById('n').value, 10) // Convertir a int
+            };
+
+
+            fetch('/runge-kutta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                
+                if (data.error) {
+                    document.getElementById('resultados').innerText = `Error: ${data.error}`;
+                }
+                else {
+                    // Mostrar los últimos valores
+                    const valores = data.ultimos_valores.map(val => `<span>${val}</span>`).join(' ');
+                    document.getElementById('resultados').innerHTML = `
+                        Últimos valores: ${valores}
+                    `;
+                    // Mostrar la gráfica
+                    document.getElementById('grafica').src = `data:image/png;base64,${data.grafico_base64}`;
+                    document.getElementById('grafica').style.display = 'block';
+                    
+                }
+            })
+            .catch(error => {
+                document.getElementById('resultados').innerText = `Error: ${error}`;
+            });
+        }
+    </script>
+</body>
+</html>
