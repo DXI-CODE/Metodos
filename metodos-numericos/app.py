@@ -287,11 +287,11 @@ def calcular_gauss_inversa_post():
     datos = request.json
     matriz = datos.get('matrix') 
 
-    matriz_np, error = validar_matriz(matriz)
-    if error:
-        return jsonify(matriz_np), error
+    ##matriz_np, error = validar_matriz(matriz)
+    ##if error:
+    ##    return jsonify(matriz_np), error
 
-    resultado, error = calcular_inversa(matriz_np)
+    resultado, error = calcular_inversa(matriz)
     if error:
         return jsonify(resultado), error
 
