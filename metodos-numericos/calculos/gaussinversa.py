@@ -1,7 +1,6 @@
 import numpy as np
 
 def validar_matriz(matriz):
-    """Función para validar que la matriz sea cuadrada y tenga datos válidos."""
     if not matriz:
         return {'error': 'Se requiere una matriz válida.'}, 400
 
@@ -13,7 +12,6 @@ def validar_matriz(matriz):
     return matriz_np, None
 
 def calcular_inversa(matriz_np):
-    """Función para calcular la inversa de la matriz."""
     try:
         inversa = np.linalg.inv(matriz_np)
         inversa_html = convertir_matriz_a_html(inversa)
@@ -24,7 +22,6 @@ def calcular_inversa(matriz_np):
         return {'error': f'Error al calcular la matriz inversa: {str(e)}'}, 500
 
 def convertir_matriz_a_html(matriz):
-    """Función para convertir la matriz numpy a HTML."""
     html = "<table>"
     for row in matriz:
         html += "<tr>" + "".join(f"<td>{elem:.2f}</td>" for elem in row) + "</tr>"
