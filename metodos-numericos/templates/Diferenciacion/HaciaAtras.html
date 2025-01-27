@@ -27,11 +27,6 @@
                     Ingresar datos
                 </label>
                 <br>
-                <label>
-                    <input type="radio" name="metodo" value="funcionDatos">
-                    Ingresar función y datos
-                </label>
-                <br>
                 <button type="button" onclick="mostrarSeccion()">Continuar</button>
             </form>
         </section>
@@ -116,48 +111,6 @@
             </form>
         </section>
 
-        <!-- Sección para ingresar función y datos -->
-        <section id="seccionFuncionDatos" style="display: none;">
-            <h2>Ingreso de Función y Datos</h2>
-            <form id="funcionDatosForm">
-                <label for="funcionDatos">Función:</label>
-                <input type="text" id="funcionDatos" name="funcionDatos" placeholder="Ejemplo: x**2 + 3*x + 2" required>
-                <br>
-                <label for="valorDatos">Valor para calcular la derivada (opcional):</label>
-                <input type="number" id="valorDatos" name="valorDatos">
-                <br>
-                <label for="cantidadDatosInput">Cantidad de datos:</label>
-                <input type="number" id="cantidadDatosInput" name="cantidadDatosInput" required>
-                <br>
-                <button type="button" onclick="generarCamposDatosFuncion()">Generar campos</button>
-                <div id="camposDatosFuncion"></div>
-                <br>
-                <fieldset>
-                    <legend>Selecciona las derivadas a calcular:</legend>
-                    <label>
-                        <input type="checkbox" name="derivada" value="primera">
-                        Primera derivada
-                    </label>
-                    <br>
-                    <label>
-                        <input type="checkbox" name="derivada" value="segunda">
-                        Segunda derivada
-                    </label>
-                    <br>
-                    <label>
-                        <input type="checkbox" name="derivada" value="tercera">
-                        Tercera derivada
-                    </label>
-                    <br>
-                    <label>
-                        <input type="checkbox" name="derivada" value="cuarta">
-                        Cuarta derivada
-                    </label>
-                </fieldset>
-                <br>
-                <button type="submit">Calcular</button>
-            </form>
-        </section>
     </main>
     <div id="resultado" class="result" style="display: none;"></div>
 
@@ -167,7 +120,6 @@
             const metodo = document.querySelector('input[name="metodo"]:checked').value;
             document.getElementById('seccionFuncion').style.display = metodo === 'funcion' ? 'block' : 'none';
             document.getElementById('seccionDatos').style.display = metodo === 'datos' ? 'block' : 'none';
-            document.getElementById('seccionFuncionDatos').style.display = metodo === 'funcionDatos' ? 'block' : 'none';
         }
 
         // Generar los campos para ingresar los datos
@@ -244,27 +196,6 @@
                     valorDatos,
                     derivadas: derivadasSeleccionadas
                 };
-            } else if (metodo === 'funcionDatos') {
-                const funcion = document.getElementById('funcionDatos').value;
-                const valor = document.getElementById('valorDatos').value || null;
-                const cantidadDatos = document.getElementById('cantidadDatosInput').value;
-                const datos = [];
-                
-                for (let i = 1; i <= cantidadDatos; i++) {
-                    const dato = document.querySelector(`input[name="dato${i}"]`).value;
-                    datos.push(dato);
-                }
-                
-                const derivadasSeleccionadas = Array.from(document.querySelectorAll('input[name="derivada"]:checked'))
-                    .map(checkbox => checkbox.value);
-
-                datosFormulario = {
-                    funcion,
-                    valor,
-                    datos,
-                    derivadas: derivadasSeleccionadas
-                };
-                
             }
             return datosFormulario;
         }
@@ -368,11 +299,6 @@
                 alert('Hubo un problema al enviar los datos');
                 console.error("Error al calcular:", error);
             }
-        });
-
-        document.getElementById('funcionDatosForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const datos = capturarDatosFormulario();
         });
     </script>
 </body>

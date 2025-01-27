@@ -170,7 +170,7 @@ def calcular_derivacion_atras(datos, tipo):
                     ]
                     arreglo_final = [None, None, None, None, None] + valores_derivados[::-1]
                     res["cuarta"] = arreglo_final
-    
+
     return {
         "tabla": res,
     }
