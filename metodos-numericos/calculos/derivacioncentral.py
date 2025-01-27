@@ -1,13 +1,13 @@
 import numpy as np
 import sympy as sp
 
-def primera(x1p, x2p, x1m, x2m, h):
+def primera(x2m, x1m, x1p, x2p, h):
     return ((-1 * x2p + 8 * x1p - 8 * x1m + x2m) / (12 * h))
-def segunda(x1p, x2p, x1m, x2m, x0, h):
+def segunda(x2m, x1m, x0, x1p, x2p, h):
     return ((-1 * x2p + 16 * x1p - 30 * x0 + 16 * x1m - x2m)/(12 * (h ** 2)))
-def tercera(x1p, x2p, x3p, x1m, x2m, x3m, h):
+def tercera(x3m, x2m, x1m, x1p, x2p, x3p, h):
     return ((-1 * x3p + 8 * x2p - 13 * x1p + 13 * x1m - 8 * x2m + x3m)/(8 * (h ** 3)))
-def cuarta(x1p, x2p, x3p, x1m, x2m, x3m, x0, h):
+def cuarta(x3m, x2m, x1m, x0, x1p, x2p, x3p, h):
     return ((-1 * x3p + 12 * x2p + 39 * x1p + 56 * x0 - 39 * x1m + 12 * x2m + x3m)/(6 * (h ** 4)))
 
 def calcular_derivacion_central(datos, tipo):
@@ -28,7 +28,6 @@ def calcular_derivacion_central(datos, tipo):
         x = sp.symbols('x')
         function = sp.lambdify(x, funcion, 'numpy')
         y = []    
-        y = []
         temp = valor
 
         try:
@@ -50,16 +49,16 @@ def calcular_derivacion_central(datos, tipo):
             except Exception as e:
                 return {"error": f"Error al evaluar la función: {e}"}
             temp += paso
-
+        #y[0] = y[i-3], y[1] = y[i-2], y[2] = y[i-1], y[3] = y[i], y[4] = y[i+1], y[5] = y[i+2], y[6] = y[i+3]
         for derivada in derivadas:
             if derivada == "primera":
-                res["primera"] = primera(y[0], y[1], y[2], paso)
+                res["primera"] = primera(y[1], y[2], y[4], y[5], paso)
             if derivada == "segunda":
-                res["segunda"] = segunda(y[0], y[1], y[2], y[3], paso)
+                res["segunda"] = segunda(y[1], y[2], y[3], y[4], y[5], paso)
             if derivada == "tercera":
-                res["tercera"] = tercera(y[0], y[1], y[2], y[3], y[4], paso)
+                res["tercera"] = tercera(y[0], y[1], y[2], y[4], y[5], y[6], paso)
             if derivada == "cuarta":
-                res["cuarta"] = cuarta(y[0], y[1], y[2], y[3], y[4], y[5], paso)
+                res["cuarta"] = cuarta(y[0], y[1], y[2], y[3], y[4], y[5], y[6], paso)
     elif tipo == "Datos":
         x = datos["xValues"]
         y = datos["yValues"]
@@ -73,12 +72,12 @@ def calcular_derivacion_central(datos, tipo):
             return {"error": "Faltan datos obligatorios: x o y."}
         if not valor is None:
             valor = float(valor)
-            if len(x) < 3:
-                return {"error": "Se debe ingresar minimo 3 datos."}
+            if len(x) < 5:
+                return {"error": "Se debe ingresar minimo 5 datos."}
             paso = 0.1
             if x[0] < x[-1]: 
-                if len(x) == 3 and x[0] != valor:
-                    return {"error": "El primer dato tiene que ser el valor a calcular."}
+                if len(x) == 5 and x[2] != valor:
+                    return {"error": "El dato del centro tiene que ser el valor a calcular."}
                 if not (x[0] <= valor <= x[-1]):
                     return {"error": "El valor está fuera del rango."}
                 paso = x[1] - x[0]
@@ -87,55 +86,59 @@ def calcular_derivacion_central(datos, tipo):
             
             for derivada in derivadas:
                 if derivada == "primera":
-                    if indice_cercano + 2 < len(x):  # Necesitamos al menos 3 valores hacia atrás
+                    if indice_cercano - 2 >= 0 and indice_cercano + 2 < len(x):  # Verificamos 2 valores antes y 2 valores después
                         aux = [primera(
-                            y[indice_cercano], y[indice_cercano + 1], y[indice_cercano + 2], paso
+                            y[indice_cercano - 2], y[indice_cercano - 1], y[indice_cercano + 1], y[indice_cercano + 2], paso
                         )]
                         res["primera"] = aux
                     else:
-                        return{"error": "No hay suficientes datos para calcular la primera derivada"}
+                        return {"error": "No hay suficientes datos para calcular la primera derivada"}
+
 
                 if derivada == "segunda":
-                    if indice_cercano + 3 < len(x):  # Necesitamos al menos 4 valores hacia atrás
+                    if indice_cercano - 2 >= 0 and indice_cercano + 2 < len(x):  # Verificamos 2 valores antes y 2 valores después
                         aux = [segunda(
-                            y[indice_cercano],
+                            y[indice_cercano - 2], 
+                            y[indice_cercano - 1],
+                            y[indice_cercano], 
                             y[indice_cercano + 1],
                             y[indice_cercano + 2],
-                            y[indice_cercano + 3],
-                            paso,
+                            paso
                         )]
                         res["segunda"] = aux
                     else:
-                        return{"error": "No hay suficientes datos para calcular la segunda derivada"}
+                        return {"error": "No hay suficientes datos para calcular la segunda derivada"}
 
                 if derivada == "tercera":
-                    if indice_cercano + 4 < len(x):  # Necesitamos al menos 5 valores hacia atrás
+                    if indice_cercano - 3 >= 0 and indice_cercano + 3 < len(x):  # Verificamos 3 valores antes y 3 valores después
                         aux = [tercera(
-                            y[indice_cercano],
+                            y[indice_cercano - 3],
+                            y[indice_cercano - 2], 
+                            y[indice_cercano - 1],
                             y[indice_cercano + 1],
                             y[indice_cercano + 2],
                             y[indice_cercano + 3],
-                            y[indice_cercano + 4],
-                            paso,
+                            paso
                         )]
                         res["tercera"] = aux
                     else:
-                        return{"error": "No hay suficientes datos para calcular la tercera derivada"}
+                        return {"error": "No hay suficientes datos para calcular la tercera derivada"}
 
                 if derivada == "cuarta":
-                    if indice_cercano + 5 < len(x):  # Necesitamos al menos 6 valores hacia atrás
+                    if indice_cercano - 3 >= 0 and indice_cercano + 3 < len(x):  # Verificamos 3 valores antes y 3 valores después
                         aux = [cuarta(
+                            y[indice_cercano - 3],
+                            y[indice_cercano - 2], 
+                            y[indice_cercano - 1],
                             y[indice_cercano],
                             y[indice_cercano + 1],
                             y[indice_cercano + 2],
                             y[indice_cercano + 3],
-                            y[indice_cercano + 4],
-                            y[indice_cercano + 5],
-                            paso,
+                            paso
                         )]
                         res["cuarta"] = aux
                     else:
-                        return{"error": "No hay suficientes datos para calcular la cuarta derivada"}
+                        return {"error": "No hay suficientes datos para calcular la cuarta derivada"}
         else:
             valores_derivados = []
             paso = 0.1
