@@ -41,7 +41,7 @@ def home():
                 {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
                 {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
                 {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
-                {"nombre": "Método Gauss-Jordan", "url": "/metodo-gauss-jordan"},
+                {"nombre": "Método Gauss-Jordan", "url": "/gauss-jordan"},
             ]
         },
         {
