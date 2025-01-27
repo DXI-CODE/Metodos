@@ -82,7 +82,7 @@
                 <div id="camposDatos"></div>
                 <br>
                 <label for="valorDatos">Valor para calcular la derivada (opcional):</label>
-                <input type="number" id="valorDatos" name="valorDatos">
+                <input type="number" id="valorDatos" name="valorDatos" step="any">
                 <br>
                 <fieldset>
                     <legend>Selecciona las derivadas a calcular:</legend>
@@ -132,29 +132,11 @@
                 const inputGroup = document.createElement('div');
                 inputGroup.innerHTML = `
                 <label for="x${i}">X${i}:</label>
-                <input type="number" id="x${i}" class="x-input" required>
+                <input type="number" id="x${i}" class="x-input" step="any" required>
                 <label for="y${i}">Y${i}:</label>
-                <input type="number" id="y${i}" class="y-input" required><br>
+                <input type="number" id="y${i}" class="y-input" step="any" required><br>
                 `;
                 camposDiv.appendChild(inputGroup);
-            }
-        }
-
-        function generarCamposDatosFuncion() {
-            const cantidad = document.getElementById('cantidadDatosInput').value;
-            const camposDiv = document.getElementById('camposDatosFuncion');
-            camposDiv.innerHTML = '';
-
-            for (let i = 1; i <= cantidad; i++) {
-                const label = document.createElement('label');
-                label.textContent = `Dato ${i}:`;
-                const input = document.createElement('input');
-                input.type = 'number';
-                input.name = `dato${i}`;
-                input.required = true;
-                camposDiv.appendChild(label);
-                camposDiv.appendChild(input);
-                camposDiv.appendChild(document.createElement('br'));
             }
         }
 
