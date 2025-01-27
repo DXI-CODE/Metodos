@@ -139,7 +139,7 @@ def calcular_derivacion_atras(datos, tipo):
                         
                 if derivada == "segunda":
                     if len(x) < 4:
-                        return{"error": "No hay suficientes datos para calcular la primera derivada"}
+                        return{"error": "No hay suficientes datos para calcular la segunda derivada"}
                     paso = x[1] - x[0]
                     valores_derivados = [
                         segunda(y[i], y[i-1], y[i-2], y[i-3], paso)
@@ -151,7 +151,7 @@ def calcular_derivacion_atras(datos, tipo):
                     
                 if derivada == "tercera":
                     if len(x) < 5:
-                        return{"error": "No hay suficientes datos para calcular la primera derivada"}
+                        return{"error": "No hay suficientes datos para calcular la tercera derivada"}
                     paso = x[1] - x[0]
                     valores_derivados = [
                         tercera(y[i], y[i-1], y[i-2], y[i-3], y[i-4], paso)
@@ -162,7 +162,7 @@ def calcular_derivacion_atras(datos, tipo):
 
                 if derivada == "cuarta":
                     if len(x) < 6:
-                        return{"error": "No hay suficientes datos para calcular la primera derivada"}
+                        return{"error": "No hay suficientes datos para calcular la cuarta derivada"}
                     paso = x[1] - x[0]
                     valores_derivados = [
                         cuarta(y[i], y[i-1], y[i-2], y[i-3], y[i-4], y[i-5], paso)

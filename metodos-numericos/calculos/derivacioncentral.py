@@ -144,53 +144,52 @@ def calcular_derivacion_central(datos, tipo):
             paso = 0.1
             for derivada in derivadas:
                 if derivada == "primera":
-                    if len(x) < 3:
-                        return{"error": "No hay suficientes datos para calcular la primera derivada"}
-                    paso = x[1] - x[0]
-                    valores_derivados = [
-                        primera(y[i], y[i + 1], y[i + 2], paso) 
-                        for i in range(len(y) - 2) 
-                    ]
-
-                    arreglo_final = valores_derivados + [None, None] 
-                    res["primera"] = arreglo_final
-
-                    #los ultimos dos valores no se calculan y en el front deberian mostrar null
-                        
-                if derivada == "segunda":
-                    if len(x) < 4:
-                        return{"error": "No hay suficientes datos para calcular la primera derivada"}
-                    paso = x[1] - x[0]
-                    valores_derivados = [
-                        segunda(y[i], y[i + 1], y[i + 2], y[i+3], paso) 
-                        for i in range(len(y) - 3) 
-                    ]
-
-                    arreglo_final = valores_derivados + [None, None, None] 
-                    res["segunda"] = arreglo_final
-
-                if derivada == "tercera":
                     if len(x) < 5:
                         return{"error": "No hay suficientes datos para calcular la primera derivada"}
                     paso = x[1] - x[0]
                     valores_derivados = [
-                        tercera(y[i], y[i + 1], y[i + 2], y[i+3], y[i+4], paso) 
-                        for i in range(len(y) - 4) 
+                        primera(y[i-2], y[i-1], y[i+1], y[i+2], paso)
+                        for i in range(2, len(y) - 2)  # El rango asegura 2 valores antes y después
                     ]
 
-                    arreglo_final = valores_derivados + [None, None, None, None] 
+                    arreglo_final = [None, None] + valores_derivados + [None, None]
+                    res["primera"] = arreglo_final
+
+                    #los primero y ultimos dos valores no se calculan y en el front deberian mostrar null
+                        
+                if derivada == "segunda":
+                    if len(x) < 5:
+                        return{"error": "No hay suficientes datos para calcular la segunda derivada"}
+                    valores_derivados = [
+                        segunda(y[i-2], y[i-1], y[i], y[i+1], y[i+2], paso)
+                        for i in range(2, len(y) - 2)  # El rango asegura 2 valores antes y después
+                    ]
+
+                    arreglo_final = [None, None] + valores_derivados + [None, None]
+                    res["segunda"] = arreglo_final
+
+                if derivada == "tercera":
+                    if len(x) < 7:
+                        return{"error": "No hay suficientes datos para calcular la tercera derivada"}
+                    paso = x[1] - x[0]
+                    valores_derivados = [
+                        tercera(y[i-3], y[i-2], y[i-1], y[i+1], y[i+2], y[i+3], paso)
+                        for i in range(3, len(y) - 3)  # Aseguramos que haya 3 valores antes y 3 después
+                    ]
+
+                    arreglo_final = [None, None, None] + valores_derivados + [None, None, None]
                     res["tercera"] = arreglo_final
 
                 if derivada == "cuarta":
-                    if len(x) < 6:
-                        return{"error": "No hay suficientes datos para calcular la primera derivada"}
+                    if len(x) < 7:
+                        return{"error": "No hay suficientes datos para calcular la cuarta derivada"}
                     paso = x[1] - x[0]
                     valores_derivados = [
-                        cuarta(y[i], y[i + 1], y[i + 2], y[i+3], y[i+4], y[i+5], paso) 
-                        for i in range(len(y) - 5) 
+                        cuarta(y[i-3], y[i-2], y[i-1], y[i], y[i+1], y[i+2], y[i+3], paso)
+                        for i in range(3, len(y) - 3)  # Aseguramos que haya 3 valores antes y 3 después
                     ]
 
-                    arreglo_final = valores_derivados + [None, None, None, None, None] 
+                    arreglo_final = [None, None, None] + valores_derivados + [None, None, None]
                     res["cuarta"] = arreglo_final
 
     return {
