@@ -535,7 +535,7 @@ def calcular_lagrange_post():
 
     try:
         serie = lagrange(puntos, grado, valorx)
-        return jsonify({'funcion': serie})
+        return serie
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
