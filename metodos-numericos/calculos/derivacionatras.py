@@ -72,40 +72,43 @@ def calcular_derivacion_atras(datos, tipo):
             for derivada in derivadas:
                 if derivada == "primera":
                     if indice_cercano >= 2:  # Necesitamos al menos 3 valores hacia atrás
-                        res["primera"] = primera(
+                        aux = [primera(
                             y[indice_cercano], y[indice_cercano - 1], y[indice_cercano - 2], paso
-                        )
+                        )]
+                        res["primera"] = aux
                     else:
                         return{"error": "No hay suficientes datos para calcular la primera derivada"}
 
                 if derivada == "segunda":
                     if indice_cercano >= 3:  # Necesitamos al menos 4 valores hacia atrás
-                        res["segunda"] = segunda(
+                        aux = [segunda(
                             y[indice_cercano],
                             y[indice_cercano - 1],
                             y[indice_cercano - 2],
                             y[indice_cercano - 3],
                             paso,
-                        )
+                        )]
+                        res["segunda"] = aux
                     else:
                         return{"error": "No hay suficientes datos para calcular la segunda derivada"}
 
                 if derivada == "tercera":
                     if indice_cercano >= 4:  # Necesitamos al menos 5 valores hacia atrás
-                        res["tercera"] = tercera(
+                        aux = [tercera(
                             y[indice_cercano],
                             y[indice_cercano - 1],
                             y[indice_cercano - 2],
                             y[indice_cercano - 3],
                             y[indice_cercano - 4],
                             paso,
-                        )
+                        )]
+                        res["tercera"] = aux
                     else:
                         return{"error": "No hay suficientes datos para calcular la tercera derivada"}
 
                 if derivada == "cuarta":
                     if indice_cercano >= 5:  # Necesitamos al menos 6 valores hacia atrás
-                        res["cuarta"] = cuarta(
+                        aux = [cuarta(
                             y[indice_cercano],
                             y[indice_cercano - 1],
                             y[indice_cercano - 2],
@@ -113,7 +116,8 @@ def calcular_derivacion_atras(datos, tipo):
                             y[indice_cercano - 4],
                             y[indice_cercano - 5],
                             paso,
-                        )
+                        )]
+                        res["cuarta"] = aux
                     else:
                         return{"error": "No hay suficientes datos para calcular la cuarta derivada"}
         else:
@@ -124,34 +128,49 @@ def calcular_derivacion_atras(datos, tipo):
                     if len(x) < 3:
                         return{"error": "No hay suficientes datos para calcular la primera derivada"}
                     paso = x[1] - x[0]
-                    i = len(x) - 1
-                    while i > 1:
-                        valores_derivados.append(primera(y[i], y[i-1], y[i-2], paso))
-                        i-=1
-                    arreglo_invertido = valores_derivados[::-1]
-                    arreglo_final = [None, None] + arreglo_invertido[2:]    
+                    valores_derivados = [
+                        primera(y[i], y[i-1], y[i-2], paso)
+                        for i in range(len(y) - 1, 1, -1)
+                    ]
+                    arreglo_final = [None, None] + valores_derivados[::-1]
                     res["primera"] = arreglo_final
+
                     #los primeros dos valores no se calculan y en el front deberian mostrar null
                         
                 if derivada == "segunda":
                     if len(x) < 4:
                         return{"error": "No hay suficientes datos para calcular la primera derivada"}
                     paso = x[1] - x[0]
-                    i = len(x) - 1
-                    while i > 2:
-                        valores_derivados.append(segunda(y[i], y[i-1], y[i-2], y[i-3], paso))
-                        i-=1
-                    arreglo_invertido = valores_derivados[::-1]
-                    arreglo_final = [None, None, None] + arreglo_invertido[3:]    
-                    res["primera"] = arreglo_final
+                    valores_derivados = [
+                        segunda(y[i], y[i-1], y[i-2], y[i-3], paso)
+                        for i in range(len(y) - 1, 2, -1)
+                    ]
+                    arreglo_final = [None, None, None] + valores_derivados[::-1]
+                    res["segunda"] = arreglo_final
+
                     
                 if derivada == "tercera":
                     if len(x) < 5:
                         return{"error": "No hay suficientes datos para calcular la primera derivada"}
+                    paso = x[1] - x[0]
+                    valores_derivados = [
+                        tercera(y[i], y[i-1], y[i-2], y[i-3], y[i-4], paso)
+                        for i in range(len(y) - 1, 3, -1)
+                    ]
+                    arreglo_final = [None, None, None, None] + valores_derivados[::-1]
+                    res["tercera"] = arreglo_final
+
                 if derivada == "cuarta":
                     if len(x) < 6:
                         return{"error": "No hay suficientes datos para calcular la primera derivada"}
+                    paso = x[1] - x[0]
+                    valores_derivados = [
+                        cuarta(y[i], y[i-1], y[i-2], y[i-3], y[i-4], y[i-5], paso)
+                        for i in range(len(y) - 1, 4, -1)
+                    ]
+                    arreglo_final = [None, None, None, None, None] + valores_derivados[::-1]
+                    res["cuarta"] = arreglo_final
+    
     return {
         "tabla": res,
     }
-        

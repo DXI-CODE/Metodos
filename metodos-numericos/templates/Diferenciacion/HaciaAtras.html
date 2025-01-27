@@ -261,7 +261,6 @@
                 datosFormulario = {
                     funcion,
                     valor,
-                    paso,
                     datos,
                     derivadas: derivadasSeleccionadas
                 };
@@ -322,6 +321,7 @@
         });
 
         document.getElementById('datosForm').addEventListener('submit', async  function (e) {
+            e.preventDefault();
             const datos = capturarDatosFormulario();
             const tipo = "Datos"
 
@@ -341,23 +341,22 @@
                     resultadoDiv.style.display = "block";
                     resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
                 } else {
-                    const valores = result.resultado_tabla || []
+                    const valores = result.resultado_tabla || {};
                     resultadoDiv.style.display = "block";
                     resultadoDiv.innerHTML = `
                     <strong>Resultados de la(s) derivada(s):</strong><br>
                     <table border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
                         <thead>
-                        <tr>
-                            <th>Derivada</th>
-                            <th>Valor</th>                    
-                        </tr>
+                            <tr>
+                                <th>Derivada</th>
+                                <th>Valores</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tbody>
-                            ${Object.entries(valores).map(([derivada, valor]) => `
+                            ${Object.entries(valores).map(([derivada, valoresArray]) => `
                                 <tr>
                                     <td>${derivada}</td>
-                                    <td>${valor}</td>
+                                    <td>${valoresArray.map(valor => valor !== null ? valor : 'N/A').join(', ')}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
