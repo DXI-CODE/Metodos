@@ -16,6 +16,8 @@ from calculos.regresion_saturado import metodo_regresion_crecimiento_saturado
 from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
 from calculos.linealizacionexponencial import exponencial
 from calculos.linealizacionpotencial import potencial
+from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
+
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -39,6 +41,7 @@ def home():
                 {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
                 {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
                 {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
+                {"nombre": "Método Gauss-Jordan", "url": "/metodo-gauss-jordan"},
             ]
         },
         {
@@ -536,6 +539,36 @@ def calcular_potencial_post():
 ##______________________________________________
 
 
+
+##[
+
+    ##METODOS DE wachomin
+
+##]
+
+##______________________________________________
+
+#______________Metodo de gauss jordan__________________
+
+@app.route('/gauss_jordan', methods=['GET'])
+def calcular_gauss_jordan_get():
+    return render_template('Matrices/GaussJordan.html')
+
+@app.route('/gauss_jordan', methods=['POST'])
+def calcular_gauss_jordan_post():
+    datos = request.json
+    matriz = datos.get('matrix') 
+
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
+
+    resultado, error = calcular_gauss_jordan(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
+#_____________________________________________________
 
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
