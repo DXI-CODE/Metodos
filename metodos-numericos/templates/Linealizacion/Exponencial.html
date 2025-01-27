@@ -18,7 +18,8 @@
     </form>
 
     <h2>Resultado Linealización</h2>
-    <div id="result"></div>
+    <img id="grafica" alt="Gráfica del método de linealización exponencial" style="display:none;">
+    <div id="error"></div>
 
     <script>
         document.getElementById("formulario").addEventListener("submit", function(event) {
@@ -48,9 +49,11 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('result').innerHTML = `<p><strong>Resultado obtenido:</strong></p><pre>${result.funcion}</pre>`;
+                    document.getElementById('grafica').src = `data:image/png;base64,${result.grafico_base64}`;
+                    document.getElementById('grafica').style.display = 'block';
+                    document.getElementById('error').innerHTML = `<br><p>R^2 es igual a: ${result.r2}</p>`;
                 } else {
-                    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
+                    document.getElementById('error').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
                 }
             } catch (error) {
                 document.getElementById('result').innerHTML = `<p style="color:red;">Error en la conexión con el servidor.</p><p>${error}</p>`;

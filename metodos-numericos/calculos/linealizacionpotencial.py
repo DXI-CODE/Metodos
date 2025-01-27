@@ -1,5 +1,8 @@
 import numpy as np
 import sympy as sp
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 import math as math
 
 def potencial(puntos):
@@ -16,7 +19,35 @@ def potencial(puntos):
     
     x = sp.symbols('x')
     a, b = final  
-    expr = (10**a) * (x ** b)  
+    expr = (10**a) * (x ** b) 
+    f_expr = sp.lambdify(x, expr, 'numpy')
+    y2 = [f_expr(fila[0]) for fila in puntos]
+
+    y_valsog = np.array([fila[1] for fila in puntos])
+    y_mean = np.mean(y_valsog )  
+    ss_total = np.sum((y_valsog  - y_mean) ** 2)  
+    ss_residual = np.sum((y_valsog - y2) ** 2) 
+    r2 = 1 - (ss_residual / ss_total)  
     
-    return sp.latex(expr)
+    try:
+        fig, ax = plt.subplots()
+        ax.plot([fila[0] for fila in puntos], [fila[1] for fila in puntos], label="Puntos originales")
+        ax.plot([fila[0] for fila in puntos], y2, label=f'f(x) = {str(expr)}')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.legend()
+        ax.set_title('Ecuación obtenida')
+
+        img = BytesIO()
+        plt.savefig(img, format='png', bbox_inches='tight')
+        img.seek(0)
+        grafico_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
+        plt.close(fig)
+        print("Gráfica generada correctamente.")
+    except Exception as e:
+        print(f"Error al generar la gráfica: {e}")
+        grafico_base64 = None
+        return {'error': e}
+
+    return {'grafico_base64': grafico_base64, 'r2': r2}
  
