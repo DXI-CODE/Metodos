@@ -3,107 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gauss - Matriz 4x3</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        td {
-            border: 1px solid #000;
-            padding: 8px;
-        }
-        input {
-            width: 60px;
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 10px 0;
-            font-size: 16px;
-        }
-    </style>
+    <title>Método de Gauss Simple</title>
 </head>
 <body>
-    <h1>Resolver Sistema con Gauss</h1>
-    <p>Ingrese los valores para la matriz 4x3 (3 filas, 3 columnas más una columna adicional para los términos independientes):</p>
-
-    <!-- Tabla para la matriz -->
-    <form id="matriz-form">
-        <table id="matrix-table">
-            <!-- Generamos la matriz 4x3 directamente en HTML -->
-            <tr>
-                <td><input type="number" step="any" id="r0c0" placeholder="A11"></td>
-                <td><input type="number" step="any" id="r0c1" placeholder="A12"></td>
-                <td><input type="number" step="any" id="r0c2" placeholder="A13"></td>
-                <td><input type="number" step="any" id="r0c3" placeholder="B1"></td>
-            </tr>
-            <tr>
-                <td><input type="number" step="any" id="r1c0" placeholder="A21"></td>
-                <td><input type="number" step="any" id="r1c1" placeholder="A22"></td>
-                <td><input type="number" step="any" id="r1c2" placeholder="A23"></td>
-                <td><input type="number" step="any" id="r1c3" placeholder="B2"></td>
-            </tr>
-            <tr>
-                <td><input type="number" step="any" id="r2c0" placeholder="A31"></td>
-                <td><input type="number" step="any" id="r2c1" placeholder="A32"></td>
-                <td><input type="number" step="any" id="r2c2" placeholder="A33"></td>
-                <td><input type="number" step="any" id="r2c3" placeholder="B3"></td>
-            </tr>
-        </table>
-
-        <button type="button" onclick="resolverMatriz()">Calcular</button>
+    <h1>Método de Gauss Simple</h1>
+    <form id="form-gauss-simple" method="POST">
+        <label for="matrix">Matriz aumentada (n x n+1, separados por comas):</label>
+        <textarea id="matrix" name="matrix" rows="5" cols="40" placeholder="Ejemplo: 2,1,-1,8&#10;1,-2,3,-1&#10;3,0,1,3"></textarea>
+        <button type="button" onclick="calcularGaussSimple()">Calcular</button>
     </form>
-
-    <h2>Resultado:</h2>
     <div id="resultado"></div>
 
     <script>
-        function resolverMatriz() {
-            const matriz = [];
+        async function calcularGaussSimple() {
+            const textarea = document.getElementById("matrix");
+            const matrix = textarea.value
+                .trim()
+                .split("\n")
+                .map(row => row.split(",").map(Number));
+
+            const response = await fetch("/gauss_simple", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ matrix })
+            });
+
+            const result = await response.json();
             const resultadoDiv = document.getElementById("resultado");
-
-            // Obtener los valores de los inputs y construir la matriz
-            for (let i = 0; i < 3; i++) {
-                const fila = [];
-                for (let j = 0; j < 4; j++) {
-                    const input = document.getElementById(`r${i}c${j}`);
-                    const valor = parseFloat(input.value);
-                    if (isNaN(valor)) {
-                        resultadoDiv.innerHTML = "<p style='color: red;'>Por favor, complete todos los campos correctamente.</p>";
-                        return;
-                    }
-                    fila.push(valor);
-                }
-                matriz.push(fila);
+            if (response.ok) {
+                resultadoDiv.innerHTML = `<p>Soluciones: ${result.soluciones.join(", ")}</p>`;
+            } else {
+                resultadoDiv.innerHTML = `<p>Error: ${result}</p>`;
             }
-
-            // Enviar la matriz al servidor
-            fetch('/resolver_matriz', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ matriz }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
-                    } else if (data.resultado_matriz) {
-                        resultadoDiv.innerHTML = `<h3>Solución:</h3>${data.resultado_matriz}`;
-                    } else {
-                        resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al calcular la solución.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al procesar la matriz:", error);
-                    resultadoDiv.innerHTML = '<p style="color: red;">Error en la comunicación con el servidor.</p>';
-                });
         }
     </script>
 </body>
