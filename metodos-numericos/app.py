@@ -573,10 +573,6 @@ def calcular_gauss_jordan_post():
     return jsonify(resultado)
 #_____________________________________________________
 
-@app.route('/gauss_simple', methods=['GET'])
-def gauss_simple_get():
-    return render_template('Matrices/GaussSimple.html')
-
 @app.route('/gauss_simple', methods=['POST'])
 def gauss_simple_post():
     datos = request.json
@@ -590,7 +586,10 @@ def gauss_simple_post():
     if error:
         return jsonify(resultado), error
 
-    return jsonify(resultado)
+    return jsonify({
+        "soluciones": resultado["soluciones"],
+        "matriz_html": resultado["matriz_html"]
+    })
 #_________________________________________________________
 
 if __name__ == '__main__':

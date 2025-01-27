@@ -28,6 +28,18 @@ def gauss_simple(matriz):
             suma = sum(matriz[i, i+1:n] * soluciones[i+1:n])
             soluciones[i] = (matriz[i, -1] - suma) / matriz[i, i]
 
-        return {"soluciones": soluciones.tolist()}, None
+        matriz_html = convertir_matriz_a_html(matriz)
+        return {"soluciones": soluciones.tolist(), "matriz_html": matriz_html}, None
     except Exception as e:
         return f"Error en el cálculo: {str(e)}", 500
+
+    
+
+
+def convertir_matriz_a_html(matriz):
+    """Convierte una matriz numpy a formato HTML."""
+    html = "<table border='1' style='border-collapse: collapse; text-align: center;'>"
+    for row in matriz:
+        html += "<tr>" + "".join(f"<td>{elem:.2f}</td>" for elem in row) + "</tr>"
+    html += "</table>"
+    return html
