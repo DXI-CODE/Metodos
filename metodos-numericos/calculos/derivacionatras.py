@@ -144,7 +144,7 @@ def calcular_derivacion_atras(datos, tipo):
                     arreglo_invertido = valores_derivados[::-1]
                     arreglo_final = [None, None, None] + arreglo_invertido[3:]    
                     res["primera"] = arreglo_final
-                    #los primeros dos valores no se calculan y en el front deberian mostrar null
+                    
                 if derivada == "tercera":
                     if len(x) < 5:
                         return{"error": "No hay suficientes datos para calcular la primera derivada"}
