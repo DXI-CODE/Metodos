@@ -557,7 +557,7 @@ def calcular_lagrange_post():
 
     try:
         serie = lagrange(puntos, grado, valorx)
-        return jsonify({'funcion': serie})
+        return serie
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
@@ -582,7 +582,7 @@ def calcular_exponencial_post():
 
     try:
         expo = exponencial(puntos)
-        return jsonify({'funcion': expo})
+        return expo
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
@@ -606,8 +606,8 @@ def calcular_potencial_post():
         return jsonify({'error': 'Todos los campos son necesarios.'}), 400
 
     try:
-        expo = potencial(puntos)
-        return jsonify({'funcion': expo})
+        pot = potencial(puntos)
+        return pot
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:

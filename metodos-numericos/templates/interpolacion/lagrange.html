@@ -36,6 +36,7 @@
             <div id="result">
                 <p>El resultado aparecerá aquí.</p>
             </div>
+            <img id="grafica" alt="Gráfica del método de interpolación de lagrange" style="display:none;">
         </section>
     </main>
 
@@ -71,9 +72,11 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('result').innerHTML = `<p><strong>Resultado obtenido:</strong></p><pre>${result.funcion}</pre>`;
+                    document.getElementById('result').innerHTML = `<pre>${result.funcion}</pre>`;
+                    document.getElementById('grafica').src = `data:image/png;base64,${result.grafico_base64}`;
+                    document.getElementById('grafica').style.display = 'block';
                 } else {
-                    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
+                    document.getElementById('error').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
                 }
             } catch (error) {
                 document.getElementById('result').innerHTML = `<p style="color:red;">Error en la conexión con el servidor.</p><p>${error}</p>`;
