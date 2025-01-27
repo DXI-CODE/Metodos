@@ -18,7 +18,7 @@ from calculos.linealizacionexponencial import exponencial
 from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
 from calculos.gauss_simple import validar_matriz, gauss_simple
-
+from calculos.derivacionatras import calcular_derivacion_atras
 
 
 app = Flask(__name__)
@@ -364,6 +364,7 @@ def calcular_linealizacion_razon_crecimiento_post():
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+
 ##______________________________________________
 ##DIFERENCIACION HACIA ATRAS
 @app.route('/derivada-atras', methods=['GET'])
@@ -382,31 +383,6 @@ def calcular_derivada_atras_post():
         )
     except Exception as e:
         return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
-
-##Hasta aqui terminan mis metodos (Jeycson)
-##______________________________________________
-##METODO DE SIMPSON 3/8
-
-@app.route('/metodo-simpson-3_8', methods=['GET'])
-def metodo_simpson_38_get():
-    return render_template('Integracion/Simpson3-8.html')
-@app.route('/metodo-simpson-3_8', methods=['POST'])
-def metodo_simpson_38_post():
-    try:
-        data = request.get_json()
-        funcion_str = data.get('funcion')
-        limite_inferior = float(data.get('limite_inferior'))
-        limite_superior = float(data.get('limite_superior'))
-        subintervalos = int(data.get('subintervalos'))
-
-        resultado = calcular_simpson_3_8(funcion_str, limite_inferior, limite_superior, subintervalos)
-        return jsonify({"resultado_num": resultado})
-
-    except Exception as e:
-        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-
-##______________________________________________
-    
     
 ##______________________________________________
 ##REGRESION POR CRECIMIENTO DE SATURACION
@@ -431,6 +407,31 @@ def calcular_regresion_saturado_post():
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+    
+##Hasta aqui terminan mis metodos (Jeycson)
+##______________________________________________
+##METODO DE SIMPSON 3/8
+
+@app.route('/metodo-simpson-3_8', methods=['GET'])
+def metodo_simpson_38_get():
+    return render_template('Integracion/Simpson3-8.html')
+@app.route('/metodo-simpson-3_8', methods=['POST'])
+def metodo_simpson_38_post():
+    try:
+        data = request.get_json()
+        funcion_str = data.get('funcion')
+        limite_inferior = float(data.get('limite_inferior'))
+        limite_superior = float(data.get('limite_superior'))
+        subintervalos = int(data.get('subintervalos'))
+
+        resultado = calcular_simpson_3_8(funcion_str, limite_inferior, limite_superior, subintervalos)
+        return jsonify({"resultado_num": resultado})
+
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+
+##______________________________________________
+    
     
 ##______________________________________________
 ##REGRESION MULTILINEAL

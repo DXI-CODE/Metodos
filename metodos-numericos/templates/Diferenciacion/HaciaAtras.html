@@ -286,7 +286,7 @@
                 });
     
                 const result = await response.json();
-                
+                const resultadoDiv = document.getElementById("resultado");
                 if (result.error) {
                     resultadoDiv.style.display = "block";
                     resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
@@ -336,7 +336,7 @@
     
                 const result = await response.json();
                 console.log(result)
-                
+                const resultadoDiv = document.getElementById("resultado");
                 if (result.error) {
                     resultadoDiv.style.display = "block";
                     resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
