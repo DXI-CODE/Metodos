@@ -17,6 +17,8 @@ from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
 from calculos.linealizacionexponencial import exponencial
 from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
+from calculos.gauss_simple import validar_matriz, gauss_simple
+
 
 
 app = Flask(__name__)
@@ -42,6 +44,7 @@ def home():
                 {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
                 {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
                 {"nombre": "Metodo Gauss-Jordan", "url": "/gauss_jordan"},
+                {"nombre": "Metodo Gauss Simple", "url": "/gauss_simple"},
             ]
         },
         {
@@ -569,6 +572,25 @@ def calcular_gauss_jordan_post():
 
     return jsonify(resultado)
 #_____________________________________________________
+
+@app.route('/gauss_simple', methods=['POST'])
+def gauss_simple_post():
+    datos = request.json
+    matriz = datos.get('matrix')
+
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
+
+    resultado, error = gauss_simple(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify({
+        "soluciones": resultado["soluciones"],
+        "matriz_html": resultado["matriz_html"]
+    })
+#_________________________________________________________
 
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
