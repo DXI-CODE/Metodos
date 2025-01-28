@@ -23,6 +23,8 @@ from calculos.derivacionadelante import calcular_derivacion_adelante
 from calculos.derivacioncentral import calcular_derivacion_central
 from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
+from calculos.biseccion import biseccion, f, convertir_resultados_a_html
+
 
 
 app = Flask(__name__)
@@ -704,6 +706,7 @@ def calcular_gauss_jordan_post():
 
     return jsonify(resultado)
 #_____________________________________________________
+#METODO DE GAUSS SIMPLE
 
 @app.route('/gauss_simple', methods=['GET'])
 def calcular_gauss_simple_get():
@@ -726,6 +729,33 @@ def calcular_gauss_simple_post():
 
 
 #_________________________________________________________
+
+
+#_______________METODO DE BISECCION________________________
+@app.route('/biseccion', methods=['GET'])
+def biseccion_get():
+    return render_template('metodos_raices/Biseccion.html')
+
+@app.route('/biseccion', methods=['POST'])
+def biseccion_post():
+    datos = request.json
+    xl = datos['xl']
+    xu = datos['xu']
+    tol = datos['tol']
+    max_iter = datos['max_iter']
+    g = datos['g']
+    m = datos['m']
+    t = datos['t']
+    v = datos['v']
+
+    try:
+        resultado = biseccion(f, xl, xu, tol, max_iter, g, m, t, v)
+        resultado['tabla'] = convertir_resultados_a_html(resultado['resultados'])
+        return jsonify(resultado)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)

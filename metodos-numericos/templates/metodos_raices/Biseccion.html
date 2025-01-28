@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método de Bisección</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Método de Bisección</h1>
+    <form id="biseccion-form">
+        <label for="xl">Valor de xl:</label>
+        <input type="number" id="xl" step="0.01" required>
+        <br><br>
+        <label for="xu">Valor de xu:</label>
+        <input type="number" id="xu" step="0.01" required>
+        <br><br>
+        <label for="tol">Tolerancia:</label>
+        <input type="number" id="tol" step="0.0001" required>
+        <br><br>
+        <label for="max_iter">Iteraciones máximas:</label>
+        <input type="number" id="max_iter" required>
+        <br><br>
+        <label for="g">Valor de g:</label>
+        <input type="number" id="g" step="0.01" required>
+        <br><br>
+        <label for="m">Valor de m:</label>
+        <input type="number" id="m" step="0.01" required>
+        <br><br>
+        <label for="t">Valor de t:</label>
+        <input type="number" id="t" step="0.01" required>
+        <br><br>
+        <label for="v">Valor de v:</label>
+        <input type="number" id="v" step="0.01" required>
+        <br><br>
+        <button type="submit">Calcular</button>
+    </form>
+    <div id="resultados" class="hidden">
+        <h2>Resultados:</h2>
+        <div id="tabla-resultados"></div>
+    </div>
+    <script>
+        document.getElementById("biseccion-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const datos = {
+                xl: parseFloat(document.getElementById("xl").value),
+                xu: parseFloat(document.getElementById("xu").value),
+                tol: parseFloat(document.getElementById("tol").value),
+                max_iter: parseInt(document.getElementById("max_iter").value),
+                g: parseFloat(document.getElementById("g").value),
+                m: parseFloat(document.getElementById("m").value),
+                t: parseFloat(document.getElementById("t").value),
+                v: parseFloat(document.getElementById("v").value)
+            };
+            try {
+                const response = await fetch("/biseccion", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(datos)
+                });
+                const resultado = await response.json();
+                if (resultado.error) {
+                    alert("Error: " + resultado.error);
+                } else {
+                    document.getElementById("tabla-resultados").innerHTML = resultado.tabla;
+                    document.getElementById("resultados").classList.remove("hidden");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+    </script>
+</body>
+</html>
