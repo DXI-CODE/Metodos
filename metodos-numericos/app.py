@@ -22,6 +22,8 @@ from calculos.derivacionatras import calcular_derivacion_atras
 from calculos.derivacionadelante import calcular_derivacion_adelante
 from calculos.derivacioncentral import calcular_derivacion_central
 from calculos.metodoeuler import metodo_euler
+from calculos.integracionmultiple import integracionmultiple
+
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -68,6 +70,7 @@ def home():
             "metodos": [
                 {"nombre": "Integración por Simpson 1_3", "url": "/simpson1_3"},
                 {"nombre": "Integración por Método de Trapecio", "url": "/metodo-trapecio"},
+                {"nombre": "Integración múltiple", "url": "/integracionmultiple"},
             ]
         },
         {
@@ -637,6 +640,36 @@ def calcular_potencial_post():
         return jsonify({'error': str(e)}), 400
     except Exception as e:
         return jsonify({'error': f'Error al calcular la función por linealización potencial: {str(e)}'}), 500
+
+##______________________________________________
+        
+#METODO DE INTEGRACIÓN MÚLTIPLE 
+
+@app.route('/integracionmultiple', methods=['GET'])
+def calcular_integracionmultiple_get():
+    return render_template('Integracion/integracionmultiple.html')
+@app.route('/integracionmultiple', methods=['POST'])
+def calcular_integracionmultiple_post():
+    datos = request.json
+    funcion = datos.get('funcion')
+    x0 = datos.get('limites_inferiores')
+    xn = datos.get('limites_superiores')
+    numero_n = datos.get('n')
+    variables = datos.get('variables')
+    cantidad_integraciones = datos.get('cant')
+
+    if not funcion or not x0  or not xn or not variables or numero_n is None or cantidad_integraciones is None:
+        return jsonify({'error': 'Todos los campos son necesarios.'}), 400
+
+    try:
+        im = integracionmultiple(funcion, x0, xn, variables, numero_n, cantidad_integraciones)
+        return jsonify({'funcion': str(im)})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular la integración múltiple: {str(e)}'}), 500
+
+##______________________________________________
 
 ##______________________________________________
 
