@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integración múltiple</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+</head>
+<body>
+    <h1>Integración múltiple</h1>
+
+    <form id="formulario">
+        <label for="funcion">Ingrese la función a integrar en términos de la variable independiente x: </label>
+        <input type="text" id="funcion" name="funcion" placeholder="Ejemplo: y*sin(x), z*exp(x), x**2" required><br>
+        <label for="variables">Variables dependientes (separadas por coma):</label>
+        <input type="text" id="variables" name="variables" placeholder="y, z, m" required><br>
+        <label for="limites_inferiores">Limites inferiores (separados por coma):</label>
+        <input type="text" id="limites_inferiores" name="limites_inferiores" placeholder="1,2,3" required><br>
+        <label for="limites_superiores">Limites superiores (separados por coma):</label>
+        <input type="text" id="limites_superiores" name="limites_superiores" placeholder="4,5,6" required><br>
+        <label for="n">Número de pasos:</label>
+        <input type="number" id="n" name="n" required><br>
+        <label for="n">Cantidad de veces a integrar:</label>
+        <input type="number" id="cant" name="cant" placeholder="2 a 4" required><br>
+
+        <button type="submit">Calcular</button>
+    </form>
+
+    <h2>Resultado Integración</h2>
+    <div id="result"></div>
+
+    <footer>
+        <p>© 2025 Calculadora de Métodos Numéricos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.getElementById("formulario").addEventListener("submit", function(event) {
+            event.preventDefault();
+            calcularIntegralMultiple(); 
+        });
+
+        async function calcularIntegralMultiple() {
+            const formData = {
+                funcion: document.getElementById('funcion').value.trim(),
+                variables: document.getElementById('variables').value.split(',').map(item => item.trim()),
+                limites_superiores: document.getElementById('limites_superiores').value.split(',').map(item => {
+                    let value = parseFloat(item.trim());
+                    return isNaN(value) ? 0.0 : value; // Asegúrate de que todos los valores sean numéricos
+                }),
+                limites_inferiores: document.getElementById('limites_inferiores').value.split(',').map(item => {
+                    let value = parseFloat(item.trim());
+                    return isNaN(value) ? 0.0 : value; // Asegúrate de que todos los valores sean numéricos
+                }),
+                n: parseInt(document.getElementById('n').value, 10), // Convertir a int
+                cant: parseInt(document.getElementById('cant').value, 10), 
+            };
+            console.log(document.getElementById('funcion').value.trim())
+            const response = await fetch('/integracionmultiple', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+    
+            const result = await response.json();
+            if (response.ok) {
+                    document.getElementById('result').innerHTML = `<p><strong>Resultado obtenido:</strong></p><pre>${result.funcion}</pre>`;
+                } else {
+                    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
+                }
+        }
+    </script>
+</body>
+</html>
