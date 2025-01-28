@@ -672,11 +672,11 @@ def calcular_gauss_jordan_post():
     return jsonify(resultado)
 #_____________________________________________________
 
-@app.route('/gauss_jordan', methods=['GET'])
+@app.route('/gauss_simple', methods=['GET'])
 def calcular_gauss_jordan_simple_get():
     return render_template('Matrices/GaussSimple.html')
 
-@app.route('/gauss_jordan', methods=['POST'])
+@app.route('/gauss_simple', methods=['POST'])
 def calcular_gauss_jordan_simple_post():
     try:
         # Validar que se envíen datos en formato JSON
