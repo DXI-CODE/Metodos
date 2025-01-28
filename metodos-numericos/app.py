@@ -21,6 +21,7 @@ from calculos.gauss_simple import validar_matriz, gauss_simple
 from calculos.derivacionatras import calcular_derivacion_atras
 from calculos.derivacionadelante import calcular_derivacion_adelante
 from calculos.derivacioncentral import calcular_derivacion_central
+from calculos.metodoeuler import metodo_euler
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -81,6 +82,7 @@ def home():
             "categoria": "Ecuaciones Diferenciales",
             "metodos": [
                 {"nombre": "E.c Diferenciales Runge Kutta Orden 4", "url": "/runge-kutta"},
+                {"nombre": "E.c Diferenciales Metodo de Euler", "url": "/metodo-euler"},
             ]
         },
     ]
@@ -427,6 +429,7 @@ def calcular_derivada_central_post():
     except Exception as e:
         return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
 
+
 ##______________________________________________
 ##REGRESION POR CRECIMIENTO DE SATURACION
 @app.route('/regresion-crecimiento-saturado', methods=['GET'])
@@ -450,7 +453,29 @@ def calcular_regresion_saturado_post():
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-    
+
+##______________________________________________
+##METODO DE EULER PARA EDO
+@app.route('/metodo-euler', methods=['GET'])
+def calcular_metodo_euler_get():
+    return render_template('ecuaciones_diferenciales/Euler.html')
+@app.route('/metodo-euler', methods=['POST'])
+def calcular_metodo_euler_post():
+    try:
+        data = request.get_json()
+        datos = data.get('datos')
+
+        resultado = metodo_euler(datos)
+        
+        return jsonify({
+            "resultado_valor": resultado["numero"],
+            "resultado_valor_n" : resultado["n"]
+        })
+
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+
+
 ##Hasta aqui terminan mis metodos (Jeycson)
 ##______________________________________________
 ##METODO DE SIMPSON 3/8

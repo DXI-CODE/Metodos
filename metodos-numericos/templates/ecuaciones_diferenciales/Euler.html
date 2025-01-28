@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodo de Euler</title>
+</head>
+<body>
+    <h1>Método de Euler</h1>
+    <form id="euler-form">
+        <label for="funcion">Ingrese la funcion en terminos de x, y:</label>
+        <input type="text" id="funcion" name="funcion" placeholder="Ejemplo: x**2 + 3*y + 2" required>
+        <br>
+        <label for="x0">Valor inicial x_0:</label>
+        <input type="number" step="any" id="x0" name="x0" required>
+        <br>
+        <label for="xn">Valor final x_n:</label>
+        <input type="number" step="any" id="xn" name="xn" required>
+        <br>
+        <label for="y0">Valor inicial y_0:</label>
+        <input type="number" step="any" id="y0" name="y0" required>
+        <br>
+
+        <div class="radio-group">
+            <label>
+            <input type="radio" name="tipo" value="h" required>
+              Tamaño del paso h 
+            </label>
+            <label>
+              <input type="radio" name="tipo" value="n">
+              Número de pasos n
+            </label>
+        </div>
+          
+        <label for="valor">Ingrese el valor:</label>
+        <input type="number" step="any" id="valor" name="valor" required disabled>
+        <br>
+        <br>
+        <button type="submit">Calcular</button>
+        
+    </form>
+    <br>
+    <div id="resultado" class="result" style="display: none;"></div>
+    <br>
+    <script>
+        const radios = document.querySelectorAll('input[name="tipo"]');
+        const inputValor = document.getElementById("valor");
+        let seleccion = null
+        // Habilitar el campo de entrada según la selección
+        radios.forEach(radio => {
+            radio.addEventListener("change", () => {
+                if (radio.checked) {
+                    inputValor.disabled = false;
+                    inputValor.placeholder = `Valor para ${radio.value}`;
+                    seleccion = radio.value
+                }
+            });
+        });
+
+        function capturarDatosFormulario() {
+            const funcion = document.getElementById('funcion').value;
+            const valor = document.getElementById('valor').value;
+            const x0 = document.getElementById('x0').value;
+            const xn = document.getElementById('xn').value;
+            const y0 = document.getElementById('y0').value;
+
+            return {
+                funcion,
+                valor,
+                seleccion,
+                x0, xn, y0
+            };
+        }
+
+        // Validación al enviar el formulario
+        document.getElementById("euler-form").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            if (inputValor.disabled || !inputValor.value) {
+                alert("Seleccione un tipo y complete el valor.");
+            }
+            
+            const datos = capturarDatosFormulario();
+
+            try{
+                const response = await fetch('/metodo-euler', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({datos})
+                });
+    
+                const result = await response.json();
+                
+                const resultadoDiv = document.getElementById("resultado");
+                if (result.error) {
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
+                } else {
+                    const valor = result.resultado_valor
+                    const n = result.resultado_valor_n
+                    resultadoDiv.style.display = "block";
+                    resultadoDiv.innerHTML = `
+                    <strong>El valor de y${n} es:</strong><br>
+                    <p>${valor}</p>
+                    `;
+                }
+            }catch (error) {
+                // Manejo de errores
+                alert('Hubo un problema al enviar los datos');
+                console.error("Error al calcular:", error);
+            }
+        });
+    </script>
+
+    
+</body>
+</html>
