@@ -32,6 +32,10 @@
             padding: 8px;
             text-align: center;
         }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -96,6 +100,7 @@
             const inputs = document.querySelectorAll('.matrix-input');
             const size = parseInt(document.getElementById('matrix-size').value);
             const matrix = [];
+            const resultadoDiv = document.getElementById("ResultadoGaussJordan");
 
             let valid = true;
             for (let i = 0; i < size; i++) {
@@ -117,6 +122,8 @@
                 return;
             }
 
+            resultadoDiv.innerHTML = '<p>Cargando resultados...</p>'; 
+
             try {
                 const response = await fetch('/gauss_jordan_simple', {
                     method: 'POST',
@@ -127,18 +134,17 @@
                 });
 
                 const data = await response.json();
-                const resultadoDiv = document.getElementById("ResultadoGaussJordan");
 
                 if (data.matriz_escalonada) {
                     resultadoDiv.innerHTML = `<h2>Matriz Escalonada:</h2>${data.matriz_escalonada}`;
                 } else if (data.error) {
-                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                    resultadoDiv.innerHTML = `<p class="error-message">Error: ${data.error}</p>`;
                 } else {
-                    resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al aplicar Gauss-Jordan Simple.</p>';
+                    resultadoDiv.innerHTML = '<p class="error-message">Error desconocido al aplicar Gauss-Jordan Simple.</p>';
                 }
             } catch (error) {
                 console.error('Error al calcular Gauss-Jordan Simple:', error);
-                alert('Hubo un error al calcular Gauss-Jordan Simple. Intente nuevamente.');
+                resultadoDiv.innerHTML = '<p class="error-message">Hubo un error al calcular Gauss-Jordan Simple. Intente nuevamente.</p>';
             }
         }
     </script>
