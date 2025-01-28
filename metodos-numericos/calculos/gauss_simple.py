@@ -1,44 +1,41 @@
 import numpy as np
 
-def validar_matriz(matriz):
+def validar_matriz_aumentada(matriz):
+    """Valida que la matriz aumentada sea correcta para Gauss-Jordan simple."""
+    if not matriz:
+        return {'error': 'Se requiere una matriz válida.'}, 400
+
+    matriz_np = np.array(matriz, dtype=float)
+
+    filas, columnas = matriz_np.shape
+    if columnas != filas + 1:
+        return {'error': 'La matriz aumentada debe tener n filas y n+1 columnas.'}, 400
+
+    return matriz_np, None
+
+def gauss_jordan_simple(matriz_np):
+    """Aplica el método de Gauss-Jordan simple a la matriz aumentada."""
     try:
-        matriz_np = np.array(matriz, dtype=float)
-        if matriz_np.shape[0] + 1 != matriz_np.shape[1]:
-            return "La matriz debe ser aumentada (n x n+1).", 400
-        return matriz_np, None
-    except ValueError:
-        return "Los elementos de la matriz deben ser numéricos.", 400
+        filas, columnas = matriz_np.shape
 
-def gauss_simple(matriz):
-    try:
-        n = len(matriz)
-        for i in range(n):
-            # Pivoteo parcial
-            max_fila = np.argmax(abs(matriz[i:, i])) + i
-            matriz[[i, max_fila]] = matriz[[max_fila, i]]
+        for i in range(filas):
+            # Seleccionar el pivote y verificar que no sea cero
+            if matriz_np[i, i] == 0:
+                return {'error': 'El sistema no tiene solución única (pivote cero).'}, 400
 
-            # Eliminación
-            for j in range(i+1, n):
-                factor = matriz[j, i] / matriz[i, i]
-                matriz[j, i:] -= factor * matriz[i, i:]
+            # Hacer ceros debajo del pivote
+            for j in range(i + 1, filas):
+                factor = matriz_np[j, i] / matriz_np[i, i]
+                matriz_np[j] = matriz_np[j] - factor * matriz_np[i]
 
-        # Extraer las soluciones
-        soluciones = np.zeros(n)
-        for i in range(n-1, -1, -1):
-            suma = sum(matriz[i, i+1:n] * soluciones[i+1:n])
-            soluciones[i] = (matriz[i, -1] - suma) / matriz[i, i]
+        return {'matriz_escalonada': convertir_matriz_a_html(matriz_np)}, None
 
-        matriz_html = convertir_matriz_a_html(matriz)
-        return {"soluciones": soluciones.tolist(), "matriz_html": matriz_html}, None
     except Exception as e:
-        return f"Error en el cálculo: {str(e)}", 500
-
-    
-
+        return {'error': f'Error al aplicar Gauss-Jordan simple: {str(e)}'}, 500
 
 def convertir_matriz_a_html(matriz):
-    """Convierte una matriz numpy a formato HTML."""
-    html = "<table border='1' style='border-collapse: collapse; text-align: center;'>"
+    """Función para convertir la matriz numpy a HTML."""
+    html = "<table>"
     for row in matriz:
         html += "<tr>" + "".join(f"<td>{elem:.2f}</td>" for elem in row) + "</tr>"
     html += "</table>"

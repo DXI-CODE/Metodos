@@ -17,7 +17,7 @@ from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
 from calculos.linealizacionexponencial import exponencial
 from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
-from calculos.gauss_simple import validar_matriz, gauss_simple
+from calculos.gauss_simple import validar_matriz_aumentada, gauss_jordan_simple, convertir_matriz_a_html
 from calculos.derivacionatras import calcular_derivacion_atras
 
 
@@ -604,23 +604,26 @@ def calcular_gauss_jordan_post():
     return jsonify(resultado)
 #_____________________________________________________
 
+@app.route('/gauss_simple', methods=['GET'])
+def calcular_gauss_jordan_simple_get():
+    return render_template('Matrices/GaussSimple.html')
+
 @app.route('/gauss_simple', methods=['POST'])
-def gauss_simple_post():
+def calcular_gauss_jordan_simple_post():
     datos = request.json
     matriz = datos.get('matrix')
 
-    matriz_np, error = validar_matriz(matriz)
+    matriz_np, error = validar_matriz_aumentada(matriz)
     if error:
         return jsonify(matriz_np), error
 
-    resultado, error = gauss_simple(matriz_np)
+    resultado, error = gauss_jordan_simple(matriz_np)
     if error:
         return jsonify(resultado), error
 
-    return jsonify({
-        "soluciones": resultado["soluciones"],
-        "matriz_html": resultado["matriz_html"]
-    })
+    resultado['matriz_escalonada'] = convertir_matriz_a_html(resultado['matriz_escalonada'])
+    return jsonify(resultado)
+
 #_________________________________________________________
 
 if __name__ == '__main__':

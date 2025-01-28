@@ -3,82 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gauss Simple</title>
+    <title>Gauss-Jordan Simple</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .matrix-container {
+            margin-top: 20px;
+            display: grid;
+            gap: 5px;
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
         table {
+            margin-top: 20px;
             border-collapse: collapse;
-            width: 50%;
-            margin: 20px auto;
         }
-        th, td {
+        td {
             border: 1px solid black;
-            text-align: center;
             padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
             text-align: center;
-        }
-        textarea {
-            width: 80%;
-            height: 100px;
-            margin: 10px 0;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Método de Gauss Simple</h1>
-        <form id="gaussSimpleForm" method="POST">
-            <label for="matrix">Ingrese la matriz (formato CSV):</label><br>
-            <textarea id="matrix" name="matrix" placeholder="Ejemplo:&#10;2,1,-1,8&#10;-3,-1,2,-11&#10;-2,1,2,-3"></textarea><br>
-            <button type="submit">Calcular</button>
-        </form>
+    <h1>Método de Gauss-Jordan Simple</h1>
+    <label for="matrix-size">Ingrese el tamaño de la matriz (mayor a 1):</label>
+    <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3">
+    <button onclick="generateMatrix()">Generar Matriz</button>
 
-        <div id="result">
-            <!-- Aquí se mostrará la matriz escalonada -->
+    <form id="formulario">
+        <div id="matrix-container" class="matrix-container"></div>
+        <div class="actions hidden" id="calcular-actions">
+            <button type="submit">Calcular Gauss-Jordan Simple</button>
         </div>
-    </div>
+    </form>
+
+    <div id="ResultadoGaussJordan"></div>
 
     <script>
-        document.getElementById('gaussSimpleForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Evita el envío tradicional del formulario
+        function generateMatrix() {
+            const container = document.getElementById('matrix-container');
+            const size = parseInt(document.getElementById('matrix-size').value);
+            const actions = document.getElementById('calcular-actions');
+            const resultado = document.getElementById('ResultadoGaussJordan');
 
-            const textarea = document.getElementById('matrix');
-            const matrixData = textarea.value;
+            if (isNaN(size) || size < 2) {
+                alert('Por favor, ingrese un tamaño válido mayor a 1.');
+                return;
+            }
+
+            container.innerHTML = '';
+            resultado.innerHTML = ''; 
+            container.style.gridTemplateColumns = `repeat(${size + 1}, auto)`;
+
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size + 1; j++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.placeholder = `(${i + 1},${j + 1})`;
+                    input.className = 'matrix-input';
+                    input.dataset.row = i;
+                    input.dataset.col = j;
+
+                    input.addEventListener('input', function () {
+                        if (input.value.trim() !== '' && !isNaN(input.value)) {
+                            input.style.borderColor = '';
+                        }
+                    });
+
+                    container.appendChild(input);
+                }
+            }
+
+            actions.classList.remove('hidden');
+        }
+
+        document.getElementById("formulario").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            calcularGaussJordanSimple();
+        });
+
+        async function calcularGaussJordanSimple() {
+            const inputs = document.querySelectorAll('.matrix-input');
+            const size = parseInt(document.getElementById('matrix-size').value);
+            const matrix = [];
+
+            let valid = true;
+            for (let i = 0; i < size; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < size + 1; j++) {
+                    const input = Array.from(inputs).find(el => el.dataset.row == i && el.dataset.col == j);
+                    if (input.value.trim() === '' || isNaN(input.value)) {
+                        valid = false;
+                        input.style.borderColor = 'red'; 
+                    } else {
+                        input.style.borderColor = ''; 
+                        matrix[i][j] = parseFloat(input.value);
+                    }
+                }
+            }
+
+            if (!valid) {
+                alert('Por favor, complete todos los campos con valores numéricos.');
+                return;
+            }
 
             try {
-                const response = await fetch('/gauss_simple', {
+                const response = await fetch('/gauss_jordan_simple', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ matrix: matrixData })
+                    body: JSON.stringify({ matrix }),
                 });
 
-                const resultDiv = document.getElementById('result');
-                if (response.ok) {
-                    const resultHtml = await response.text(); // Recibe la tabla HTML del servidor
-                    resultDiv.innerHTML = `<h3>Resultado:</h3>${resultHtml}`;
+                const data = await response.json();
+                const resultadoDiv = document.getElementById("ResultadoGaussJordan");
+
+                if (data.matriz_escalonada) {
+                    resultadoDiv.innerHTML = `<h2>Matriz Escalonada:</h2>${data.matriz_escalonada}`;
+                } else if (data.error) {
+                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
                 } else {
-                    const errorText = await response.text();
-                    resultDiv.innerHTML = `<h3>Error:</h3><p>${errorText}</p>`;
+                    resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al aplicar Gauss-Jordan Simple.</p>';
                 }
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('result').innerHTML = `<h3>Error:</h3><p>${error.message}</p>`;
+                console.error('Error al calcular Gauss-Jordan Simple:', error);
+                alert('Hubo un error al calcular Gauss-Jordan Simple. Intente nuevamente.');
             }
-        });
+        }
     </script>
 </body>
 </html>
