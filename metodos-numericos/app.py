@@ -672,25 +672,36 @@ def calcular_gauss_jordan_post():
     return jsonify(resultado)
 #_____________________________________________________
 
-@app.route('/gauss_simple', methods=['GET'])
+@app.route('/gauss_jordan', methods=['GET'])
 def calcular_gauss_jordan_simple_get():
     return render_template('Matrices/GaussSimple.html')
 
-@app.route('/gauss_simple', methods=['POST'])
+@app.route('/gauss_jordan', methods=['POST'])
 def calcular_gauss_jordan_simple_post():
-    datos = request.json
-    matriz = datos.get('matrix')
+    try:
+        # Validar que se envíen datos en formato JSON
+        datos = request.json
+        if not datos or 'matrix' not in datos:
+            return jsonify({'error': 'Solicitud inválida. Asegúrate de enviar un JSON con una clave "matrix".'}), 400
 
-    matriz_np, error = validar_matriz_aumentada(matriz)
-    if error:
-        return jsonify(matriz_np), error
+        # Obtener la matriz y validar su formato
+        matriz = datos.get('matrix')
+        matriz_np, error = validar_matriz_aumentada(matriz)
+        if error:
+            return jsonify(matriz_np), error
 
-    resultado, error = gauss_jordan_simple(matriz_np)
-    if error:
-        return jsonify(resultado), error
+        # Aplicar el método de Gauss-Jordan simple
+        resultado, error = gauss_jordan_simple(matriz_np)
+        if error:
+            return jsonify(resultado), error
 
-    resultado['matriz_escalonada'] = convertir_matriz_a_html(resultado['matriz_escalonada'])
-    return jsonify(resultado)
+        # Convertir la matriz resultante a HTML
+        resultado['matriz_escalonada'] = convertir_matriz_a_html(resultado['matriz_escalonada'])
+        return jsonify(resultado)
+
+    except Exception as e:
+        # Manejo de excepciones generales
+        return jsonify({'error': f'Ocurrió un error inesperado: {str(e)}'}), 500
 
 #_________________________________________________________
 
