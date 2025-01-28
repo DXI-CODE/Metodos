@@ -19,7 +19,9 @@ from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
 from calculos.gauss_simple import validar_matriz_aumentada, gauss_jordan_simple, convertir_matriz_a_html
 from calculos.derivacionatras import calcular_derivacion_atras
-
+from calculos.derivacionadelante import calcular_derivacion_adelante
+from calculos.derivacioncentral import calcular_derivacion_central
+from calculos.metodoeuler import metodo_euler
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -72,12 +74,15 @@ def home():
             "categoria": "Diferenciacion",
             "metodos": [
                 {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
+                {"nombre": "Diferenciacion numerica hacia adelante", "url":"/derivada-adelante"},
+                {"nombre": "Diferenciacion numerica central", "url":"/derivada-central"},
             ]
         },
         {
             "categoria": "Ecuaciones Diferenciales",
             "metodos": [
                 {"nombre": "E.c Diferenciales Runge Kutta Orden 4", "url": "/runge-kutta"},
+                {"nombre": "E.c Diferenciales Metodo de Euler", "url": "/metodo-euler"},
             ]
         },
     ]
@@ -383,7 +388,48 @@ def calcular_derivada_atras_post():
         )
     except Exception as e:
         return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+
+
+##______________________________________________
+##DIFERENCIACION HACIA ADELANTE
+@app.route('/derivada-adelante', methods=['GET'])
+def calcular_derivada_adelante_get():
+    return render_template('Diferenciacion/HaciaAdelante.html')
+@app.route('/derivada-adelante', methods=['POST'])
+def calcular_derivada_adelante_post():
+    datos = request.json
+    valores = datos.get('datos')
+    tipo = datos.get('tipo')
     
+    try:
+        resultado = calcular_derivacion_adelante(valores, tipo)
+        return jsonify(
+            {'resultado_tabla': resultado["tabla"]}
+        )
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+
+
+##______________________________________________
+##DIFERENCIACION CENTRAL
+@app.route('/derivada-central', methods=['GET'])
+def calcular_derivada_central_get():
+    return render_template('Diferenciacion/Central.html')
+@app.route('/derivada-central', methods=['POST'])
+def calcular_derivada_central_post():
+    datos = request.json
+    valores = datos.get('datos')
+    tipo = datos.get('tipo')
+    
+    try:
+        resultado = calcular_derivacion_central(valores, tipo)
+        return jsonify(
+            {'resultado_tabla': resultado["tabla"]}
+        )
+    except Exception as e:
+        return jsonify({'error': f'Error al calcular: {str(e)}'}), 500
+
+
 ##______________________________________________
 ##REGRESION POR CRECIMIENTO DE SATURACION
 @app.route('/regresion-crecimiento-saturado', methods=['GET'])
@@ -407,7 +453,29 @@ def calcular_regresion_saturado_post():
 
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-    
+
+##______________________________________________
+##METODO DE EULER PARA EDO
+@app.route('/metodo-euler', methods=['GET'])
+def calcular_metodo_euler_get():
+    return render_template('ecuaciones_diferenciales/Euler.html')
+@app.route('/metodo-euler', methods=['POST'])
+def calcular_metodo_euler_post():
+    try:
+        data = request.get_json()
+        datos = data.get('datos')
+
+        resultado = metodo_euler(datos)
+        
+        return jsonify({
+            "resultado_valor": resultado["numero"],
+            "resultado_valor_n" : resultado["n"]
+        })
+
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+
+
 ##Hasta aqui terminan mis metodos (Jeycson)
 ##______________________________________________
 ##METODO DE SIMPSON 3/8
@@ -514,7 +582,7 @@ def calcular_lagrange_post():
 
     try:
         serie = lagrange(puntos, grado, valorx)
-        return jsonify({'funcion': serie})
+        return serie
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
@@ -539,7 +607,7 @@ def calcular_exponencial_post():
 
     try:
         expo = exponencial(puntos)
-        return jsonify({'funcion': expo})
+        return expo
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
@@ -563,8 +631,8 @@ def calcular_potencial_post():
         return jsonify({'error': 'Todos los campos son necesarios.'}), 400
 
     try:
-        expo = potencial(puntos)
-        return jsonify({'funcion': expo})
+        pot = potencial(puntos)
+        return pot
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
     except Exception as e:
