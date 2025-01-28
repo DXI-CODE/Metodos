@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gauss-Jordan Simple</title>
-    <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
+    <title>Gauss Simple</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,33 +29,29 @@
             padding: 8px;
             text-align: center;
         }
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-        }
     </style>
 </head>
 <body>
-    <h1>Método de Gauss-Jordan Simple</h1>
-    <label for="matrix-size">Ingrese el tamaño de la matriz (mayor a 1):</label>
+    <h1>Método de Gauss Simple</h1>
+    <label for="matrix-size">Ingrese el tamaño de la matriz aumentada (número de ecuaciones):</label>
     <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3">
     <button onclick="generateMatrix()">Generar Matriz</button>
 
     <form id="formulario">
         <div id="matrix-container" class="matrix-container"></div>
         <div class="actions hidden" id="calcular-actions">
-            <button type="submit">Calcular Gauss-Jordan Simple</button>
+            <button type="submit">Calcular Gauss Simple</button>
         </div>
     </form>
 
-    <div id="ResultadoGaussJordan"></div>
+    <div id="ResultadoGaussSimple"></div>
 
     <script>
         function generateMatrix() {
             const container = document.getElementById('matrix-container');
             const size = parseInt(document.getElementById('matrix-size').value);
             const actions = document.getElementById('calcular-actions');
-            const resultado = document.getElementById('ResultadoGaussJordan');
+            const resultado = document.getElementById('ResultadoGaussSimple');
 
             if (isNaN(size) || size < 2) {
                 alert('Por favor, ingrese un tamaño válido mayor a 1.');
@@ -66,8 +59,8 @@
             }
 
             container.innerHTML = '';
-            resultado.innerHTML = ''; 
-            container.style.gridTemplateColumns = `repeat(${size + 1}, auto)`;
+            resultado.innerHTML = '';
+            container.style.gridTemplateColumns = `repeat(${size + 1}, auto)`; // Incluye la columna de términos independientes
 
             for (let i = 0; i < size; i++) {
                 for (let j = 0; j < size + 1; j++) {
@@ -93,14 +86,13 @@
 
         document.getElementById("formulario").addEventListener("submit", async function (event) {
             event.preventDefault();
-            calcularGaussJordanSimple();
+            calcularGaussSimple();
         });
 
-        async function calcularGaussJordanSimple() {
+        async function calcularGaussSimple() {
             const inputs = document.querySelectorAll('.matrix-input');
             const size = parseInt(document.getElementById('matrix-size').value);
             const matrix = [];
-            const resultadoDiv = document.getElementById("ResultadoGaussJordan");
 
             let valid = true;
             for (let i = 0; i < size; i++) {
@@ -122,8 +114,6 @@
                 return;
             }
 
-            resultadoDiv.innerHTML = '<p>Cargando resultados...</p>'; 
-
             try {
                 const response = await fetch('/gauss_simple', {
                     method: 'POST',
@@ -134,17 +124,18 @@
                 });
 
                 const data = await response.json();
+                const resultadoDiv = document.getElementById("ResultadoGaussSimple");
 
                 if (data.matriz_escalonada) {
-                    resultadoDiv.innerHTML = `<h2>Matriz Escalonada:</h2>${data.matriz_escalonada}`;
+                    resultadoDiv.innerHTML = `<h2>Resultado:</h2>${data.matriz_escalonada}`;
                 } else if (data.error) {
-                    resultadoDiv.innerHTML = `<p class="error-message">Error: ${data.error}</p>`;
+                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
                 } else {
-                    resultadoDiv.innerHTML = '<p class="error-message">Error desconocido al aplicar Gauss-Jordan Simple.</p>';
+                    resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al calcular Gauss Simple.</p>';
                 }
             } catch (error) {
-                console.error('Error al calcular Gauss-Jordan Simple:', error);
-                resultadoDiv.innerHTML = '<p class="error-message">Hubo un error al calcular Gauss-Jordan Simple. Intente nuevamente.</p>';
+                console.error('Error al calcular Gauss Simple:', error);
+                alert('Hubo un error al calcular Gauss Simple. Intente nuevamente.');
             }
         }
     </script>

@@ -17,7 +17,7 @@ from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
 from calculos.linealizacionexponencial import exponencial
 from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
-from calculos.gauss_simple import validar_matriz_aumentada, gauss_jordan_simple, convertir_matriz_a_html
+from calculos.gauss_simple import validar_matriz_aumentada, gauss_simple, convertir_matriz_a_html
 from calculos.derivacionatras import calcular_derivacion_atras
 from calculos.derivacionadelante import calcular_derivacion_adelante
 from calculos.derivacioncentral import calcular_derivacion_central
@@ -673,35 +673,24 @@ def calcular_gauss_jordan_post():
 #_____________________________________________________
 
 @app.route('/gauss_simple', methods=['GET'])
-def calcular_gauss_jordan_simple_get():
+def calcular_gauss_simple_get():
     return render_template('Matrices/GaussSimple.html')
 
 @app.route('/gauss_simple', methods=['POST'])
-def calcular_gauss_jordan_simple_post():
-    try:
-        # Validar que se envíen datos en formato JSON
-        datos = request.json
-        if not datos or 'matrix' not in datos:
-            return jsonify({'error': 'Solicitud inválida. Asegúrate de enviar un JSON con una clave "matrix".'}), 400
+def calcular_gauss_simple_post():
+    datos = request.json
+    matriz = datos.get('matrix')
 
-        # Obtener la matriz y validar su formato
-        matriz = datos.get('matrix')
-        matriz_np, error = validar_matriz_aumentada(matriz)
-        if error:
-            return jsonify(matriz_np), error
+    matriz_np, error = validar_matriz_aumentada(matriz)
+    if error:
+        return jsonify(matriz_np), error
 
-        # Aplicar el método de Gauss-Jordan simple
-        resultado, error = gauss_jordan_simple(matriz_np)
-        if error:
-            return jsonify(resultado), error
+    resultado, error = gauss_simple(matriz_np)
+    if error:
+        return jsonify(resultado), error
 
-        # Convertir la matriz resultante a HTML
-        resultado['matriz_escalonada'] = convertir_matriz_a_html(resultado['matriz_escalonada'])
-        return jsonify(resultado)
+    return jsonify(resultado)
 
-    except Exception as e:
-        # Manejo de excepciones generales
-        return jsonify({'error': f'Ocurrió un error inesperado: {str(e)}'}), 500
 
 #_________________________________________________________
 
