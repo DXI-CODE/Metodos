@@ -61,13 +61,26 @@
 
     <div id="resultados" class="hidden">
         <h2>Resultados:</h2>
-        <div id="tabla-resultados"></div>
-        <h2>Gráfica de Convergencia:</h2>
-        <img id="grafica" src="" alt="Gráfica de convergencia">
+        <table>
+            <thead>
+                <tr>
+                    <th>Iteración</th>
+                    <th>xl</th>
+                    <th>xu</th>
+                    <th>xr</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-resultados"></tbody>
+        </table>
+        
         <h3>Resultado Final</h3>
         <p><strong>Raíz encontrada:</strong> <span id="raiz"></span></p>
         <p><strong>Número de iteraciones:</strong> <span id="iteraciones"></span></p>
+    
+        <h2>Gráfica de Convergencia:</h2>
+        <img id="grafica" src="" alt="Gráfica de convergencia">
     </div>
+    
 
     <script>
         document.getElementById("biseccion-form").addEventListener("submit", async function(event) {
