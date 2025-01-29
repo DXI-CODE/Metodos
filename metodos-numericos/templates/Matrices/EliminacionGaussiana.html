@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +15,7 @@
         .matrix-container {
             margin-top: 20px;
             display: grid;
+            grid-template-columns: repeat(4, auto); /* Fijo en 3x4 */
             gap: 5px;
         }
         .actions {
@@ -35,15 +36,14 @@
     </style>
 </head>
 <body>
-    <h1>Metodo eliminación Gaussiana</h1>
-    <label for="matrix-size">Ingrese el tamaño de la matriz aumentada (mayor a 1):</label>
-    <input type="number" id="matrix-size" min="3" max="3" placeholder="Ejemplo: 3">
-    <button onclick="generarMatriz()">Generar Matriz</button>
+    <h1>Método de Eliminación Gaussiana</h1>
+    
+    <button onclick="generarMatriz()">Generar Matriz 3x4</button>
 
     <form id="formulario">
         <div id="matrix-container" class="matrix-container"></div>
         <div class="actions hidden" id="calcular-actions">
-            <button type="submit">Calcular eliminación</button>
+            <button type="submit">Calcular Eliminación</button>
         </div>
     </form>
 
@@ -52,32 +52,22 @@
     <script>
         function generarMatriz() {
             const container = document.getElementById('matrix-container');
-            const size = parseInt(document.getElementById('matrix-size').value);
             const actions = document.getElementById('calcular-actions');
             const resultado = document.getElementById('ResultadoEliminacion');
 
-            if (isNaN(size) || size < 2) {
-                alert('Por favor, ingrese un tamaño válido mayor a 1.');
-                return;
-            }
+            container.innerHTML = ''; 
+            resultado.innerHTML = ''; 
+            container.style.gridTemplateColumns = `repeat(4, auto)`; // Fijo en 3x4
 
-            container.innerHTML = '';resultado.innerHTML = ''; 
-            container.style.gridTemplateColumns = `repeat(${size + 1}, auto)`;
-
-            for (let i = 0; i < size; i++) {
-                for (let j = 0; j < size + 1; j++) {
+            for (let i = 0; i < 3; i++) {  // Fijar en tamaño 3x4
+                for (let j = 0; j < 4; j++) {  // 3 variables + 1 resultado
                     const input = document.createElement('input');
                     input.type = 'number';
+                    input.step = 'any';  // Permitir decimales y negativos
                     input.placeholder = `(${i + 1},${j + 1})`;
                     input.className = 'matrix-input';
                     input.dataset.row = i;
                     input.dataset.col = j;
-
-                    input.addEventListener('input', function () {
-                        if (input.value.trim() !== '' && !isNaN(input.value)) {
-                            input.style.borderColor = '';
-                        }
-                    });
 
                     container.appendChild(input);
                 }
@@ -93,13 +83,12 @@
 
         async function calcularEliminacionGaussiana() {
             const inputs = document.querySelectorAll('.matrix-input');
-            const size = parseInt(document.getElementById('matrix-size').value);
             const matrix = [];
-
             let valid = true;
-            for (let i = 0; i < size; i++) {
+
+            for (let i = 0; i < 3; i++) {
                 matrix[i] = [];
-                for (let j = 0; j < size + 1; j++) {
+                for (let j = 0; j < 4; j++) {
                     const input = Array.from(inputs).find(el => el.dataset.row == i && el.dataset.col == j);
                     if (input.value.trim() === '' || isNaN(input.value)) {
                         valid = false;
