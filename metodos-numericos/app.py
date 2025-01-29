@@ -25,7 +25,7 @@ from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
-from calculos.eliminacion_gaussiana import gaussiana_eliminacion, resolver_gauss
+
 
 
 app = Flask(__name__)
@@ -636,21 +636,22 @@ def calcular_exponencial_post():
 def eliminacion_gaussiana_get():
     return render_template('matrices/EliminacionGaussiana.html')
 
+
 @app.route('/eliminacion_gaussiana', methods=['POST'])
-def eliminacion_gaussiana_post():
-    try:
-        # Obtener los datos JSON del cliente
-        datos = request.json
-        matriz = datos['matriz']  # Asumiendo que la matriz es un campo en el JSON
+def calcualar_eliminacion_gaussiana_post():
+    datos = request.json
+    matriz = datos.get('matrix') 
 
-        # Asegúrate de que la función de eliminación gaussiana esté definida correctamente
-        soluciones = gaussiana_eliminacion(matriz)  # Llamar a la función de eliminación gaussiana
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
 
-        # Retornar las soluciones en formato JSON
-        return jsonify({'soluciones': soluciones})
+    resultado, error = eliminacion_gaussiana(matriz_np)
+    if error:
+        return jsonify(resultado), error
 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    return jsonify(resultado)
+
 
 ##______________________________________________
         
