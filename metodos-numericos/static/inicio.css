@@ -44,12 +44,12 @@ h1 {
 
 .container {
     display: flex;
+    width: 100%; /* Ocupará todo el ancho de la pantalla */
     flex-wrap: wrap;
     justify-content: center;
     margin: 20px;
     background: linear-gradient(to bottom, #05121a, #009eff);
     height: 100vh;
-    width: 200px;
 }
 
 .categoria {
