@@ -12,12 +12,13 @@
 
 body {
     /*font-family: Arial, sans-serif;*/
-    background-color: white;
+    /*background-color: white;*/
     color: #333;
     margin: 0;
     padding: 0;
     font-size: 1rem;
     font-weight: normal;
+    background: linear-gradient(to bottom, #05121a, #05121a, #009eff);
 }
 
 #logo {
