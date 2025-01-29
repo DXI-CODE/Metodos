@@ -14,9 +14,10 @@ body {
     padding: 20px;
 }
 
-h1{
+/*h1{
     margin-bottom: 15px;
-    color: #0ff; /* Color principal */
+    color: #0077b6; 
+    color: #0ff;  
     text-shadow: 
      0 0 5px #0ff,
      0 0 10px #0ff,
@@ -25,9 +26,9 @@ h1{
      0 0 40px #0ff,
      0 0 50px #0ff,
      0 0 60px #0ff;
-}
+}*/
 
-h2, h3 {
+h1,h2, h3 {
     color: #0077b6;
     margin-bottom: 15px;
 }
