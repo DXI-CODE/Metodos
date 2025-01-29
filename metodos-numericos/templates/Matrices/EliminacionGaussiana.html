@@ -133,11 +133,11 @@
                 } else if (data.error) {
                     resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
                 } else {
-                    resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al calcular Gauss-Jordan.</p>';
+                    resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al calcular la eliminación Gaussiana.</p>';
                 }
             } catch (error) {
-                console.error('Error al calcular Gauss-Jordan:', error);
-                alert('Hubo un error al calcular Gauss-Jordan. Intente nuevamente.');
+                console.error('Error al calcular la eliminación Gaussiana:', error);
+                alert('Hubo un error al calcular la eliminación Gaussiana. Intente nuevamente.');
             }
         }
     </script>
