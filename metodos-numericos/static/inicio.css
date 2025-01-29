@@ -20,6 +20,19 @@ body {
     font-weight: normal;
 }
 
+#logo {
+    display: block;
+    width: 100%; /* Ocupará todo el ancho de la pantalla */
+    max-height: 300px; /* Ajusta este valor según la altura que desees */
+    object-fit: contain; /* Evita que la imagen se deforme */
+    margin: 0 auto; /* Centrar la imagen */
+    position: sticky;
+    top: 0;
+    background: white; /* Para que no se mezcle con el fondo */
+    z-index: 1000; /* Para que esté por encima de otros elementos */
+
+}
+
 h1 {
     background-color: #0077b6;
     color: white;
