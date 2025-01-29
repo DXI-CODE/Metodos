@@ -35,21 +35,21 @@ body {
 }
 
 h1 {
-    background-color: #c9d0ef;
+    background-color: #6b77c3;
     color: #05121a;
     padding: 20px;
     margin: 0;
     font-size: 28px;
     text-align: center;
 
-    border: solid #0ff;
+    border: solid #9098d4;
     border-radius: 5px;
     text-transform: uppercase;
     box-shadow: 
-    0 0 5px #0ff,
-    0 0 10px #0ff,
-    0 0 20px #0ff,
-    0 0 30px #00f;
+    0 0 5px #cacfed,
+    0 0 10px #cacfed,
+    0 0 20px #cacfed,
+    0 0 30px #3346b6;
     transition: 0.3s ease;
 }
 
@@ -66,7 +66,7 @@ h1 {
 .categoria {
     display: inline-block;
     width: 200px;
-    height: 40px;
+    /*height: 40px;*/
     background-color: #f0f0f0;
     margin: 50px;
     text-align: center;
