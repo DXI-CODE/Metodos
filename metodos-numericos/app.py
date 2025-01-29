@@ -51,6 +51,7 @@ def home():
                 {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
                 {"nombre": "Metodo Gauss-Jordan", "url": "/gauss_jordan"},
                 {"nombre": "Metodo Gauss Simple", "url": "/gauss_simple"},
+                {"nombre": "Método Eliminación Gaussiana", "url": "/eliminacion_gaussiana"},
             ]
         },
         {
@@ -675,6 +676,39 @@ def calcular_integracionmultiple_post():
 ##______________________________________________
 
 ##______________________________________________
+
+
+
+##[
+
+    ##METODOS DE GERSON
+
+##]
+
+##_________Eliminación Gaussiana______________
+
+@app.route('/eliminacion_gaussiana', methods=['GET'])
+def calcular_eliminacion_gaussiana_get():
+    return render_template('Matrices/EliminacionGaussiana.html')
+
+@app.route('/eliminacion_gaussiana', methods=['POST'])
+def calcular_eliminacion_gaussiana_post():
+    datos = request.json
+    matriz = datos.get('matrix') 
+
+    matriz_np, error = validar_matriz(matriz)
+    if error:
+        return jsonify(matriz_np), error
+
+    resultado, error = calcular_gauss_jordan(matriz_np)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
+
+
+
+
 
 
 
