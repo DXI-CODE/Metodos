@@ -65,7 +65,8 @@ h1 {
 
 .categoria {
     display: inline-block;
-    width: 180px; /* Reducido de 200px a 180px */
+    width: 100px; /* Reducido de 200px a 100px */
+    min-height: 40px;
     background-color: #f0f0f0;
     margin: 20px; /* Reducido de 50px a 20px */
     text-align: center;
