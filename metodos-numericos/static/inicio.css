@@ -65,18 +65,26 @@ h1 {
 
 .categoria {
     display: inline-block;
-    width: 200px;
-    /*height: 40px;*/
+    width: 180px; /* Reducido de 200px a 180px */
     background-color: #f0f0f0;
-    margin: 50px;
+    margin: 20px; /* Reducido de 50px a 20px */
     text-align: center;
     border-radius: 8px;
     cursor: pointer;
-    position: relative; /* Asegura que el contenedor de los métodos se posicione en relación a esta caja */
-    z-index: 1; /* Inicialmente está en el nivel más bajo */
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px; /* Ajustado para que el contenido no se vea muy espacioso */
     transition: transform 0.3s ease-in-out;
 }
+
+/* Ajusta el tamaño del texto dentro de las categorías */
+.categoria h3 {
+    font-size: 16px; /* Reducido para que el texto no sea tan grande */
+    margin-bottom: 8px;
+    color: #091bbd;
+}
+
 
 .categoria:hover .metodos {
     display: block;
