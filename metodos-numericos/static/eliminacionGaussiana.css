@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Covered+By+Your+Grace&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Mochiy+Pop+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: "Exo 2", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: rgb(238, 245, 250);
+}
+body {
+    background: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+}
+h1{
+  
+    font-family: "Exo 2", serif;
+    font-optical-sizing: auto;
+    font-weight:weight;
+    font-style:normal;
+    margin: 30px;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 3.7rem;
+    color: rgb(1, 1, 196);
+    
+}
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover {
+    background: #0056b3;
+}
+.matrix-container {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+.matrix-input {
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+.matrix-input:focus {
+    border-color: #007bff;
+    outline: none;
+    transform: scale(1.1);
+}
+.actions {
+    margin-top: 20px;
+}
+.hidden {
+    display: none;
+}
+#ResultadoEliminacion {
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
