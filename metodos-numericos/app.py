@@ -25,7 +25,7 @@ from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
-from calculos.eliminacion_gaussiana import gaussiana_eliminacion, resolver_gauss
+
 
 
 app = Flask(__name__)

@@ -49,38 +49,3 @@ def convertir_vector_a_html(vector):
 from flask import Flask, request, jsonify, render_template
 
 
-# Función para resolver la matriz usando eliminación de Gauss
-def gaussiana_eliminacion(matriz):
-    filas = len(matriz)
-    columnas = len(matriz[0])
-
-    # Eliminación hacia adelante
-    for i in range(filas - 1):
-        for k in range(i + 1, filas):
-            factor = matriz[k][i] / matriz[i][i]
-            for j in range(i, columnas):
-                matriz[k][j] -= factor * matriz[i][j]
-
-    # Sustitución hacia atrás para encontrar las soluciones
-    soluciones = [0] * filas
-    for i in range(filas - 1, -1, -1):
-        suma = sum(matriz[i][j] * soluciones[j] for j in range(i + 1, columnas - 1))
-        soluciones[i] = (matriz[i][columnas - 1] - suma) / matriz[i][i]
-
-    return soluciones
-
-
-
-# Ruta para recibir y resolver la matriz enviada desde el formulario HTML
-
-def resolver_gauss():
-    try:
-        datos = request.json
-        matriz = datos['matriz']
-
-        soluciones = gaussiana_eliminacion(matriz)
-        return jsonify({'soluciones': soluciones})
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
-
