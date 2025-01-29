@@ -14,7 +14,20 @@ body {
     padding: 20px;
 }
 
-h1, h2, h3 {
+h1{
+    margin-bottom: 15px;
+    color: #0ff; /* Color principal */
+    text-shadow: 
+     0 0 5px #0ff,
+     0 0 10px #0ff,
+     0 0 20px #00f,
+     0 0 30px #00f,
+     0 0 40px #0ff,
+     0 0 50px #0ff,
+     0 0 60px #0ff;
+}
+
+h2, h3 {
     color: #0077b6;
     margin-bottom: 15px;
 }
@@ -27,6 +40,18 @@ form {
     width: 90%;
     max-width: 500px;
     margin: 20px auto;
+
+    border: 2px solid rgb(250, 69, 211);
+      border-radius: 5px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 
+        0 0 5px rgb(247, 67, 172),
+        0 0 10px rgb(247, 67, 172),
+        0 0 20px rgb(247, 67, 172),
+        0 0 30px rgb(182, 8, 109);
+      transition: 0.3s ease;
+
 }
 
 label {
