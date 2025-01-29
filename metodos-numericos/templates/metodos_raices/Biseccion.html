@@ -55,7 +55,20 @@
     </form>
     <div id="resultados" class="hidden">
         <h2>Resultados:</h2>
-        <div id="tabla-resultados"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Iteración</th>
+                    <th>xl</th>
+                    <th>xu</th>
+                    <th>xr</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-resultados"></tbody>
+        </table>
+        <h3>Resultado Final</h3>
+        <p><strong>Raíz encontrada:</strong> <span id="raiz"></span></p>
+        <p><strong>Número de iteraciones:</strong> <span id="iteraciones"></span></p>
     </div>
     <script>
         document.getElementById("biseccion-form").addEventListener("submit", async function(event) {
@@ -80,7 +93,18 @@
                 if (resultado.error) {
                     alert("Error: " + resultado.error);
                 } else {
-                    document.getElementById("tabla-resultados").innerHTML = resultado.tabla;
+                    let tablaHTML = "";
+                    resultado.resultados.forEach(res => {
+                        tablaHTML += `<tr>
+                            <td>${res.iteracion}</td>
+                            <td>${res.xl}</td>
+                            <td>${res.xu}</td>
+                            <td>${res.xr}</td>
+                        </tr>`;
+                    });
+                    document.getElementById("tabla-resultados").innerHTML = tablaHTML;
+                    document.getElementById("raiz").textContent = resultado.raiz;
+                    document.getElementById("iteraciones").textContent = resultado.iteraciones;
                     document.getElementById("resultados").classList.remove("hidden");
                 }
             } catch (error) {
