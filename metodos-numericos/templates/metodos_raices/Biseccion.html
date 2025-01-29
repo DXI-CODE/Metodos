@@ -22,6 +22,11 @@
         .hidden {
             display: none;
         }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -53,6 +58,7 @@
         <br><br>
         <button type="submit">Calcular</button>
     </form>
+
     <div id="resultados" class="hidden">
         <h2>Resultados:</h2>
         <table>
@@ -66,51 +72,70 @@
             </thead>
             <tbody id="tabla-resultados"></tbody>
         </table>
+        
         <h3>Resultado Final</h3>
         <p><strong>Raíz encontrada:</strong> <span id="raiz"></span></p>
         <p><strong>Número de iteraciones:</strong> <span id="iteraciones"></span></p>
+    
+        <h2>Gráfica de Convergencia:</h2>
+        <img id="grafica" src="" alt="Gráfica de convergencia">
     </div>
+    
+
     <script>
         document.getElementById("biseccion-form").addEventListener("submit", async function(event) {
-            event.preventDefault();
-            const datos = {
-                xl: parseFloat(document.getElementById("xl").value),
-                xu: parseFloat(document.getElementById("xu").value),
-                tol: parseFloat(document.getElementById("tol").value),
-                max_iter: parseInt(document.getElementById("max_iter").value),
-                g: parseFloat(document.getElementById("g").value),
-                m: parseFloat(document.getElementById("m").value),
-                t: parseFloat(document.getElementById("t").value),
-                v: parseFloat(document.getElementById("v").value)
-            };
-            try {
-                const response = await fetch("/biseccion", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(datos)
-                });
-                const resultado = await response.json();
-                if (resultado.error) {
-                    alert("Error: " + resultado.error);
-                } else {
-                    let tablaHTML = "";
-                    resultado.resultados.forEach(res => {
-                        tablaHTML += `<tr>
-                            <td>${res.iteracion}</td>
-                            <td>${res.xl}</td>
-                            <td>${res.xu}</td>
-                            <td>${res.xr}</td>
-                        </tr>`;
-                    });
-                    document.getElementById("tabla-resultados").innerHTML = tablaHTML;
-                    document.getElementById("raiz").textContent = resultado.raiz;
-                    document.getElementById("iteraciones").textContent = resultado.iteraciones;
-                    document.getElementById("resultados").classList.remove("hidden");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
+    event.preventDefault();
+    const datos = {
+        xl: parseFloat(document.getElementById("xl").value),
+        xu: parseFloat(document.getElementById("xu").value),
+        tol: parseFloat(document.getElementById("tol").value),
+        max_iter: parseInt(document.getElementById("max_iter").value),
+        g: parseFloat(document.getElementById("g").value),
+        m: parseFloat(document.getElementById("m").value),
+        t: parseFloat(document.getElementById("t").value),
+        v: parseFloat(document.getElementById("v").value)
+    };
+
+    try {
+        const response = await fetch("/biseccion", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos)
         });
+        const resultado = await response.json();
+        
+        if (resultado.error) {
+            alert("Error: " + resultado.error);
+        } else {
+            // Llenar la tabla de resultados
+            let tablaHTML = "";
+            resultado.resultados.forEach(res => {
+                tablaHTML += `
+                    <tr>
+                        <td>${res.iteracion}</td>
+                        <td>${res.xl.toFixed(6)}</td>
+                        <td>${res.xu.toFixed(6)}</td>
+                        <td>${res.xr.toFixed(6)}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById("tabla-resultados").innerHTML = tablaHTML;
+
+            // Mostrar la raíz y número de iteraciones
+            document.getElementById("raiz").textContent = resultado.raiz.toFixed(6);
+            document.getElementById("iteraciones").textContent = resultado.iteraciones;
+
+            // Mostrar la gráfica
+            document.getElementById("grafica").src = "data:image/png;base64," + resultado.grafica;
+
+            // Mostrar los resultados
+            document.getElementById("resultados").classList.remove("hidden");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+});
+
     </script>
 </body>
 </html>
