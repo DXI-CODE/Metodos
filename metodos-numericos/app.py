@@ -24,6 +24,7 @@ from calculos.derivacioncentral import calcular_derivacion_central
 from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
+from calculos.eliminacion_gaussiana import validar_matriz
 
 
 
@@ -700,7 +701,7 @@ def calcular_eliminacion_gaussiana_post():
     if error:
         return jsonify(matriz_np), error
 
-    resultado, error = calcular_gauss_jordan(matriz_np)
+    resultado, error = calcularEliminacionGaussiana(matriz_np)
     if error:
         return jsonify(resultado), error
 
