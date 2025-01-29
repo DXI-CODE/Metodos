@@ -1,15 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Covered+By+Your+Grace&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Mochiy+Pop+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
 
 *{
   background: rgb(238, 245, 250);
 }
 
 h1{
-    font-family: "Josefin Sans", serif;
+  
+    font-family: "Exo 2", serif;
     font-optical-sizing: auto;
-    font-style: normal;
+    font-weight:weight;
+    font-style:normal;
+    margin: 30px;
+    padding: 0;
+    box-sizing: border-box;
     text-align: center;
-    font-size: 4rem;
+    font-size: 3.7rem;
     color: rgb(1, 1, 196);
     
 }
@@ -21,7 +27,7 @@ h1{
     align-items: center;
     width: 40%;
     position: relative;
-    left: 30%;
+    left: 29%;
     padding: 15px;
     gap: 10px;
     border: 2px solid #0ff;
@@ -68,6 +74,10 @@ h2{
 }
 
 #ResultadoSerieTaylor {
+  font-size: large;
+}
+
+#ResultadoSeriemclaurin {
   font-size: large;
 }
 
