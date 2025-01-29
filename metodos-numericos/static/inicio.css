@@ -65,8 +65,8 @@ h1 {
 
 .categoria {
     display: inline-block;
-    width: 100px; /* Reducido de 200px a 100px */
-    min-height: 40px;
+    width: 200px;
+    height: 50px;
     background-color: #f0f0f0;
     margin: 20px; /* Reducido de 50px a 20px */
     text-align: center;
@@ -75,7 +75,7 @@ h1 {
     position: relative;
     z-index: 1;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px; /* Ajustado para que el contenido no se vea muy espacioso */
+    padding: 20px; /* Ajustado para que el contenido no se vea muy espacioso */
     transition: transform 0.3s ease-in-out;
 }
 
@@ -90,12 +90,6 @@ h1 {
 .categoria:hover .metodos {
     display: block;
     transform: scale(1.05);
-}
-
-h3 {
-    color: #0077b6;
-    font-size: 22px;
-    margin-bottom: 10px;
 }
 
 .metodos {
