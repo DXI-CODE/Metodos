@@ -49,6 +49,7 @@ h1 {
     margin: 20px;
     background: linear-gradient(to bottom, #05121a, #009eff);
     height: 100vh;
+    width: 200px;
 }
 
 .categoria {
