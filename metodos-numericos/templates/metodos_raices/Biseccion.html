@@ -22,6 +22,11 @@
         .hidden {
             display: none;
         }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -53,23 +58,14 @@
         <br><br>
         <button type="submit">Calcular</button>
     </form>
+
     <div id="resultados" class="hidden">
         <h2>Resultados:</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Iteración</th>
-                    <th>xl</th>
-                    <th>xu</th>
-                    <th>xr</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-resultados"></tbody>
-        </table>
-        <h3>Resultado Final</h3>
-        <p><strong>Raíz encontrada:</strong> <span id="raiz"></span></p>
-        <p><strong>Número de iteraciones:</strong> <span id="iteraciones"></span></p>
+        <div id="tabla-resultados"></div>
+        <h2>Gráfica de Convergencia:</h2>
+        <img id="grafica" src="" alt="Gráfica de convergencia">
     </div>
+
     <script>
         document.getElementById("biseccion-form").addEventListener("submit", async function(event) {
             event.preventDefault();
@@ -93,18 +89,8 @@
                 if (resultado.error) {
                     alert("Error: " + resultado.error);
                 } else {
-                    let tablaHTML = "";
-                    resultado.resultados.forEach(res => {
-                        tablaHTML += `<tr>
-                            <td>${res.iteracion}</td>
-                            <td>${res.xl}</td>
-                            <td>${res.xu}</td>
-                            <td>${res.xr}</td>
-                        </tr>`;
-                    });
-                    document.getElementById("tabla-resultados").innerHTML = tablaHTML;
-                    document.getElementById("raiz").textContent = resultado.raiz;
-                    document.getElementById("iteraciones").textContent = resultado.iteraciones;
+                    document.getElementById("tabla-resultados").innerHTML = resultado.tabla;
+                    document.getElementById("grafica").src = "data:image/png;base64," + resultado.grafica;
                     document.getElementById("resultados").classList.remove("hidden");
                 }
             } catch (error) {
