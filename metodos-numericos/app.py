@@ -85,7 +85,8 @@ def home():
                 {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
                 {"nombre": "Diferenciacion numerica hacia adelante", "url":"/derivada-adelante"},
                 {"nombre": "Diferenciacion numerica central", "url":"/derivada-central"},
-                {"nombre": "METODO DE BISECCION", "url":"/biseccion"},
+                {"nombre": "Metodo de biseccion", "url":"/biseccion"},
+                {"nombre": "Metodo de Newton", "url":"/newton"},
             ]
         },
         {
