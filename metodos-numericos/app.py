@@ -17,7 +17,6 @@ from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
 from calculos.linealizacionexponencial import exponencial
 from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
-<<<<<<< Updated upstream
 from calculos.gauss_simple import validar_matriz_aumentada, gauss_simple, convertir_matriz_a_html
 from calculos.derivacionatras import calcular_derivacion_atras
 from calculos.derivacionadelante import calcular_derivacion_adelante
@@ -26,10 +25,7 @@ from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
-
-=======
 from calculos.eliminacion_gaussiana import gaussiana_eliminacion, resolver_gauss
->>>>>>> Stashed changes
 
 
 app = Flask(__name__)

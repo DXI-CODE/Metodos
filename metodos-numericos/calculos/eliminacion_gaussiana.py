@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import numpy as np
 
 def validar_matriz(matriz):
@@ -47,7 +46,6 @@ def convertir_vector_a_html(vector):
         html += f"<li>x{i + 1} = {val:.4f}</li>"
     html += "</ul>"
     return html
-=======
 from flask import Flask, request, jsonify, render_template
 
 
@@ -86,4 +84,3 @@ def resolver_gauss():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
->>>>>>> Stashed changes
