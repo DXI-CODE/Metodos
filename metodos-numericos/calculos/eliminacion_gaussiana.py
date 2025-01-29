@@ -42,10 +42,8 @@ def eliminacion_gaussiana(matriz_np):
 def convertir_vector_a_html(vector):
     """Convierte un vector de soluciones en formato HTML."""
     html = "<h2>Soluciones:</h2><ul>"
-    for i, val in enumerate(vector[:3]):  # Solo mostrar x1, x2 y x3
+    for i, val in enumerate(vector):  # Muestra todas las soluciones
         html += f"<li>x{i + 1} = {val:.4f}</li>"
     html += "</ul>"
     return html
-from flask import Flask, request, jsonify, render_template
-
 
