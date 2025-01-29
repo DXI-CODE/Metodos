@@ -41,6 +41,16 @@ h1 {
     margin: 0;
     font-size: 28px;
     text-align: center;
+
+    border: solid #0ff;
+    border-radius: 5px;
+    text-transform: uppercase;
+    box-shadow: 
+    0 0 5px #0ff,
+    0 0 10px #0ff,
+    0 0 20px #0ff,
+    0 0 30px #00f;
+    transition: 0.3s ease;
 }
 
 .container {
