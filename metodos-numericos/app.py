@@ -17,6 +17,7 @@ from calculos.runge_kutta_4 import runge_kutta_4, validar_ecuaciones
 from calculos.linealizacionexponencial import exponencial
 from calculos.linealizacionpotencial import potencial
 from calculos.gauss_jordan import validar_matriz, calcular_gauss_jordan
+<<<<<<< Updated upstream
 from calculos.gauss_simple import validar_matriz_aumentada, gauss_simple, convertir_matriz_a_html
 from calculos.derivacionatras import calcular_derivacion_atras
 from calculos.derivacionadelante import calcular_derivacion_adelante
@@ -26,6 +27,9 @@ from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
 
+=======
+from calculos.eliminacion_gaussiana import gaussiana_eliminacion, resolver_gauss
+>>>>>>> Stashed changes
 
 
 app = Flask(__name__)
@@ -622,6 +626,35 @@ def calcular_exponencial_post():
         return jsonify({'error': f'Error al calcular la función por linealización exponencial: {str(e)}'}), 500
 
 ##______________________________________________
+
+##[
+
+    ##METODOS DE Gerson
+
+##]
+
+##______________________________________________
+
+# El método de eliminación gaussiana
+@app.route('/eliminacion_gaussiana', methods=['GET'])
+def eliminacion_gaussiana_get():
+    return render_template('matrices/EliminacionGaussiana.html')
+
+@app.route('/eliminacion_gaussiana', methods=['POST'])
+def eliminacion_gaussiana_post():
+    try:
+        # Obtener los datos JSON del cliente
+        datos = request.json
+        matriz = datos['matriz']  # Asumiendo que la matriz es un campo en el JSON
+
+        # Asegúrate de que la función de eliminación gaussiana esté definida correctamente
+        soluciones = gaussiana_eliminacion(matriz)  # Llamar a la función de eliminación gaussiana
+
+        # Retornar las soluciones en formato JSON
+        return jsonify({'soluciones': soluciones})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 ##______________________________________________
         

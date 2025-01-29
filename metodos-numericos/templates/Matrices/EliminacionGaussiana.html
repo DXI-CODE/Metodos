@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eliminación Gaussiana</title>
+<<<<<<< Updated upstream
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
@@ -128,6 +129,82 @@
                 console.error('Error al calcular la eliminación Gaussiana:', error);
                 alert('Hubo un error al calcular la eliminación Gaussiana. Intente nuevamente.');
             }
+=======
+</head>
+<body>
+    <h2>Resolución de sistema de ecuaciones (Eliminación de Gaussiana)</h2>
+    <table border="1">
+        <tr>
+            <td><input type="number" id="r0c0"></td>
+            <td><input type="number" id="r0c1"></td>
+            <td><input type="number" id="r0c2"></td>
+            <td><input type="number" id="r0c3" placeholder="Resultado"></td>
+        </tr>
+        <tr>
+            <td><input type="number" id="r1c0"></td>
+            <td><input type="number" id="r1c1"></td>
+            <td><input type="number" id="r1c2"></td>
+            <td><input type="number" id="r1c3" placeholder="Resultado"></td>
+        </tr>
+        <tr>
+            <td><input type="number" id="r2c0"></td>
+            <td><input type="number" id="r2c1"></td>
+            <td><input type="number" id="r2c2"></td>
+            <td><input type="number" id="r2c3" placeholder="Resultado"></td>
+        </tr>
+    </table>
+    <br>
+    <button onclick="mandarMatriz()">Calcular</button>
+    <br><br>
+    <div id="resultado"></div>
+
+    <script>
+        function mandarMatriz() {
+            const matriz = [
+                [
+                    parseFloat(document.getElementById('r0c0').value),
+                    parseFloat(document.getElementById('r0c1').value),
+                    parseFloat(document.getElementById('r0c2').value),
+                    parseFloat(document.getElementById('r0c3').value)
+                ],
+                [
+                    parseFloat(document.getElementById('r1c0').value),
+                    parseFloat(document.getElementById('r1c1').value),
+                    parseFloat(document.getElementById('r1c2').value),
+                    parseFloat(document.getElementById('r1c3').value)
+                ],
+                [
+                    parseFloat(document.getElementById('r2c0').value),
+                    parseFloat(document.getElementById('r2c1').value),
+                    parseFloat(document.getElementById('r2c2').value),
+                    parseFloat(document.getElementById('r2c3').value)
+                ]
+            ];
+
+            fetch('/eliminacion_gaussiana', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ matriz: matriz })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('resultado').innerHTML = 
+                        `<p style="color:red;">Error: ${data.error}</p>`;
+                } else {
+                    document.getElementById('resultado').innerHTML = 
+                        `Soluciones: X1 = ${data.soluciones[0].toFixed(4)}, ` + 
+                        `X2 = ${data.soluciones[1].toFixed(4)}, ` + 
+                        `X3 = ${data.soluciones[2].toFixed(4)}`;
+                }
+            })
+            .catch(error => {
+                document.getElementById('resultado').innerHTML = 
+                    `<p style="color:red;">Error: ${error}</p>`;
+            });
+>>>>>>> Stashed changes
         }
     </script>
 </body>
