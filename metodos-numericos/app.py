@@ -25,6 +25,8 @@ from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
+from calculos.newton import newton_raphson
+
 
 
 
@@ -83,7 +85,8 @@ def home():
                 {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
                 {"nombre": "Diferenciacion numerica hacia adelante", "url":"/derivada-adelante"},
                 {"nombre": "Diferenciacion numerica central", "url":"/derivada-central"},
-                {"nombre": "METODO DE BISECCION", "url":"/biseccion"},
+                {"nombre": "Metodo de biseccion", "url":"/biseccion"},
+                {"nombre": "Metodo de Newton", "url":"/newton"},
             ]
         },
         {
@@ -795,6 +798,26 @@ def biseccion_post():
         return jsonify({'error': str(e)})
 
 
+#------------------------------ NEWTON -----------------------------------------------#
+
+@app.route('/newton', methods=['GET'])
+def newton_get():
+    return render_template('metodos_raices/Newton.html')
+
+@app.route('/newton', methods=['POST'])
+def newton_post():
+    datos = request.json
+    x0 = datos['x0']
+    tol = datos['tol']
+    max_iter = datos['max_iter']
+
+    try:
+        resultado = newton_raphson(x0, tol, max_iter)
+        return jsonify(resultado)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
+#-----------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
