@@ -625,32 +625,6 @@ def calcular_exponencial_post():
 
 ##[
 
-    ##METODOS DE Gerson
-
-##]
-
-##______________________________________________
-
-# El método de eliminación gaussiana
-@app.route('/eliminacion_gaussiana', methods=['GET'])
-def eliminacion_gaussiana_get():
-    return render_template('matrices/EliminacionGaussiana.html')
-
-@app.route('/eliminacion_gaussiana', methods=['POST'])
-def eliminacion_gaussiana_post():
-    try:
-        # Obtener los datos JSON del cliente
-        datos = request.json
-        matriz = datos['matriz']  # Asumiendo que la matriz es un campo en el JSON
-
-        # Asegúrate de que la función de eliminación gaussiana esté definida correctamente
-        soluciones = gaussiana_eliminacion(matriz)  # Llamar a la función de eliminación gaussiana
-
-        # Retornar las soluciones en formato JSON
-        return jsonify({'soluciones': soluciones})
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
 
 ##______________________________________________
         
