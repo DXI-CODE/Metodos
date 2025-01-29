@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminación Gaussiana</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .matrix-container {
+            margin-top: 20px;
+            display: grid;
+            gap: 5px;
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Metodo eliminación Gaussiana</h1>
+    <label for="matrix-size">Ingrese el tamaño de la matriz aumentada (mayor a 1):</label>
+    <input type="number" id="matrix-size" min="3" max="3" placeholder="Ejemplo: 3">
+    <button onclick="generarMatriz()">Generar Matriz</button>
+
+    <form id="formulario">
+        <div id="matrix-container" class="matrix-container"></div>
+        <div class="actions hidden" id="calcular-actions">
+            <button type="submit">Calcular eliminación</button>
+        </div>
+    </form>
+
+    <div id="ResultadoEliminacion"></div>
+
+    <script>
+        function generarMatriz() {
+            const container = document.getElementById('matrix-container');
+            const size = parseInt(document.getElementById('matrix-size').value);
+            const actions = document.getElementById('calcular-actions');
+            const resultado = document.getElementById('ResultadoEliminacion');
+
+            if (isNaN(size) || size < 2) {
+                alert('Por favor, ingrese un tamaño válido mayor a 1.');
+                return;
+            }
+
+            container.innerHTML = '';resultado.innerHTML = ''; 
+            container.style.gridTemplateColumns = `repeat(${size + 1}, auto)`;
+
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size + 1; j++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.placeholder = `(${i + 1},${j + 1})`;
+                    input.className = 'matrix-input';
+                    input.dataset.row = i;
+                    input.dataset.col = j;
+
+                    input.addEventListener('input', function () {
+                        if (input.value.trim() !== '' && !isNaN(input.value)) {
+                            input.style.borderColor = '';
+                        }
+                    });
+
+                    container.appendChild(input);
+                }
+            }
+
+            actions.classList.remove('hidden');
+        }
+
+        document.getElementById("formulario").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            calcularEliminacionGaussiana();
+        });
+
+        async function calcularEliminacionGaussiana() {
+            const inputs = document.querySelectorAll('.matrix-input');
+            const size = parseInt(document.getElementById('matrix-size').value);
+            const matrix = [];
+
+            let valid = true;
+            for (let i = 0; i < size; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < size + 1; j++) {
+                    const input = Array.from(inputs).find(el => el.dataset.row == i && el.dataset.col == j);
+                    if (input.value.trim() === '' || isNaN(input.value)) {
+                        valid = false;
+                        input.style.borderColor = 'red'; 
+                    } else {
+                        input.style.borderColor = ''; 
+                        matrix[i][j] = parseFloat(input.value);
+                    }
+                }
+            }
+
+            if (!valid) {
+                alert('Por favor, complete todos los campos con valores numéricos.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/eliminacion_gaussiana', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ matrix }),
+                });
+
+                const data = await response.json();
+                const resultadoDiv = document.getElementById("ResultadoEliminacion");
+
+                if (data.resultado_matriz) {
+                    resultadoDiv.innerHTML = `<h2>Resultado:</h2>${data.resultado_matriz}`;
+                } else if (data.error) {
+                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                } else {
+                    resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al calcular Gauss-Jordan.</p>';
+                }
+            } catch (error) {
+                console.error('Error al calcular Gauss-Jordan:', error);
+                alert('Hubo un error al calcular Gauss-Jordan. Intente nuevamente.');
+            }
+        }
+    </script>
+</body>
+</html>
