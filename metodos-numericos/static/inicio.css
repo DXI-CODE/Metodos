@@ -28,7 +28,7 @@ body {
     margin: 0 auto; /* Centrar la imagen */
     position: sticky;
     top: 0;
-    background: white; /* Para que no se mezcle con el fondo */
+    background: #06161d; /* Para que no se mezcle con el fondo */
     z-index: 1000; /* Para que esté por encima de otros elementos */
 
 }
@@ -77,7 +77,7 @@ h3 {
 }
 
 .metodos {
-    display: flex;
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
