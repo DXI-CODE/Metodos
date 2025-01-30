@@ -75,7 +75,7 @@ h2{
     font-style: normal;
 }
 
-p{
+p, h3 {
     text-align: center;
 
 }
@@ -87,3 +87,9 @@ p{
   align-items: center;
 }
 
+#grafica {
+  font-size: large;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
