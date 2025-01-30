@@ -736,7 +736,7 @@ def interpolacion_matrices_post():
     datos = request.json
     x_puntos = datos.get('x')  # Lista de valores X
     y_puntos = datos.get('y')  # Lista de valores Y
-    x_eval = datos.get('x_eval')  # Valor en X a evaluar
+    x_eval = datos.get('evaluar')  # Valor en X a evaluar
 
     # Validar y ejecutar interpolación
     resultado, error = interpolacion_por_matrices(x_puntos, y_puntos, x_eval)
