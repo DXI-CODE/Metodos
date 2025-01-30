@@ -759,7 +759,7 @@ def calcular_interpolacionNewton_post():
     data = request.json
     x = data.get('x')
     y = data.get('y')
-    x_eval = data.get('evaluar')
+    x_eval = data.get('x_eval')
 
     resultado, error = interpolacion_newton(x, y, x_eval)
     
