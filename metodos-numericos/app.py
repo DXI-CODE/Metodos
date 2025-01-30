@@ -754,17 +754,18 @@ def interpolacion_matrices_post():
 def calcular_interpolacionNewton_get():
     return render_template('interpolacion/Newton.html')
 
-
+@app.route('/interpolacion_newton', methods=['POST'])
 def calcular_interpolacionNewton_post():
     data = request.json
     x = data.get('x')
     y = data.get('y')
-    x_eval = data.get('x_eval')
+    x_eval = data.get('evaluar')
 
     resultado, error = interpolacion_newton(x, y, x_eval)
     
     if error:
         return jsonify(resultado), error
+    
     return jsonify(resultado)
 
 
