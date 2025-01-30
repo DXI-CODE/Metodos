@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import uuid  # Para generar nombres únicos para las imágenes
 
 def validar_datos(x, y, x_eval):
     """Valida los datos de entrada para la interpolación."""
@@ -43,7 +44,7 @@ def interpolacion_por_matrices(x, y, x_eval):
         f_x_eval = sum(coef * (x_eval ** i) for i, coef in enumerate(coeficientes))
 
         # Generar la gráfica
-        imagen_path = generar_grafica(x, y, coeficientes)
+        imagen_path = generar_grafica(x, y, coeficientes, x_eval, f_x_eval)
 
         # Convertir resultados a HTML (con 4 decimales)
         resultado_html = convertir_resultado_a_html(polinomio_str, x_eval, f_x_eval, imagen_path)
@@ -52,8 +53,8 @@ def interpolacion_por_matrices(x, y, x_eval):
     except Exception as e:
         return {'error': f'Error en la interpolación: {str(e)}'}, 500
 
-def generar_grafica(x, y, coeficientes):
-    """Genera la gráfica de la interpolación y la guarda como imagen."""
+def generar_grafica(x, y, coeficientes, x_eval, f_x_eval):
+    """Genera la gráfica de la interpolación y la guarda como imagen con nombre único."""
     # Crear un rango de valores X para la gráfica
     x_range = np.linspace(min(x) - 1, max(x) + 1, 1000)
     
@@ -64,13 +65,20 @@ def generar_grafica(x, y, coeficientes):
     plt.figure(figsize=(8, 6))
     plt.plot(x_range, y_range, label="Polinomio Interpolador", color='blue')
     plt.scatter(x, y, color='red', zorder=5, label="Puntos dados")
+
+    # Mostrar el punto evaluado en verde
+    plt.scatter(x_eval, f_x_eval, color='green', zorder=10, label=f'Punto Evaluado ({x_eval}, {f_x_eval:.4f})')
+
     plt.title('Interpolación por Sistemas Matriciales')
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.legend()
 
+    # Generar un nombre único para la imagen
+    imagen_name = f"grafica_{str(uuid.uuid4())}.png"
+    image_path = os.path.join('static', imagen_name)
+
     # Guardar la imagen en el servidor
-    image_path = 'static/grafica_interpolacion.png'
     plt.savefig(image_path)
     plt.close()
 
