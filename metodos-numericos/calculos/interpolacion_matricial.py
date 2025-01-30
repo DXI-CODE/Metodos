@@ -30,14 +30,17 @@ def interpolacion_por_matrices(x, y, x_eval):
 
         # Formatear el polinomio como string
         polinomio_str = "f(x) = " + " + ".join(
-            f"{coef:.6f} * x^{i}" if i > 0 else f"{coef:.6f}"
-            for i, coef in enumerate(coeficientes)
+            f"{coef:.4f} * x^{i}" if i > 0 else f"{coef:.4f}"
+            for i, coef in enumerate(coeficientes) if coef != 0
         )
+
+        # Cambiar x^1 por x
+        polinomio_str = polinomio_str.replace("x^1", "x")
 
         # Evaluar el polinomio en x_eval
         f_x_eval = sum(coef * (x_eval ** i) for i, coef in enumerate(coeficientes))
 
-        # Convertir resultados a HTML
+        # Convertir resultados a HTML (con 4 decimales)
         resultado_html = convertir_resultado_a_html(polinomio_str, x_eval, f_x_eval)
         return {'resultado': resultado_html}, None
 
@@ -50,6 +53,6 @@ def convertir_resultado_a_html(polinomio, x_eval, resultado):
     <h2>Polinomio Interpolador:</h2>
     <p>{polinomio.replace("+ -", "- ")}</p>
     <h2>Evaluación en x = {x_eval}:</h2>
-    <p>f({x_eval}) = {resultado:.6f}</p>
+    <p>f({x_eval}) = {resultado:.4f}</p>
     """
     return html
