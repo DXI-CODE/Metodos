@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Exo 2', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 50px;
+    color: #077410;
+    margin-bottom: 15px;
+}
+
+h2 {
+    color: #077410;
+    font-size: 24px;
+    margin-bottom: 15px;
+    margin-top: 20px;
+}
+
+form {
+    background: white;
+    color: #077410;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    margin: 30px auto;
+
+    border: 2px solid rgb(69, 189, 14);
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 
+      0 0 5px rgb(103, 247, 67),
+      0 0 10px rgb(103, 247, 67),
+      0 0 20px rgb(103, 247, 67),
+      0 0 30px rgb(25, 126, 5);
+    transition: 0.3s ease;
+}
+
+p {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    background: #f4f4f4;
+}
+
+button {
+    background-color: #00b4d8;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #1b860c;
+    transform: scale(0.9);
+    box-shadow: 0 4px 10px rgb(53, 223, 37);
+}
+
+#grafica {
+    max-width: 100%;
+    height: auto;
+    margin-top: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+footer {
+    margin-top: 30px;
+    padding: 10px;
+    background: #e3f2fd;
+    color: #24b600;
+    font-size: 14px;
+    border-radius: 5px;
+}
