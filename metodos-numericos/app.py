@@ -63,6 +63,8 @@ def home():
             "categoria": "Linealizacion",
             "metodos": [
                 {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+                {"nombre": "Linealizacion exponencial", "url":"/exponencial"},
+                {"nombre": "Linealizacion potencial", "url":"/potencial"},
             ]
         },
         {
