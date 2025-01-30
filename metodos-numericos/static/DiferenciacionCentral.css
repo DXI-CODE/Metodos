@@ -18,11 +18,21 @@ h1{
     font-size: 50px;;
     color: #8f0505;
     margin-bottom: 15px;
+    font-family: "Exo 2", serif;
+    font-optical-sizing: auto;
+    font-weight:weight;
+    font-style:normal;
+    margin: 30px;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 3.7rem;
 }
 
 h2 {
     color: #8f0505;
     margin-bottom: 15px;
+    font-size: 22px;
 }
 
 header {
@@ -31,16 +41,6 @@ header {
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 28px;
-}
-
-h2 {
-    color: #c02a04;
-    font-size: 22px;
-    margin-bottom: 10px;
 }
 
 p {
