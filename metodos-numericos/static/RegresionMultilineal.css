@@ -74,7 +74,9 @@ button {
 }
 
 button:hover {
-    background-color: #da5e2d;
+    background-color: #f07646;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgb(223, 111, 37);
 }
 
 #step2 {
