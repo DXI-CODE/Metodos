@@ -26,6 +26,7 @@ from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
 from calculos.newton import newton_raphson
+from calculos.interpolacion_matricial import interpolacion_por_matrices
 
 
 
@@ -71,6 +72,14 @@ def home():
                 {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
             ]
         },
+        {
+            "categoria": "Interpolaciones",
+            "metodos": [
+                {"nombre": "Interpolación por matrices", "url": "/interpolacion_matrices"},
+                
+            ]
+        },
+
         {
             "categoria": "Integración",
             "metodos": [
@@ -715,6 +724,26 @@ def calcular_eliminacion_gaussiana_post():
 
 
 
+##_________Interpolación por matrices______________
+@app.route('/interpolacion_matrices', methods=['GET'])
+def interpolacion_matrices_get():
+    """Renderiza la página HTML donde el usuario ingresa los valores."""
+    return render_template('interpolacion/SistemasMatriz.html')
+
+@app.route('/interpolacion_matrices', methods=['POST'])
+def interpolacion_matrices_post():
+    """Recibe los datos del formulario y realiza la interpolación."""
+    datos = request.json
+    x_puntos = datos.get('x')  # Lista de valores X
+    y_puntos = datos.get('y')  # Lista de valores Y
+    x_eval = datos.get('x_eval')  # Valor en X a evaluar
+
+    # Validar y ejecutar interpolación
+    resultado, error = interpolacion_por_matrices(x_puntos, y_puntos, x_eval)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
 
 
 
