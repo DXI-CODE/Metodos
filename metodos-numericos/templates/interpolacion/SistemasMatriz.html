@@ -72,7 +72,7 @@
 
             for (let i = 0; i < numPuntos; i++) {
                 const row = document.createElement('tr');
-                row.innerHTML = `
+                row.innerHTML = ` 
                     <td><input type="number" class="input-x" step="any" placeholder="X${i + 1}"></td>
                     <td><input type="number" class="input-y" step="any" placeholder="Y${i + 1}"></td>
                 `;
@@ -113,8 +113,11 @@
                 return;
             }
 
+            // Imprimir los datos antes de enviarlos
+            console.log({ x: datosX, y: datosY, evaluar });
+
             try {
-                const response = await fetch('/interpolacion_matricial', {
+                const response = await fetch('/interpolacion_matrices', {  // Asegurándome de que la ruta esté correcta
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ x: datosX, y: datosY, evaluar })

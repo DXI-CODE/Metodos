@@ -13,6 +13,13 @@ def validar_datos(x, y, x_eval):
 def interpolacion_por_matrices(x, y, x_eval):
     """Realiza la interpolación utilizando la matriz de Vandermonde."""
     try:
+        # Imprimir para depuración
+        print(f"x: {x}, y: {y}, x_eval: {x_eval}")
+
+        # Validar que los valores no sean None o vacíos
+        if x_eval is None or not isinstance(x_eval, (int, float)):
+            return {'error': 'El valor a evaluar debe ser un número.'}, 400
+
         x = np.array(x, dtype=float)
         y = np.array(y, dtype=float)
         x_eval = float(x_eval)
