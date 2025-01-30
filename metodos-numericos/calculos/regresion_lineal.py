@@ -53,10 +53,16 @@ def regresion_lineal(x, y):
     <p>r² = {r2:.4f}</p>
     """
 
+    # Formateo de la ecuación para mostrar correctamente el signo de a1
+    if a1 < 0:
+        a1_str = f"- {abs(a1):.4f}"
+    else:
+        a1_str = f"+ {a1:.4f}"
+
     # Generar gráfico
     plt.figure(figsize=(6, 4))
     plt.scatter(x, y, color='blue', label='Datos originales')
-    plt.plot(x, y_cal, color='red', linestyle='-', label=f'Regresión: y = {a0:.4f} + {a1:.4f}x')
+    plt.plot(x, y_cal, color='red', linestyle='-', label=f'Regresión: y = {a0:.4f} {a1_str}x')
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.title("Regresión Lineal")
