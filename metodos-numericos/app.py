@@ -829,23 +829,18 @@ def biseccion_post():
 
 #------------------------------ NEWTON -----------------------------------------------#
 
-@app.route('/newton', methods=['GET'])
-def newton_get():
-    return render_template('metodos_raices/Newton.html')
+@app.route("/newton", methods=["GET", "POST"])
+def newton():
+    if request.method == "GET":
+        return render_template("metodos_raices/newton.html")
+    elif request.method == "POST":
+        datos = request.json
+        x0 = float(datos["x0"])
+        tol = float(datos["tol"])
+        max_iter = int(datos["max_iter"])
 
-@app.route('/newton', methods=['POST'])
-def newton_post():
-    datos = request.json
-    x0 = datos['x0']
-    tol = datos['tol']
-    max_iter = datos['max_iter']
-
-    try:
         resultado = newton_raphson(x0, tol, max_iter)
         return jsonify(resultado)
-    except Exception as e:
-        return jsonify({'error': str(e)})
-    
 #-----------------------------------------------------------------------------------
 
 if __name__ == '__main__':
