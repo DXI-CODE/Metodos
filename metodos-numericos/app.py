@@ -75,7 +75,7 @@ def home():
         {
             "categoria": "Interpolaciones",
             "metodos": [
-                {"nombre": "Interpolación por matrices", "url": "/interpolacion_matrices"},
+                {"nombre": "Interpolación por matrices", "url": "/interpolacion_matricial"},
                 
             ]
         },
@@ -725,12 +725,12 @@ def calcular_eliminacion_gaussiana_post():
 
 
 ##_________Interpolación por matrices______________
-@app.route('/interpolacion_matrices', methods=['GET'])
+@app.route('/interpolacion_matricial', methods=['GET'])
 def interpolacion_matrices_get():
     """Renderiza la página HTML donde el usuario ingresa los valores."""
     return render_template('interpolacion/SistemasMatriz.html')
 
-@app.route('/interpolacion_matrices', methods=['POST'])
+@app.route('/interpolacion_matricial', methods=['POST'])
 def interpolacion_matrices_post():
     """Recibe los datos del formulario y realiza la interpolación."""
     datos = request.json
