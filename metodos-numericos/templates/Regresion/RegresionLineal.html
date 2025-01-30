@@ -103,7 +103,7 @@
             }
 
             try {
-                const response = await fetch('/regresion', {
+                const response = await fetch('/regresion_lineal', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ x: datosX, y: datosY })
