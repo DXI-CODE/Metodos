@@ -21,10 +21,11 @@ def regresion_lineal(x, y):
     sr = np.sum((y - y_cal)**2)       # Suma de los residuos al cuadrado
     r2 = (st - sr) / st               # Coeficiente de determinación
 
+    # Crear tabla HTML
     tabla_html = """
     <table border="1">
         <tr>
-            <th>x</th><th>y</th><th>x²</th><th>xy</th><th>ŷ (Y_cal)</th><th>St</th><th>Sr</th>
+            <th>x</th><th>y</th><th>x²</th><th>xy</th><th>ŷ</th><th>St</th><th>Sr</th>
         </tr>
     """
     
@@ -38,44 +39,34 @@ def regresion_lineal(x, y):
             <td>{st_i:.4f}</td><td>{sr_i:.4f}</td>
         </tr>
         """
-
-    # Agregar totales
+    
     tabla_html += f"""
         <tr>
-            <td><strong>Σ</strong></td>
-            <td><strong>{sum_y:.4f}</strong></td>
-            <td><strong>{sum_x2:.4f}</strong></td>
-            <td><strong>{sum_xy:.4f}</strong></td>
-            <td>-</td>
-            <td><strong>{st:.4f}</strong></td>
-            <td><strong>{sr:.4f}</strong></td>
+            <td><b>Σ</b></td><td>{sum_y:.4f}</td><td>{sum_x2:.4f}</td>
+            <td>{sum_xy:.4f}</td><td>-</td><td>{st:.4f}</td><td>{sr:.4f}</td>
         </tr>
     </table>
+    <p>a0 = {a0:.4f}</p>
+    <p>a1 = {a1:.4f}</p>
+    <p>St = {st:.4f}</p>
+    <p>Sr = {sr:.4f}</p>
+    <p>r² = {r2:.4f}</p>
     """
 
-    plt.figure(figsize=(8, 6))
-    
-    # 🔹 **Puntos originales (Azul)**
+    # Generar gráfico
+    plt.figure(figsize=(6, 4))
     plt.scatter(x, y, color='blue', label='Datos originales')
-
-    # 🔹 **Puntos ajustados (Verde)**
-    plt.scatter(x, y_cal, color='green', label='Y Calculada', marker='x', s=100)
-
-    # 🔹 **Línea de regresión (Rojo)**
-    plt.plot(x, y_cal, color='red', linestyle='--', label='Recta de Regresión')
-
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title('Regresión Lineal por Mínimos Cuadrados')
+    plt.plot(x, y_cal, color='red', linestyle='-', label=f'Regresión: y = {a0:.4f} + {a1:.4f}x')
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.title("Regresión Lineal")
     plt.legend()
-    plt.grid(True)
+    plt.grid()
 
-
+    # Guardar imagen en base64 para enviarla al HTML
     img = io.BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)
-    grafico_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
-    plt.close()
+    grafico_base64 = base64.b64encode(img.getvalue()).decode()
 
-    
-    return tabla_html, f"data:image/png;base64,{grafico_base64}", a0, a1, r2
+    return tabla_html, grafico_base64
