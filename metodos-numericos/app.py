@@ -25,7 +25,7 @@ from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
-from calculos.newton import newton_raphson
+from calculos.newton import newton_raphson, generar_grafica  # Importa las funciones desde el archivo .py
 from calculos.interpolacion_matricial import interpolacion_por_matrices
 
 
@@ -841,11 +841,41 @@ def newton_post():
     max_iter = datos['max_iter']
 
     try:
+        # Llama al método de Newton-Raphson
         resultado = newton_raphson(x0, tol, max_iter)
-        return jsonify(resultado)
+
+        # Generar tabla HTML
+        tabla_html = convertir_resultados_a_html(resultado['iteraciones'])
+
+        # Generar gráfica
+        valores_xr = [it['xr'] for it in resultado['iteraciones']]
+        grafica_base64 = generar_grafica(valores_xr, [])
+
+        # Respuesta al frontend
+        return jsonify({
+            "raiz": resultado['raiz'],
+            "tabla": tabla_html,
+            "grafica": grafica_base64
+        })
     except Exception as e:
         return jsonify({'error': str(e)})
-    
+
+def convertir_resultados_a_html(iteraciones):
+    html = "<table border='1' style='border-collapse: collapse; width: 100%;'>"
+    html += "<tr><th>Iteración</th><th>x0</th><th>xr</th><th>Error</th><th>f(x)</th><th>f'(x)</th></tr>"
+    for it in iteraciones:
+        html += (
+            f"<tr>"
+            f"<td>{it['iteracion']}</td>"
+            f"<td>{it['x0']:.6f}</td>"
+            f"<td>{it['xr']:.6f}</td>"
+            f"<td>{it['error']:.6f}</td>"
+            f"<td>{it['f(x)']:.6f}</td>"
+            f"<td>{it['f\'(x)']:.6f}</td>"
+            f"</tr>"
+        )
+    html += "</table>"
+    return html
 #-----------------------------------------------------------------------------------
 
 if __name__ == '__main__':
