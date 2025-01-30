@@ -25,12 +25,24 @@ h2, h3 {
 
 form {
     background: white;
+    color: #b65800;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 500px;
-    margin: 20px auto;
+    margin: 30px auto;
+
+    border: 2px solid rgb(250, 165, 69);
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 
+      0 0 5px rgb(247, 190, 67),
+      0 0 10px rgb(247, 190, 67),
+      0 0 20px rgb(247, 190, 67),
+      0 0 30px rgb(182, 92, 8);
+    transition: 0.3s ease;
 }
 
 label {
