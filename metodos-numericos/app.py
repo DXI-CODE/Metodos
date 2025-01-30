@@ -65,7 +65,7 @@ def home():
                 {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
                 {"nombre": "Linealizacion exponencial", "url":"/exponencial"},
                 {"nombre": "Linealizacion potencial", "url":"/potencial"},
-                {"nombre": "Regresión lineal", "url": "/regresion_lineal"},
+                
             ]
         },
         {
@@ -74,6 +74,7 @@ def home():
                 {"nombre": "Regresion por crecimiento de saturación", "url": "/regresion-crecimiento-saturado"},
                 {"nombre": "Regresion multilineal", "url": "/regresion-multilineal"},
                 {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
+                {"nombre": "Regresión lineal", "url": "/regresion_lineal"},
             ]
         },
         {
