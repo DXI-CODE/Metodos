@@ -32,7 +32,7 @@ form {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 500px;
-    margin: 30px auto;
+    margin: 20px auto;
 
     border: 2px solid rgb(250, 69, 211);
       border-radius: 5px;
@@ -44,7 +44,6 @@ form {
         0 0 20px rgb(247, 67, 172),
         0 0 30px rgb(182, 8, 109);
       transition: 0.3s ease;
-
 }
 
 label {
