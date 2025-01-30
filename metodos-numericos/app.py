@@ -27,6 +27,7 @@ from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
 from calculos.newton import newton_raphson
 from calculos.interpolacion_matricial import interpolacion_por_matrices
+from calculos.interpolacion_newton import interpolacion_newton
 
 
 
@@ -76,6 +77,7 @@ def home():
             "categoria": "Interpolaciones",
             "metodos": [
                 {"nombre": "Interpolación por matrices", "url": "/interpolacion_matricial"},
+                {"nombre": "Interpolación por Newton", "url": "/interpolacion_newton"},
                 
             ]
         },
@@ -745,6 +747,25 @@ def interpolacion_matrices_post():
 
     return jsonify(resultado)
 
+
+##_________Interpolación Newton______________
+
+@app.route('/interpolacion_newton', methods=['GET'])
+def calcular_interpolacionNewton_get():
+    return render_template('interpolacion/Newton.html')
+
+
+def calcular_interpolacionNewton_post():
+    data = request.json
+    x = data.get('x')
+    y = data.get('y')
+    x_eval = data.get('evaluar')
+
+    resultado, error = interpolacion_newton(x, y, x_eval)
+    
+    if error:
+        return jsonify(resultado), error
+    return jsonify(resultado)
 
 
 
