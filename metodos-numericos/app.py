@@ -54,7 +54,6 @@ def home():
             "metodos": [
                 {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
                 {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
-                {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
                 {"nombre": "Metodo Gauss-Jordan", "url": "/gauss_jordan"},
                 {"nombre": "Metodo Gauss Simple", "url": "/gauss_simple"},
                 {"nombre": "Método Eliminación Gaussiana", "url": "/eliminacion_gaussiana"},
@@ -93,6 +92,7 @@ def home():
             "metodos": [
                 {"nombre": "Integración por Simpson 1_3", "url": "/simpson1_3"},
                 {"nombre": "Integración por Método de Trapecio", "url": "/metodo-trapecio"},
+                {"nombre": "Metodo Simpson 3/8", "url": "/metodo-simpson-3_8"},
                 {"nombre": "Integración múltiple", "url": "/integracionmultiple"},
             ]
         },
