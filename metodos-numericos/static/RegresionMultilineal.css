@@ -12,38 +12,37 @@ body {
     text-align: center;
     padding: 20px;
 }
-
 h1{
     font-size: 50px;;
-    color: #321aa0;
+    color: #a04f1a;
     margin-bottom: 15px;
 }
 
 h2, h3 {
-    color: #1b0d57;
-    margin-bottom: 15px;
+    color: #b65800;
+    margin-bottom: 15px; 
 }
 
 form {
     background: white;
-    color: #1b0d57;
+    color: #b65800;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 500px;
-    margin: 20px auto;
+    margin: 30px auto;
 
-    border: 2px solid rgb(250, 69, 211);
-      border-radius: 5px;
-      cursor: pointer;
-      text-transform: uppercase;
-      box-shadow: 
-        0 0 5px rgb(247, 67, 172),
-        0 0 10px rgb(247, 67, 172),
-        0 0 20px rgb(247, 67, 172),
-        0 0 30px rgb(182, 8, 109);
-      transition: 0.3s ease;
+    border: 2px solid rgb(250, 165, 69);
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 
+      0 0 5px rgb(247, 190, 67),
+      0 0 10px rgb(247, 190, 67),
+      0 0 20px rgb(247, 190, 67),
+      0 0 30px rgb(182, 92, 8);
+    transition: 0.3s ease;
 }
 
 label {
@@ -62,22 +61,22 @@ input {
 }
 
 button {
-    background-color: #d80090;
+    background-color: #d84f00;
     color: white;
     border: none;
     padding: 12px;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    transition:0.3s;
+    transition: 0.3s;
     width: 100%;
     margin-top: 10px;
 }
 
 button:hover {
-    background-color: #f062b9;
+    background-color: #f07646;
     transform: scale(0.9);
-    box-shadow: 0 4px 10px rgb(255, 0, 234);
+    box-shadow: 0 4px 10px rgb(223, 111, 37);
 }
 
 #step2 {

@@ -28,8 +28,9 @@ from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
 from calculos.newton import newton_raphson
 from calculos.interpolacion_matricial import interpolacion_por_matrices
 from calculos.interpolacion_newton import interpolacion_newton
-
-
+from calculos.regresion_lineal import regresion_lineal
+from calculos.regresion_matrices import regresion_por_matrices
+import numpy as np
 
 
 app = Flask(__name__)
@@ -63,6 +64,9 @@ def home():
             "categoria": "Linealizacion",
             "metodos": [
                 {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+                {"nombre": "Linealizacion exponencial", "url":"/exponencial"},
+                {"nombre": "Linealizacion potencial", "url":"/potencial"},
+                
             ]
         },
         {
@@ -71,6 +75,8 @@ def home():
                 {"nombre": "Regresion por crecimiento de saturación", "url": "/regresion-crecimiento-saturado"},
                 {"nombre": "Regresion multilineal", "url": "/regresion-multilineal"},
                 {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
+                {"nombre": "Regresión lineal", "url": "/regresion_lineal"},
+                {"nombre": "Regresión por minimos cuadrados", "url": "/regresion_matrices"},
             ]
         },
         {
@@ -769,6 +775,57 @@ def calcular_interpolacionNewton_post():
     return jsonify(resultado)
 
 
+
+@app.route('/regresion_lineal', methods=['GET'])
+def calcular_regresion_get():
+    return render_template('Regresion/RegresionLineal.html')
+
+
+@app.route('/regresion_lineal', methods=['POST'])
+def calcular_regresion_post():
+    try:
+        datos = request.json
+        x = np.array(datos['x'], dtype=float)
+        y = np.array(datos['y'], dtype=float)
+        
+        if len(x) < 2:
+            return jsonify({'error': 'Se necesitan al menos 2 puntos para la regresión.'})
+        
+        tabla, grafico = regresion_lineal(x, y)
+        return jsonify({'resultado': tabla, 'grafico': grafico})
+    
+    except Exception as e:
+        return jsonify({'error': f'Error en el cálculo: {str(e)}'})
+
+
+@app.route('/regresion_matrices', methods=['GET'])
+def calcular_regresionM_get():
+    return render_template('Regresion/MinimosCuadrados.html')
+
+
+
+@app.route('/regresion_matrices', methods=['POST'])
+def calcular_regresionM_post():
+    data = request.get_json()
+    tipo = data['tipo']
+    x = data['x']
+    y = data['y']
+
+    # Validación de que todos los valores de x e y son numéricos
+    try:
+        x = [float(i) for i in x]
+        y = [float(i) for i in y]
+    except ValueError:
+        return jsonify({'error': 'Todos los valores de X y Y deben ser números válidos.'})
+
+    # Verificar que x e y tengan la misma longitud
+    if len(x) != len(y):
+        return jsonify({'error': 'Las listas de X e Y deben tener la misma longitud.'})
+
+    # Calcular regresión
+    resultado_html = regresion_por_matrices(tipo, x, y)
+
+    return jsonify({'resultado': resultado_html})
 
 ##[
 
