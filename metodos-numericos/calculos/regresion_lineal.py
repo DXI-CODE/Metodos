@@ -46,11 +46,13 @@ def regresion_lineal(x, y):
             <td>{sum_xy:.4f}</td><td>-</td><td>{st:.4f}</td><td>{sr:.4f}</td>
         </tr>
     </table>
-    <p>a0 = {a0:.4f}</p>
-    <p>a1 = {a1:.4f}</p>
-    <p>St = {st:.4f}</p>
-    <p>Sr = {sr:.4f}</p>
-    <p>r² = {r2:.4f}</p>
+    <div class="texto box">
+        <p>a0 = {a0:.4f}</p>
+        <p>a1 = {a1:.4f}</p>
+        <p>St = {st:.4f}</p>
+        <p>Sr = {sr:.4f}</p>
+        <p>r² = {r2:.4f}</p>
+    </div>
     """
 
     # Formateo de la ecuación para mostrar correctamente el signo de a1

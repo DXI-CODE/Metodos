@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./static/metodoniuton.css">
 
     <script>
+        
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("newton-form").addEventListener("submit", async function(event) {
                 event.preventDefault();
@@ -68,7 +69,7 @@
                 <input type="number" id="max_iter" required><br>
             </div>
 
-            <button type="submit">Calcular</button>
+            <button id="mostrar" type="submit">Calcular</button>
         </form>
     </div>
 
@@ -98,4 +99,11 @@
     </div>
     <br>
 </body>
+    <script>
+        document.getElementById("mostrar").addEventListener("click", function() {
+            let elemento = document.getElementById("resultados");
+            elemento.style.display = "grid"; // Cambia a display grid
+        });
+    </script>
+
 </html>

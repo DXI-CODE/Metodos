@@ -20,6 +20,39 @@ h1 {
     text-align: center;
     font-size: 3.7rem;
     color: rgb(1, 1, 196);
+}
+
+#formulario{
+    width: 100%;
+}
+
+button, .botoncito {
+    width: 28%;
+    font-size: medium;
+    color: white;
+    background: cornflowerblue;
+    border: solid #40a5cc;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 10px;
+    bottom: 5px;
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 40%;
+    flex: 2;
+}
+
+.eliminacion{
+    width: 100%;
 
 }
 
@@ -41,53 +74,30 @@ h1 {
     transition: 0.3s ease;
 }
 
-.form-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+.container {
+    margin-top: 20px;
 }
 
-label {
-    text-align: center;
-    font-size: large;
+
+
+table {
+    margin-top: 20px;
+    border-collapse: collapse;
     font-family: "Poppins", serif;
-    font-weight: 500;
-    font-style: normal;
-    text-align: right;
-    /* Alinear texto a la derecha */
-    padding-right: 10px;
-    /* Espaciado a la derecha */
-    flex: 1;
-    margin-right: 10px;
+    width: 60%;
+    border: solid 2px #00b7ff;
 }
 
-p {
-    font-weight: 400;
-}
-
-input {
+th {
+    border: 1px solid #00b7ff;
     padding: 10px;
-    font-size: medium;
-    letter-spacing: 1px;
-    width: 30%;
-    flex: 2;
 }
 
-button {
-    width: 28%;
+td {
+    border: 1px solid #00b7ff;
+    padding: 8px;
+    text-align: center;
     font-size: medium;
-    color: white;
-    background: cornflowerblue;
-    border: solid #40a5cc;
-    padding: 6px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    top: 10px;
-    bottom: 5px;
-    margin-bottom: 10px;
 }
 
 h2,
@@ -100,53 +110,26 @@ h3 {
     margin: 2px;
 }
 
-#resultados {
+.hidden {
     display: none;
-    grid-template-rows: auto 1fr;
-    /* Fila 1: título, Fila 2: dos columnas */
-    grid-template-columns: 1fr 1fr;
-    /* Dos columnas iguales */
-    gap: 20px;
-    align-items: start;
-    max-width: 900px;
-    margin: auto;
-    text-align: center;
 }
-
-h3 {
-    font-weight: 400;
-    font-size: large;
-}
-
-table {
-    margin-top: 20px;
-    border-collapse: collapse;
-    font-family: "Poppins", serif;
-    border-collapse: collapse;
-    width: 28%;
-    border: solid 2px #00b7ff;
-}
-
-th {
-    border: 1px solid #00b7ff;
-}
-
-td {
-    border: 1px solid #00b7ff;
-    padding: 8px;
-    text-align: center;
-    font-size: medium;
-}
-
 .titulo {
     grid-column: span 2;
     /* Hace que el h2 ocupe las dos columnas */
 }
 
 .texto {
+    font-family: "Poppins", serif;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    position: absolute;
+    left: 20%;
+    margin-top: 21px;
+    border: solid #69a4ef;
+    padding: 10px;
+    width: 25%;
+    height: 245px;
+    border-radius: 10px;
 }
 
 .imagen-con-titulo {
@@ -161,4 +144,12 @@ img {
     height: auto;
     border-radius: 10px;
     border: solid #69a4ef;
+    margin-top: 20px;
+    margin-left: 20px;
+    position: absolute;
+    right: 20%;
+}
+
+p{
+    text-align: left;
 }

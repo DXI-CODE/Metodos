@@ -4,32 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regresión Lineal</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            margin-top: 20px;
-        }
-        table {
-            margin-top: 20px;
-            border-collapse: collapse;
-            width: 50%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-        .hidden {
-            display: none;
-        }
-        img {
-            margin-top: 20px;
-            max-width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="./static/regresionLineal.css">
     <script type="text/javascript" async
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
@@ -38,22 +13,27 @@
 <body>
     <h1>Regresión Lineal por Mínimos Cuadrados</h1>
 
-    <button onclick="agregarFila()">Agregar Punto</button>
+    <div class="tamanoNew">
 
-    <form id="formulario">
-        <table id="tabla-datos">
-            <tr>
-                <th>X</th>
-                <th>Y</th>
-                <th>Acción</th>
-            </tr>
-        </table>
-        <button type="submit">Calcular Regresión</button>
-    </form>
+        <button onclick="agregarFila()">Agregar Punto</button>
+
+        <form id="formulario">
+            <table id="tabla-datos">
+                <tr>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>Acción</th>
+                </tr>
+            </table>
+            <button class="botoncito" type="submit">Calcular Regresión</button>
+        </form>
+    </div>
+
+    <br>
 
     <div id="resultado"></div>
-    <img id="grafico" class="hidden">
-
+    <div class="imagen-con-titulo box"><img id="grafico" class="hidden"></div>
+    <br>
     <script>
         function agregarFila() {
             const tabla = document.getElementById('tabla-datos');
@@ -62,7 +42,7 @@
             fila.innerHTML = `
                 <td><input type="number" class="input-x" step="any" required></td>
                 <td><input type="number" class="input-y" step="any" required></td>
-                <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+                <td><button type="button" class = "eliminacion" onclick="eliminarFila(this)">Eliminar</button></td>
             `;
 
             tabla.appendChild(fila);
@@ -125,5 +105,6 @@
             }
         }
     </script>
+    <br>
 </body>
 </html>
