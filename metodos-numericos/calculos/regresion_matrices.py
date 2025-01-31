@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import base64
 import io
 
-
 # Función para calcular regresión por matrices
 def regresion_por_matrices(tipo, x, y):
     x = np.array(x)
@@ -13,69 +12,39 @@ def regresion_por_matrices(tipo, x, y):
         A = np.vstack([np.ones_like(x), x]).T
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
-        
-        # Formatear la ecuación correctamente
-        a0 = coef[0]
-        a1 = coef[1]
-        if a1 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x"
-        else:
-            equation = f"y = {a0:.4f} + {a1:.4f}x"
+        equation = f"y = {coef[0]:.4f} + {coef[1]:.4f}x"
     
     elif tipo == 'cuadratica':
         A = np.vstack([np.ones_like(x), x, x**2]).T
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
-        
-        # Formatear la ecuación correctamente
-        a0 = coef[0]
-        a1 = coef[1]
-        a2 = coef[2]
-        
-        if a1 < 0 and a2 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x²"
-        elif a1 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x²"
-        elif a2 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x²"
-        else:
-            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x²"
+        equation = f"y = {coef[0]:.4f} + {coef[1]:.4f}x + {coef[2]:.4f}x²"
     
     elif tipo == 'cubica':
         A = np.vstack([np.ones_like(x), x, x**2, x**3]).T
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
-        
-        # Formatear la ecuación correctamente
-        a0 = coef[0]
-        a1 = coef[1]
-        a2 = coef[2]
-        a3 = coef[3]
-        
-        if a1 < 0 and a2 < 0 and a3 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x² - {abs(a3):.4f}x³"
-        elif a1 < 0 and a2 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x² + {a3:.4f}x³"
-        elif a1 < 0 and a3 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x² - {abs(a3):.4f}x³"
-        elif a2 < 0 and a3 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x² - {abs(a3):.4f}x³"
-        elif a1 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x² + {a3:.4f}x³"
-        elif a2 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x² + {a3:.4f}x³"
-        elif a3 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² - {abs(a3):.4f}x³"
-        else:
-            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² + {a3:.4f}x³"
+        equation = f"y = {coef[0]:.4f} + {coef[1]:.4f}x + {coef[2]:.4f}x² + {coef[3]:.4f}x³"
 
-    # Calcular R² correctamente
-    st = np.sum((y - np.mean(y))**2)  # Total sum of squares
-    sr = np.sum((y - y_cal)**2)       # Residual sum of squares
-    r2 = (st - sr) / st                # Coeficiente de determinación
+    # Calcular S_t (Total sum of squares)
+    st = np.sum((y - np.mean(y))**2)
+
+    # Calcular S_r (Residual sum of squares)
+    sr = np.sum((y - y_cal)**2)
+
+    # Calcular r² (Coeficiente de determinación)
+    r2 = (st - sr) / st
+
+    # Depuración: Imprimir S_t, S_r y r²
+    print(f"S_t (Total Sum of Squares): {st:.4f}")
+    print(f"S_r (Residual Sum of Squares): {sr:.4f}")
+    print(f"r² (Coeficiente de determinación): {r2:.4f}")
 
     # Crear tabla HTML
-    tabla_html = """
+    tabla_html = f"""
+    <p>{equation}</p>
+    <p>r² = {r2:.4f}</p>
+    <img src="data:image/png;base64,{grafico_base64}" alt="Gráfico de Regresión">
     <table border="1">
         <tr>
             <th>x</th><th>y</th><th>x²</th><th>xy</th><th>ŷ</th><th>St</th><th>Sr</th>
@@ -91,7 +60,7 @@ def regresion_por_matrices(tipo, x, y):
             <td>{x[i] * y[i]:.4f}</td><td>{y_cal[i]:.4f}</td>
             <td>{st_i:.4f}</td><td>{sr_i:.4f}</td>
         </tr>
-        """
+    """
 
     # Agregar la suma de las columnas
     tabla_html += f"""
@@ -118,13 +87,5 @@ def regresion_por_matrices(tipo, x, y):
     img.seek(0)
     grafico_base64 = base64.b64encode(img.getvalue()).decode()
 
-    # Devolver resultados en formato HTML
-    resultado_html = f"""
-    <p>{equation}</p>
-    <p>r² = {r2:.4f}</p>
-    <img src="data:image/png;base64,{grafico_base64}" alt="Gráfico de Regresión">
-    <p>Tabla de Resultados:</p>
-    {tabla_html}
-    """
+    return tabla_html, grafico_base64
 
-    return resultado_html
