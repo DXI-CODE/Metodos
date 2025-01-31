@@ -811,10 +811,23 @@ def calcular_regresionM_post():
     x = data['x']
     y = data['y']
 
-    tabla_html = regresion_por_matrices(tipo, x, y)
+    # Validación de que todos los valores de x e y son numéricos
+    try:
+        x = [float(i) for i in x]
+        y = [float(i) for i in y]
+    except ValueError:
+        return jsonify({'error': 'Todos los valores de X y Y deben ser números válidos.'})
+
+    # Verificar que x e y tengan la misma longitud
+    if len(x) != len(y):
+        return jsonify({'error': 'Las listas de X e Y deben tener la misma longitud.'})
+
+    # Calcular regresión
+    tabla_html, grafico_base64 = regresion_por_matrices(tipo, x, y)
 
     return jsonify({
-        'resultado': tabla_html
+        'resultado': tabla_html,
+        'grafico': grafico_base64
     })
 
 
