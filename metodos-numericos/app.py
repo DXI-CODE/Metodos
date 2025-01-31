@@ -25,7 +25,12 @@ from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
 from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
-
+from calculos.newton import newton_raphson
+from calculos.interpolacion_matricial import interpolacion_por_matrices
+from calculos.interpolacion_newton import interpolacion_newton
+from calculos.regresion_lineal import regresion_lineal
+from calculos.regresion_matrices import regresion_por_matrices
+import numpy as np
 
 
 app = Flask(__name__)
@@ -59,6 +64,9 @@ def home():
             "categoria": "Linealizacion",
             "metodos": [
                 {"nombre": "Linealizacion a razon de crecimiento", "url":"/linealizacion-a-razon-crecimiento"},
+                {"nombre": "Linealizacion exponencial", "url":"/exponencial"},
+                {"nombre": "Linealizacion potencial", "url":"/potencial"},
+                
             ]
         },
         {
@@ -67,8 +75,19 @@ def home():
                 {"nombre": "Regresion por crecimiento de saturación", "url": "/regresion-crecimiento-saturado"},
                 {"nombre": "Regresion multilineal", "url": "/regresion-multilineal"},
                 {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
+                {"nombre": "Regresión lineal", "url": "/regresion_lineal"},
+                {"nombre": "Regresión por minimos cuadrados", "url": "/regresion_matrices"},
             ]
         },
+        {
+            "categoria": "Interpolaciones",
+            "metodos": [
+                {"nombre": "Interpolación por matrices", "url": "/interpolacion_matricial"},
+                {"nombre": "Interpolación por Newton", "url": "/interpolacion_newton"},
+                
+            ]
+        },
+
         {
             "categoria": "Integración",
             "metodos": [
@@ -83,7 +102,8 @@ def home():
                 {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
                 {"nombre": "Diferenciacion numerica hacia adelante", "url":"/derivada-adelante"},
                 {"nombre": "Diferenciacion numerica central", "url":"/derivada-central"},
-                {"nombre": "METODO DE BISECCION", "url":"/biseccion"},
+                {"nombre": "Metodo de biseccion", "url":"/biseccion"},
+                {"nombre": "Metodo de Newton", "url":"/newton"},
             ]
         },
         {
@@ -712,8 +732,90 @@ def calcular_eliminacion_gaussiana_post():
 
 
 
+##_________Interpolación por matrices______________
+@app.route('/interpolacion_matricial', methods=['GET'])
+def interpolacion_matrices_get():
+    """Renderiza la página HTML donde el usuario ingresa los valores."""
+    return render_template('interpolacion/SistemasMatriz.html')
+
+@app.route('/interpolacion_matricial', methods=['POST'])
+def interpolacion_matrices_post():
+    """Recibe los datos del formulario y realiza la interpolación."""
+    datos = request.json
+    x_puntos = datos.get('x')  # Lista de valores X
+    y_puntos = datos.get('y')  # Lista de valores Y
+    x_eval = datos.get('evaluar')  # Valor en X a evaluar
+
+    # Validar y ejecutar interpolación
+    resultado, error = interpolacion_por_matrices(x_puntos, y_puntos, x_eval)
+    if error:
+        return jsonify(resultado), error
+
+    return jsonify(resultado)
 
 
+##_________Interpolación Newton______________
+
+@app.route('/interpolacion_newton', methods=['GET'])
+def calcular_interpolacionNewton_get():
+    return render_template('interpolacion/Newton.html')
+
+@app.route('/interpolacion_newton', methods=['POST'])
+def calcular_interpolacionNewton_post():
+    data = request.json
+    x = data.get('x')
+    y = data.get('y')
+    x_eval = data.get('evaluar')
+
+    resultado, error = interpolacion_newton(x, y, x_eval)
+    
+    if error:
+        return jsonify(resultado), error
+    
+    return jsonify(resultado)
+
+
+
+@app.route('/regresion_lineal', methods=['GET'])
+def calcular_regresion_get():
+    return render_template('Regresion/RegresionLineal.html')
+
+
+@app.route('/regresion_lineal', methods=['POST'])
+def calcular_regresion_post():
+    try:
+        datos = request.json
+        x = np.array(datos['x'], dtype=float)
+        y = np.array(datos['y'], dtype=float)
+        
+        if len(x) < 2:
+            return jsonify({'error': 'Se necesitan al menos 2 puntos para la regresión.'})
+        
+        tabla, grafico = regresion_lineal(x, y)
+        return jsonify({'resultado': tabla, 'grafico': grafico})
+    
+    except Exception as e:
+        return jsonify({'error': f'Error en el cálculo: {str(e)}'})
+
+
+@app.route('/regresion_matrices', methods=['GET'])
+def calcular_regresionM_get():
+    return render_template('Regresion/MinimosCuadrados.html')
+
+
+
+@app.route('/regresion_matrices', methods=['POST'])
+def calcular_regresionM_post():
+    data = request.get_json()
+    tipo = data['tipo']
+    x = data['x']
+    y = data['y']
+
+    tabla_html = regresion_por_matrices(tipo, x, y)
+
+    return jsonify({
+        'resultado': tabla_html
+    })
 
 
 ##[
@@ -795,6 +897,21 @@ def biseccion_post():
         return jsonify({'error': str(e)})
 
 
+#------------------------------ NEWTON -----------------------------------------------#
+
+@app.route("/newton", methods=["GET", "POST"])
+def newton():
+    if request.method == "GET":
+        return render_template("metodos_raices/newton.html")
+    elif request.method == "POST":
+        datos = request.json
+        x0 = float(datos["x0"])
+        tol = float(datos["tol"])
+        max_iter = int(datos["max_iter"])
+
+        resultado = newton_raphson(x0, tol, max_iter)
+        return jsonify(resultado)
+#-----------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)

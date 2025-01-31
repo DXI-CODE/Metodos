@@ -4,26 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Método de Punto Fijo</title>
-    <style>
-        #resultado {
-            margin-top: 20px;
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .result {
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            max-width: 600px;
-            margin: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="./static/teilorSerie.css">
+    
 </head>
 <body>
-    <h1 style="text-align: center; color: #333;">Método de Punto Fijo</h1>
+    <h1>Método de Punto Fijo</h1>
     
     <form id="punto-fijo-form" style="max-width: 500px; margin: auto;">
         <label for="funcion">Ingrese la función g(x):</label>
@@ -38,7 +23,7 @@
         <label for="iteraciones">Número máximo de iteraciones:</label>
         <input type="number" id="iteraciones" name="iteraciones" placeholder="100" required><br><br>
 
-        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Calcular Punto Fijo</button>
+        <button type="submit">Calcular</button>
     </form>
 
     <div id="resultado" class="result" style="display: none;"></div>
@@ -76,7 +61,8 @@
                 const resultadoDiv = document.getElementById("resultado");
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(data);
-                resultadoDiv.style.display = "block";
+               
+                resultadoDiv.style.display = "flex";
                 resultadoDiv.innerHTML = "";
                 resultadoDiv.appendChild(img);
 
@@ -87,5 +73,6 @@
         });
 
     </script>
+    <br>
 </body>
 </html>

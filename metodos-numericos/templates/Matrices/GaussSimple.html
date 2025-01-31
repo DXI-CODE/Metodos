@@ -4,45 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gauss Simple</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .matrix-container {
-            margin-top: 20px;
-            display: grid;
-            gap: 5px;
-        }
-        .actions {
-            margin-top: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-        table {
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="./static/gausSimple.css">
 </head>
 <body>
     <h1>Método de Gauss Simple</h1>
-    <label for="matrix-size">Ingrese el tamaño de la matriz aumentada (número de ecuaciones):</label>
-    <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3">
-    <button onclick="generateMatrix()">Generar Matriz</button>
+    <br>
 
-    <form id="formulario">
-        <div id="matrix-container" class="matrix-container"></div>
-        <div class="actions hidden" id="calcular-actions">
-            <button type="submit">Calcular Gauss Simple</button>
-        </div>
-    </form>
+    <div class="tamMatriz">
+        <label for="matrix-size">Ingrese el tamaño de la matriz aumentada (número de ecuaciones):</label>
+        <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3">
+        <button onclick="generateMatrix()">Generar Matriz</button>
+        
+        <form id="formulario">
+            <div id="matrix-container" class="matrix-container"></div>
+            <div class="actions hidden" id="calcular-actions">
+                <button type="submit">Calcular Gauss Simple</button>
+            </div>
+        </form>
+        <br>
+    </div>
+
+    <br>
 
     <div id="ResultadoGaussSimple"></div>
 
@@ -139,5 +121,6 @@
             }
         }
     </script>
+    <br>
 </body>
 </html>
