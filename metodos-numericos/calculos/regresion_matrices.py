@@ -32,6 +32,34 @@ def regresion_por_matrices(tipo, x, y):
     sr = np.sum((y - y_cal)**2)
     r2 = (st - sr) / st
 
+    # Crear tabla HTML
+    tabla_html = """
+    <table border="1">
+        <tr>
+            <th>x</th><th>y</th><th>x²</th><th>xy</th><th>ŷ</th><th>St</th><th>Sr</th>
+        </tr>
+    """
+
+    for i in range(len(x)):
+        st_i = (y[i] - np.mean(y))**2
+        sr_i = (y[i] - y_cal[i])**2
+        tabla_html += f"""
+        <tr>
+            <td>{x[i]:.4f}</td><td>{y[i]:.4f}</td><td>{x[i]**2:.4f}</td>
+            <td>{x[i] * y[i]:.4f}</td><td>{y_cal[i]:.4f}</td>
+            <td>{st_i:.4f}</td><td>{sr_i:.4f}</td>
+        </tr>
+        """
+
+    # Agregar la suma de las columnas
+    tabla_html += f"""
+        <tr>
+            <td><b>Σ</b></td><td>{np.sum(y):.4f}</td><td>{np.sum(x**2):.4f}</td>
+            <td>{np.sum(x * y):.4f}</td><td>-</td><td>{st:.4f}</td><td>{sr:.4f}</td>
+        </tr>
+    </table>
+    """
+
     # Generar gráfico
     plt.figure(figsize=(6, 4))
     plt.scatter(x, y, color='blue', label='Datos originales')
@@ -49,13 +77,12 @@ def regresion_por_matrices(tipo, x, y):
     grafico_base64 = base64.b64encode(img.getvalue()).decode()
 
     # Devolver resultados en formato HTML
-    tabla_html = f"""
+    resultado_html = f"""
     <p>{equation}</p>
     <p>r² = {r2:.4f}</p>
     <img src="data:image/png;base64,{grafico_base64}" alt="Gráfico de Regresión">
+    <p>Tabla de Resultados:</p>
+    {tabla_html}
     """
 
-    return tabla_html
-
-
-
+    return resultado_html
