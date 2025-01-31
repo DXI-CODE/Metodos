@@ -83,6 +83,7 @@ def home():
             "metodos": [
                 {"nombre": "Interpolación por matrices", "url": "/interpolacion_matricial"},
                 {"nombre": "Interpolación por Newton", "url": "/interpolacion_newton"},
+                {"nombre": "Interpolación por Lagrange", "url": "/calcular_lagrange"},
                 
             ]
         },
