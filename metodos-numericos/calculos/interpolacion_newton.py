@@ -106,8 +106,8 @@ def convertir_resultado_a_html(polinomio, x_eval, resultado, imagen_path):
     <h2>Polinomio Interpolador de Newton:</h2>
     <p>{polinomio.replace("+ -", "- ")}</p>
     <h2>Evaluación en x = {x_eval}:</h2>
-    <p>f({x_eval}) = {resultado:.4f}</p>
-    <h2>Gráfica:</h2>
-    <img src="{imagen_path}" alt="Gráfica de la Interpolación de Newton">
+    <p>f({x_eval}) = {resultado:.4f}</p></div>
+    <div class="imagen-con-titulo"><h2>Gráfica:</h2>
+    <img src="{imagen_path}" alt="Gráfica de la Interpolación de Newton"></div>
     """
     return html
