@@ -94,7 +94,7 @@ h1 {
 }
 
 .metodos {
-    display: flex; /* Ahora aparecerán en columna */
+    display: none;
     flex-direction: column;
     gap: 10px; /* Espacio entre cada método */
     background: rgb(45, 16, 173); /* Asegurar visibilidad */
@@ -122,7 +122,7 @@ h1 {
     display: block;
     color: white;
     background-color: #00b4d8;
-   
+    text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
 }
