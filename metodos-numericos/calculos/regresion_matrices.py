@@ -69,10 +69,10 @@ def regresion_por_matrices(tipo, x, y):
         else:
             equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² + {a3:.4f}x³"
 
-    # Calcular R²
-    st = np.sum((y - np.mean(y))**2)
-    sr = np.sum((y - y_cal)**2)
-    r2 = (st - sr) / st
+    # Calcular R² correctamente
+    st = np.sum((y - np.mean(y))**2)  # Total sum of squares
+    sr = np.sum((y - y_cal)**2)       # Residual sum of squares
+    r2 = (st - sr) / st                # Coeficiente de determinación
 
     # Crear tabla HTML
     tabla_html = """
