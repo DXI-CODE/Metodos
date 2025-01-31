@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import base64
 import io
 
+
+# Función para calcular regresión por matrices
 def regresion_por_matrices(tipo, x, y):
     x = np.array(x)
     y = np.array(y)
@@ -12,6 +14,7 @@ def regresion_por_matrices(tipo, x, y):
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
         
+        # Formatear la ecuación correctamente
         a0 = coef[0]
         a1 = coef[1]
         if a1 < 0:
@@ -24,6 +27,7 @@ def regresion_por_matrices(tipo, x, y):
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
         
+        # Formatear la ecuación correctamente
         a0 = coef[0]
         a1 = coef[1]
         a2 = coef[2]
@@ -42,6 +46,7 @@ def regresion_por_matrices(tipo, x, y):
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
         
+        # Formatear la ecuación correctamente
         a0 = coef[0]
         a1 = coef[1]
         a2 = coef[2]
@@ -64,17 +69,10 @@ def regresion_por_matrices(tipo, x, y):
         else:
             equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² + {a3:.4f}x³"
 
-    # Calcular R² correctamente
-    st = np.sum((y - np.mean(y))**2)  # Total sum of squares
-    sr = np.sum((y - y_cal)**2)       # Residual sum of squares
-    r2 = (st - sr) / st                # Coeficiente de determinación
-
-    # Debug: Ver las diferencias para verificar el cálculo de sr
-    print("Valores reales:", y)
-    print("Valores ajustados:", y_cal)
-    print("Diferencias (y - y_cal):", y - y_cal)
-    print("Residuos al cuadrado:", (y - y_cal)**2)
-    print("Suma de residuos al cuadrado (sr):", sr)
+    # Calcular R²
+    st = np.sum((y - np.mean(y))**2)
+    sr = np.sum((y - y_cal)**2)
+    r2 = (st - sr) / st
 
     # Crear tabla HTML
     tabla_html = """

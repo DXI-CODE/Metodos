@@ -3,76 +3,23 @@ import matplotlib.pyplot as plt
 import base64
 import io
 
+def regresion_lineal(x, y):
+    n = len(x)
+    sum_x = np.sum(x)
+    sum_y = np.sum(y)
+    sum_x2 = np.sum(x**2)
+    sum_xy = np.sum(x * y)
+    
+    # Cálculo de los coeficientes
+    A = np.array([[n, sum_x], [sum_x, sum_x2]])
+    C = np.array([sum_y, sum_xy])
+    a0, a1 = np.linalg.solve(A, C)
 
-# Función para calcular regresión por matrices
-def regresion_por_matrices(tipo, x, y):
-    x = np.array(x)
-    y = np.array(y)
-    
-    if tipo == 'lineal':
-        A = np.vstack([np.ones_like(x), x]).T
-        coef = np.linalg.lstsq(A, y, rcond=None)[0]
-        y_cal = A @ coef
-        
-        # Formatear la ecuación correctamente
-        a0 = coef[0]
-        a1 = coef[1]
-        if a1 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x"
-        else:
-            equation = f"y = {a0:.4f} + {a1:.4f}x"
-    
-    elif tipo == 'cuadratica':
-        A = np.vstack([np.ones_like(x), x, x**2]).T
-        coef = np.linalg.lstsq(A, y, rcond=None)[0]
-        y_cal = A @ coef
-        
-        # Formatear la ecuación correctamente
-        a0 = coef[0]
-        a1 = coef[1]
-        a2 = coef[2]
-        
-        if a1 < 0 and a2 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x²"
-        elif a1 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x²"
-        elif a2 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x²"
-        else:
-            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x²"
-    
-    elif tipo == 'cubica':
-        A = np.vstack([np.ones_like(x), x, x**2, x**3]).T
-        coef = np.linalg.lstsq(A, y, rcond=None)[0]
-        y_cal = A @ coef
-        
-        # Formatear la ecuación correctamente
-        a0 = coef[0]
-        a1 = coef[1]
-        a2 = coef[2]
-        a3 = coef[3]
-        
-        if a1 < 0 and a2 < 0 and a3 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x² - {abs(a3):.4f}x³"
-        elif a1 < 0 and a2 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x² + {a3:.4f}x³"
-        elif a1 < 0 and a3 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x² - {abs(a3):.4f}x³"
-        elif a2 < 0 and a3 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x² - {abs(a3):.4f}x³"
-        elif a1 < 0:
-            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x² + {a3:.4f}x³"
-        elif a2 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x² + {a3:.4f}x³"
-        elif a3 < 0:
-            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² - {abs(a3):.4f}x³"
-        else:
-            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² + {a3:.4f}x³"
-
-    # Calcular R²
-    st = np.sum((y - np.mean(y))**2)
-    sr = np.sum((y - y_cal)**2)
-    r2 = (st - sr) / st
+    # Cálculo de valores ajustados y errores
+    y_cal = a0 + a1 * x
+    st = np.sum((y - np.mean(y))**2)  # Suma total de cuadrados
+    sr = np.sum((y - y_cal)**2)       # Suma de los residuos al cuadrado
+    r2 = (st - sr) / st               # Coeficiente de determinación
 
     # Crear tabla HTML
     tabla_html = """
@@ -81,8 +28,8 @@ def regresion_por_matrices(tipo, x, y):
             <th>x</th><th>y</th><th>x²</th><th>xy</th><th>ŷ</th><th>St</th><th>Sr</th>
         </tr>
     """
-
-    for i in range(len(x)):
+    
+    for i in range(n):
         st_i = (y[i] - np.mean(y))**2
         sr_i = (y[i] - y_cal[i])**2
         tabla_html += f"""
@@ -92,39 +39,40 @@ def regresion_por_matrices(tipo, x, y):
             <td>{st_i:.4f}</td><td>{sr_i:.4f}</td>
         </tr>
         """
-
-    # Agregar la suma de las columnas
+    
     tabla_html += f"""
         <tr>
-            <td><b>Σ</b></td><td>{np.sum(y):.4f}</td><td>{np.sum(x**2):.4f}</td>
-            <td>{np.sum(x * y):.4f}</td><td>-</td><td>{st:.4f}</td><td>{sr:.4f}</td>
+            <td><b>Σ</b></td><td>{sum_y:.4f}</td><td>{sum_x2:.4f}</td>
+            <td>{sum_xy:.4f}</td><td>-</td><td>{st:.4f}</td><td>{sr:.4f}</td>
         </tr>
     </table>
+    <p>a0 = {a0:.4f}</p>
+    <p>a1 = {a1:.4f}</p>
+    <p>St = {st:.4f}</p>
+    <p>Sr = {sr:.4f}</p>
+    <p>r² = {r2:.4f}</p>
     """
+
+    # Formateo de la ecuación para mostrar correctamente el signo de a1
+    if a1 < 0:
+        a1_str = f"- {abs(a1):.4f}"
+    else:
+        a1_str = f"+ {a1:.4f}"
 
     # Generar gráfico
     plt.figure(figsize=(6, 4))
     plt.scatter(x, y, color='blue', label='Datos originales')
-    plt.plot(x, y_cal, color='red', label=f'Regresión: {equation}')
+    plt.plot(x, y_cal, color='red', linestyle='-', label=f'Regresión: y = {a0:.4f} {a1_str}x')
     plt.xlabel("X")
     plt.ylabel("Y")
-    plt.title(f"Regresión {tipo.capitalize()}")
+    plt.title("Regresión Lineal")
     plt.legend()
     plt.grid()
 
-    # Guardar imagen en base64
+    # Guardar imagen en base64 para enviarla al HTML
     img = io.BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)
     grafico_base64 = base64.b64encode(img.getvalue()).decode()
 
-    # Devolver resultados en formato HTML
-    resultado_html = f"""
-    <p>{equation}</p>
-    <p>r² = {r2:.4f}</p>
-    <img src="data:image/png;base64,{grafico_base64}" alt="Gráfico de Regresión">
-    <p>Tabla de Resultados:</p>
-    {tabla_html}
-    """
-
-    return resultado_html
+    return tabla_html, grafico_base64
