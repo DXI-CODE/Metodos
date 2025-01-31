@@ -13,19 +13,61 @@ def regresion_por_matrices(tipo, x, y):
         A = np.vstack([np.ones_like(x), x]).T
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
-        equation = f"y = {coef[0]:.4f} + {coef[1]:.4f}x"
+        
+        # Formatear la ecuación correctamente
+        a0 = coef[0]
+        a1 = coef[1]
+        if a1 < 0:
+            equation = f"y = {a0:.4f} - {abs(a1):.4f}x"
+        else:
+            equation = f"y = {a0:.4f} + {a1:.4f}x"
     
     elif tipo == 'cuadratica':
         A = np.vstack([np.ones_like(x), x, x**2]).T
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
-        equation = f"y = {coef[0]:.4f} + {coef[1]:.4f}x + {coef[2]:.4f}x²"
+        
+        # Formatear la ecuación correctamente
+        a0 = coef[0]
+        a1 = coef[1]
+        a2 = coef[2]
+        
+        if a1 < 0 and a2 < 0:
+            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x²"
+        elif a1 < 0:
+            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x²"
+        elif a2 < 0:
+            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x²"
+        else:
+            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x²"
     
     elif tipo == 'cubica':
         A = np.vstack([np.ones_like(x), x, x**2, x**3]).T
         coef = np.linalg.lstsq(A, y, rcond=None)[0]
         y_cal = A @ coef
-        equation = f"y = {coef[0]:.4f} + {coef[1]:.4f}x + {coef[2]:.4f}x² + {coef[3]:.4f}x³"
+        
+        # Formatear la ecuación correctamente
+        a0 = coef[0]
+        a1 = coef[1]
+        a2 = coef[2]
+        a3 = coef[3]
+        
+        if a1 < 0 and a2 < 0 and a3 < 0:
+            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x² - {abs(a3):.4f}x³"
+        elif a1 < 0 and a2 < 0:
+            equation = f"y = {a0:.4f} - {abs(a1):.4f}x - {abs(a2):.4f}x² + {a3:.4f}x³"
+        elif a1 < 0 and a3 < 0:
+            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x² - {abs(a3):.4f}x³"
+        elif a2 < 0 and a3 < 0:
+            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x² - {abs(a3):.4f}x³"
+        elif a1 < 0:
+            equation = f"y = {a0:.4f} - {abs(a1):.4f}x + {a2:.4f}x² + {a3:.4f}x³"
+        elif a2 < 0:
+            equation = f"y = {a0:.4f} + {a1:.4f}x - {abs(a2):.4f}x² + {a3:.4f}x³"
+        elif a3 < 0:
+            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² - {abs(a3):.4f}x³"
+        else:
+            equation = f"y = {a0:.4f} + {a1:.4f}x + {a2:.4f}x² + {a3:.4f}x³"
 
     # Calcular R²
     st = np.sum((y - np.mean(y))**2)
