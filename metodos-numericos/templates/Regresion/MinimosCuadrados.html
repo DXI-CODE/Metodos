@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión por Matrices</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        input {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Regresión por Matrices</h1>
+
+    <label for="regresion_tipo">Seleccione el tipo de regresión:</label>
+    <select id="regresion_tipo">
+        <option value="lineal">Regresión Lineal</option>
+        <option value="cuadratica">Regresión Cuadrática</option>
+        <option value="cubica">Regresión Cúbica</option>
+    </select>
+
+    <form id="formulario">
+        <div id="input-container" class="container">
+            <div>
+                <label for="x-values">Ingrese los valores de X (separados por coma):</label>
+                <input type="text" id="x-values" placeholder="Ejemplo: 1, 2, 3, 4">
+            </div>
+            <div>
+                <label for="y-values">Ingrese los valores de Y (separados por coma):</label>
+                <input type="text" id="y-values" placeholder="Ejemplo: 2, 4, 6, 8">
+            </div>
+        </div>
+
+        <div id="calcular-actions">
+            <button type="submit">Calcular Regresión</button>
+        </div>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        document.getElementById("formulario").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            calcularRegresion();
+        });
+
+        async function calcularRegresion() {
+            const tipoRegresion = document.getElementById('regresion_tipo').value;
+            const xInput = document.getElementById('x-values').value.split(',').map(val => parseFloat(val.trim()));
+            const yInput = document.getElementById('y-values').value.split(',').map(val => parseFloat(val.trim()));
+            const resultadoDiv = document.getElementById('resultado');
+
+            if (xInput.length !== yInput.length || xInput.some(isNaN) || yInput.some(isNaN)) {
+                alert('Por favor, ingrese valores numéricos válidos y asegúrese de que X e Y tengan la misma cantidad de elementos.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/regresion_matrices', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipo: tipoRegresion, x: xInput, y: yInput })
+                });
+
+                const data = await response.json();
+                if (data.resultado) {
+                    resultadoDiv.innerHTML = `<h2>Resultado:</h2>${data.resultado}`;
+                } else if (data.error) {
+                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                } else {
+                    resultadoDiv.innerHTML = `<p style="color: red;">Error desconocido.</p>`;
+                }
+            } catch (error) {
+                console.error('Error al calcular la regresión:', error);
+                alert('Hubo un error al calcular la regresión. Intente nuevamente.');
+            }
+        }
+    </script>
+</body>
+</html>
