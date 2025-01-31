@@ -29,6 +29,7 @@ from calculos.newton import newton_raphson
 from calculos.interpolacion_matricial import interpolacion_por_matrices
 from calculos.interpolacion_newton import interpolacion_newton
 from calculos.regresion_lineal import regresion_lineal
+from calculos.regresion_matrices import regresion_por_matrices
 import numpy as np
 
 
@@ -75,6 +76,7 @@ def home():
                 {"nombre": "Regresion multilineal", "url": "/regresion-multilineal"},
                 {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
                 {"nombre": "Regresión lineal", "url": "/regresion_lineal"},
+                {"nombre": "Regresión por minimos cuadrados", "url": "/regresion_matrices"},
             ]
         },
         {
@@ -794,6 +796,26 @@ def calcular_regresion_post():
     
     except Exception as e:
         return jsonify({'error': f'Error en el cálculo: {str(e)}'})
+
+
+@app.route('/regresion_matrices', methods=['GET'])
+def calcular_regresionM_get():
+    return render_template('Regresion/MinimosCuadrados.html')
+
+
+
+@app.route('/regresion_matrices', methods=['POST'])
+def calcular_regresionM_post():
+    data = request.get_json()
+    tipo = data['tipo']
+    x = data['x']
+    y = data['y']
+
+    tabla_html = regresion_por_matrices(tipo, x, y)
+
+    return jsonify({
+        'resultado': tabla_html
+    })
 
 
 ##[
