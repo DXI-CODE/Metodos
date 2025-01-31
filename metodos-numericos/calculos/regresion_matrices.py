@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import base64
 import io
 
-
 # Función para calcular regresión por matrices
 def regresion_por_matrices(tipo, x, y):
     x = np.array(x)
