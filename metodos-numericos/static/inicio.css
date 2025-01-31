@@ -93,17 +93,18 @@ h1 {
 }
 
 .metodos {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    border-radius: 4px;
-    width: 100%;
-    min-width: 200px; /* Evita que la lista sea más estrecha que la categoría */
+    display: flex; /* Ahora aparecerán en columna */
     flex-direction: column;
+    gap: 10px; /* Espacio entre cada método */
+    background: rgb(45, 16, 173); /* Asegurar visibilidad */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    width: 220px; /* Ajuste para que no sean demasiado estrechos */
+    position: relative; /* Evita que floten en la página */
+    top: 100%;
+    background-color: #fff;
+    min-width: 200px; /* Evita que la lista sea más estrecha que la categoría */
     margin-top: 10px;
     z-index: 10;
 }
