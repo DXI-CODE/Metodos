@@ -20,12 +20,12 @@
         <input type="number" id="expansion" name="expansion" required><br>    
         <label for="numero_n">Ingrese el número de términos (n): </label>
         <input type="number" id="numero_n" name="numero_n" required><br>
-        <button type="submit">Calcular</button>
+        <button id="mostrar" type="submit">Calcular</button>
     </form>
 
     <br>
     
-    <h2>Resultado Serie De Taylor</h2>
+    <h2 id="result">Resultado Serie De Taylor</h2>
     <div id="ResultadoSerieTaylor"></div>
 
     <script>
@@ -59,7 +59,14 @@
                 document.getElementById("ResultadoSerieTaylor").innerText = data.error;
             }
         }
+
+        document.getElementById("mostrar").addEventListener("click", function() {
+            console.log('entro')
+            let elemento = document.getElementById("result");
+            elemento.style.display = "block";
+        });
     </script>
     <br>
+
 </body>
 </html>

@@ -69,17 +69,25 @@ h2{
     font-size: x-large;
     font-family: "Poppins", serif;
     font-weight: 500;
-    font-style: normal;
+    font-style: normal; 
+}
+
+#result{
+    display: none;
 }
 
 #ResultadoSerieTaylor {
     font-size: large;
- 
+    max-width: 1265px;
+    overflow-x: auto;
+    padding: 20px;
 }
 
 #ResultadoSeriemclaurin {
     font-size: large;
-    max-width: 50%;
+    max-width: 1265px;
+    overflow-x: auto;
+    padding: 20px;
 }
 
 img{
