@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión No Lineal</title>
+    <script>
+        function generarCampos() {
+            let cantidad = document.getElementById("num_datos").value;
+            let contenedor = document.getElementById("datos");
+            contenedor.innerHTML = "";
+            
+            let table = document.createElement("table");
+            let header = document.createElement("tr");
+            header.innerHTML = "<th>x</th><th>y</th>";
+            table.appendChild(header);
+            
+            for (let i = 0; i < cantidad; i++) {
+                let fila = document.createElement("tr");
+                fila.innerHTML = `<td><input type='number' step='any' name='x[]' required></td>
+                                  <td><input type='number' step='any' name='y[]' required></td>`;
+                table.appendChild(fila);
+            }
+            contenedor.appendChild(table);
+        }
+    </script>
+</head>
+<body>
+    <h1>Regresión No Lineal - Modelo Exponencial</h1>
+    <form action="/regresion_no_lineal" method="post">
+        <label for="num_datos">Cantidad de datos:</label>
+        <input type="number" id="num_datos" name="num_datos" min="1" required>
+        <button type="button" onclick="generarCampos()">Generar</button>
+        
+        <div id="datos"></div>
+        
+        <button type="submit">Calcular</button>
+    </form>
+</body>
+</html>

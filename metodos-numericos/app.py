@@ -30,6 +30,8 @@ from calculos.interpolacion_matricial import interpolacion_por_matrices
 from calculos.interpolacion_newton import interpolacion_newton
 from calculos.regresion_lineal import regresion_lineal
 from calculos.regresion_matrices import regresion_por_matrices
+from calculos.regresion_no_lineal import regresion_no_lineal
+
 import numpy as np
 
 
@@ -923,5 +925,24 @@ def newton():
         return jsonify(resultado)
 #-----------------------------------------------------------------------------------
 
+#-------------------REGRESION NO LINEAL -------------------------------------
+@app.route('/regresion_no_lineal', methods=['GET', 'POST'])
+def regresion_no_lineal_view():
+    if request.method == 'POST':
+        try:
+            x_vals = request.json.get('x_vals')
+            y_vals = request.json.get('y_vals')
+
+            if not x_vals or not y_vals:
+                return jsonify({'error': 'Faltan valores de x o y'}), 400
+
+            resultados = regresion_no_lineal(x_vals, y_vals)
+            return jsonify(resultados)
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    return render_template('regresion/regresion_no_lineal.html')
+#------------------------------------------------------------
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
