@@ -9,67 +9,32 @@
             let cantidad = document.getElementById("num_datos").value;
             let contenedor = document.getElementById("datos");
             contenedor.innerHTML = "";
-
-            let table = document.createElement("table");
-            table.border = "1";
-            table.style = "border-collapse: collapse; width: 100%; text-align: center;";
             
+            let table = document.createElement("table");
             let header = document.createElement("tr");
             header.innerHTML = "<th>x</th><th>y</th>";
             table.appendChild(header);
-
+            
             for (let i = 0; i < cantidad; i++) {
                 let fila = document.createElement("tr");
-                fila.innerHTML = `<td><input type='number' step='any' class='x_vals' required></td>
-                                  <td><input type='number' step='any' class='y_vals' required></td>`;
+                fila.innerHTML = `<td><input type='number' step='any' name='x[]' required></td>
+                                  <td><input type='number' step='any' name='y[]' required></td>`;
                 table.appendChild(fila);
             }
             contenedor.appendChild(table);
         }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("regresionForm").addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                let x_vals = [...document.querySelectorAll('.x_vals')].map(input => parseFloat(input.value));
-                let y_vals = [...document.querySelectorAll('.y_vals')].map(input => parseFloat(input.value));
-
-                fetch('/regresion_no_lineal', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ x_vals: x_vals, y_vals: y_vals })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById("resultado").innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
-                    } else {
-                        document.getElementById("resultado").innerHTML = `
-                            <h3>Resultados</h3>
-                            <p><strong>Parámetros:</strong> a0 = ${data.a0}, a1 = ${data.a1}</p>
-                            <p><strong>Coeficiente R²:</strong> ${data.r2}</p>
-                            <img src="data:image/png;base64,${data.grafica}" alt="Gráfica de Ajuste">
-                        `;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        });
     </script>
 </head>
 <body>
-    <h1>Regresión No Lineal</h1>
-
-    <form id="regresionForm">
-        <label for="num_datos">Número de datos:</label>
-        <input type="number" id="num_datos" min="1" required>
-        <button type="button" onclick="generarCampos()">Generar Campos</button>
+    <h1>Regresión No Lineal - Modelo Exponencial</h1>
+    <form action="/regresion_no_lineal" method="post">
+        <label for="num_datos">Cantidad de datos:</label>
+        <input type="number" id="num_datos" name="num_datos" min="1" required>
+        <button type="button" onclick="generarCampos()">Generar</button>
         
         <div id="datos"></div>
-
+        
         <button type="submit">Calcular</button>
     </form>
-
-    <div id="resultado"></div>
 </body>
 </html>

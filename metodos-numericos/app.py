@@ -927,27 +927,23 @@ def newton():
 #-----------------------------------------------------------------------------------
 
 #-------------------REGRESION NO LINEAL -------------------------------------
-@app.route('/regresion_no_lineal', methods=['POST'])
+@app.route('/regresion_no_lineal', methods=['GET', 'POST'])
 def regresion_no_lineal_view():
-    try:
-        data = request.get_json()
-        print("Datos recibidos:", data)  # Verificar en la consola
+    if request.method == 'POST':
+        try:
+            x_vals = request.json.get('x_vals')
+            y_vals = request.json.get('y_vals')
 
-        x_vals = data.get('x_vals')
-        y_vals = data.get('y_vals')
+            if not x_vals or not y_vals:
+                return jsonify({'error': 'Faltan valores de x o y'}), 400
 
-        if not x_vals or not y_vals:
-            return jsonify({'error': 'Faltan valores de x o y'}), 400
+            resultados = regresion_no_lineal(x_vals, y_vals)
+            return jsonify(resultados)
 
-        x_vals = [float(i) for i in x_vals]
-        y_vals = [float(i) for i in y_vals]
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
-        resultados = regresion_no_lineal(x_vals, y_vals)
-
-        return jsonify(resultados)
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    return render_template('regresion/regresion_no_lineal.html')
 #------------------------------------------------------------
 if __name__ == '__main__':
     app.run(debug=True,  host='127.0.0.1', port=5000)
