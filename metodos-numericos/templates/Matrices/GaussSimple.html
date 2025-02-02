@@ -72,54 +72,54 @@
         });
 
         async function calcularGaussSimple() {
-            const inputs = document.querySelectorAll('.matrix-input');
-            const size = parseInt(document.getElementById('matrix-size').value);
-            const matrix = [];
+    const inputs = document.querySelectorAll('.matrix-input');
+    const size = parseInt(document.getElementById('matrix-size').value);
+    const matrix = [];
 
-            let valid = true;
-            for (let i = 0; i < size; i++) {
-                matrix[i] = [];
-                for (let j = 0; j < size + 1; j++) {
-                    const input = Array.from(inputs).find(el => el.dataset.row == i && el.dataset.col == j);
-                    if (input.value.trim() === '' || isNaN(input.value)) {
-                        valid = false;
-                        input.style.borderColor = 'red'; 
-                    } else {
-                        input.style.borderColor = ''; 
-                        matrix[i][j] = parseFloat(input.value);
-                    }
-                }
-            }
-
-            if (!valid) {
-                alert('Por favor, complete todos los campos con valores numéricos.');
-                return;
-            }
-
-            try {
-                const response = await fetch('/gauss_simple', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ matrix }),
-                });
-
-                const data = await response.json();
-                const resultadoDiv = document.getElementById("ResultadoGaussSimple");
-
-                if (data.matriz_escalonada) {
-                    resultadoDiv.innerHTML = `<h2>Resultado:</h2>${data.matriz_escalonada}`;
-                } else if (data.error) {
-                    resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
-                } else {
-                    resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al calcular Gauss Simple.</p>';
-                }
-            } catch (error) {
-                console.error('Error al calcular Gauss Simple:', error);
-                alert('Hubo un error al calcular Gauss Simple. Intente nuevamente.');
+    let valid = true;
+    for (let i = 0; i < size; i++) {
+        matrix[i] = [];
+        for (let j = 0; j < size + 1; j++) {
+            const input = Array.from(inputs).find(el => el.dataset.row == i && el.dataset.col == j);
+            if (input.value.trim() === '' || isNaN(input.value)) {
+                valid = false;
+                input.style.borderColor = 'red'; 
+            } else {
+                input.style.borderColor = ''; 
+                matrix[i][j] = parseFloat(input.value);
             }
         }
+    }
+
+    if (!valid) {
+        alert('Por favor, complete todos los campos con valores numéricos.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/gauss_simple', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ matrix }),
+        });
+
+        const data = await response.json();
+        const resultadoDiv = document.getElementById("ResultadoGaussSimple");
+
+        if (data.matriz_escalonada) {
+            resultadoDiv.innerHTML = `<h2>Resultado:</h2>${data.matriz_escalonada}`;
+        } else if (data.error) {
+            resultadoDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+        } else {
+            resultadoDiv.innerHTML = '<p style="color: red;">Error desconocido al calcular Gauss Simple.</p>';
+        }
+    } catch (error) {
+        console.error('Error al calcular Gauss Simple:', error);
+        alert('Hubo un error al calcular Gauss Simple. Intente nuevamente.');
+    }
+}
     </script>
     <br>
 </body>

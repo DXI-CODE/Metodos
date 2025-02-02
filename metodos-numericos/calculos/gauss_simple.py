@@ -4,7 +4,10 @@ def validar_matriz_aumentada(matriz):
     if not matriz:
         return {'error': 'Se requiere una matriz válida.'}, 400
 
-    matriz_np = np.array(matriz, dtype=float)
+    try:
+        matriz_np = np.array(matriz, dtype=float)
+    except ValueError as e:
+        return {'error': 'Los valores de la matriz deben ser números válidos.'}, 400
 
     filas, columnas = matriz_np.shape
     if columnas != filas + 1:  # Verifica si es una matriz aumentada
