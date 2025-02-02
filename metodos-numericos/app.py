@@ -78,6 +78,7 @@ def home():
                 {"nombre": "Regresión Polinomial", "url": "/regresion-polinomial"},
                 {"nombre": "Regresión lineal", "url": "/regresion_lineal"},
                 {"nombre": "Regresión por minimos cuadrados", "url": "/regresion_matrices"},
+                {"nombre": "Regresión no lineal", "url": "/regresion_no_lineal"}
             ]
         },
         {
