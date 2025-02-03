@@ -18,7 +18,7 @@
 
         <form id="formulario">
             <div id="input-container" class="container"></div>
-            <div class="alinear">
+            <div id="alinear">
                 <label for="evaluar">Valor a evaluar:</label>
                 <input type="number" id="evaluar" step="any">
             </div>
@@ -32,16 +32,20 @@
     <div id="resultado"></div>
 
     <script>
+       
         function generarCampos() {
             const container = document.getElementById('input-container');
             const orden = parseInt(document.getElementById('orden').value);
             const acciones = document.getElementById('calcular-actions');
             const resultado = document.getElementById('resultado');
+            let paraCalc = document.getElementById('alinear')
 
             if (isNaN(orden) || orden < 1 || orden > 4) {
                 alert('Por favor, ingrese un orden válido (1 a 4).');
                 return;
             }
+
+            paraCalc.style.display = 'flex'
 
             const numPuntos = orden + 1;
             container.innerHTML = ''; 
@@ -59,6 +63,8 @@
                     <td><input type="number" class="input-y" step="any" placeholder="Y${i + 1}"></td>
                 `;
                 table.appendChild(row);
+                
+                datoUlti = numPuntos
             }
 
             container.appendChild(table);
@@ -89,6 +95,7 @@
                 datosX.push(x);
                 datosY.push(y);
             }
+
 
             if (isNaN(evaluar)) {
                 alert('Ingrese un valor válido para evaluar.');

@@ -81,6 +81,7 @@ input {
 
 
 table {
+    display: none;
     margin-top: 20px;
     border-collapse: collapse;
     font-family: "Poppins", serif;

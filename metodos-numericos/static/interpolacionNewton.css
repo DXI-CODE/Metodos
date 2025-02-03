@@ -82,8 +82,8 @@ button{
     
 }
 
-.alinear{
-    display: flex;
+#alinear{
+    display: none;
     align-items: center;
 }
 
