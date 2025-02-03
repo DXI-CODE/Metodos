@@ -28,11 +28,13 @@ def potencial(puntos):
     ss_total = np.sum((y_valsog  - y_mean) ** 2)  
     ss_residual = np.sum((y_valsog - y2) ** 2) 
     r2 = 1 - (ss_residual / ss_total)  
+
+    puntos_ord = sorted(puntos)
     
     try:
         fig, ax = plt.subplots()
-        ax.plot([fila[0] for fila in puntos], [fila[1] for fila in puntos], label="Puntos originales")
-        ax.plot([fila[0] for fila in puntos], y2, label=f'f(x) = {str(expr)}')
+        ax.plot([fila[0] for fila in puntos_ord], [fila[1] for fila in puntos_ord], label="Puntos originales")
+        ax.plot([fila[0] for fila in puntos_ord], sorted(y2), label=f'f(x) = {str(expr)}')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
         ax.legend()

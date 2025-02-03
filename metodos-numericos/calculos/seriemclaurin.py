@@ -1,33 +1,12 @@
-from sympy import symbols, sympify, diff, factorial, latex
+import sympy as sp
 
-def calcular_serie_mclaurin(function_str, numero_n):
-    """
-    Calcula la serie de Maclaurin (una expansión en serie de Taylor en a=0) de una función dada.
-
-    Args:
-        function_str (str): La función a expandir, expresada como una cadena de texto.
-        numero_n (int): El número de términos a calcular en la serie de Maclaurin.
-
-    Returns:
-        str: La expansión de la serie de Maclaurin en formato LaTeX.
-    """
-    # Variables simbólicas
-    x = symbols('x')
+def calcular_serie_mclaurin(funcion_str, numero_n):
+    expansion = 0.0
+    x = sp.symbols('x')
+    funcion = sp.sympify(funcion_str)
+    serie_maclaurin = sp.series(funcion, x, expansion, numero_n)
     
-    # Convierte el string de la función a una expresión simbólica
-    function = sympify(function_str)
-
-    # Calcula la serie de Maclaurin (a = 0)
-    maclaurin_expansion = 0
-    for i in range(numero_n):
-        # Derivada de orden i
-        derivative = diff(function, x, i)
-        
-        # Termino i-ésimo de la serie de Maclaurin
-        term = (derivative.subs(x, 0) / factorial(i)) * (x)**i
-        maclaurin_expansion += term
-
-    print(maclaurin_expansion)
-    print(latex(maclaurin_expansion))
-    # Devuelve el resultado como un string LaTeX
-    return latex(maclaurin_expansion)
+    serie_latex = sp.latex(serie_maclaurin)
+    serie_latex = serie_latex.replace('**', '^').replace('O(', 'O(')
+    return serie_latex
+    #return str(serie_latex).replace('**', '^').replace('O(', 'O(')
