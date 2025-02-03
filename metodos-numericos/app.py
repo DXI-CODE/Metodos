@@ -64,7 +64,6 @@ def home():
             "categoria": "Raices",
             "metodos": [
                 {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
-                {"nombre": "Metodo de biseccion", "url":"/biseccion"},
                 {"nombre": "Metodo de Newton", "url":"/newton"},
                 {"nombre": "Metodo de Biseccion", "url":"/biseccion"},
                 {"nombre": "Metodo de Falsa Posicion", "url":"/metodo-falsa-posicion"},
