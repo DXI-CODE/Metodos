@@ -23,7 +23,7 @@ from calculos.derivacionadelante import calcular_derivacion_adelante
 from calculos.derivacioncentral import calcular_derivacion_central
 from calculos.metodoeuler import metodo_euler
 from calculos.integracionmultiple import integracionmultiple
-from calculos.biseccion import biseccion, f
+from calculos.biseccion import biseccion, f, convertir_resultados_a_html
 from calculos.eliminacion_gaussiana import validar_matriz, eliminacion_gaussiana
 from calculos.newton import newton_raphson
 from calculos.interpolacion_matricial import interpolacion_por_matrices
@@ -904,6 +904,7 @@ def biseccion_post():
 
     try:
         resultado = biseccion(f, xl, xu, tol, max_iter, g, m, t, v)
+        resultado['tabla'] = convertir_resultados_a_html(resultado['resultados'])
         return jsonify(resultado)
     except Exception as e:
         return jsonify({'error': str(e)})
