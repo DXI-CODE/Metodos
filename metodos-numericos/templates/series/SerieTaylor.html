@@ -17,9 +17,10 @@
         <label for="funcion">Ingrese la función en términos de x: </label>
         <input type="text" id="funcion" name="funcion" placeholder="Ejemplo: sin(x), exp(x), x**2" required><br>
         <label for="expansion">Ingrese el punto de expansión (a): </label>
-        <input type="number" id="expansion" name="expansion" required><br>    
+        <input type="number" id="expansion" name="expansion" required ><br>  
         <label for="numero_n">Ingrese el número de términos (n): </label>
-        <input type="number" id="numero_n" name="numero_n" required><br>
+        <input type="number" id="numero_n" name="numero_n" onfocus="borrarParrafo('errorN')" required><br>
+        <p id="errorN"></p> 
         <button id="mostrar" type="submit">Calcular</button>
     </form>
 
@@ -29,9 +30,26 @@
     <div id="ResultadoSerieTaylor"></div>
 
     <script>
+
+
         document.getElementById("formulario").addEventListener("submit", function(event) {
+            let expan = document.getElementById('expansion')
+            let numero_n = document.getElementById('numero_n')
+
             event.preventDefault();
-            calcularSerieTaylor(); 
+
+            if (numero_n.value <= 0){
+                document.getElementById('errorN').innerText = 'Por favor, ingrese un número mayor a 0'
+                valido = false
+            } else{
+                valido = true
+            }
+
+            if (expan.value != '' && numero_n.value != '' && valido){
+                let elemento = document.getElementById("result");
+                elemento.style.display = "block";
+                calcularSerieTaylor(); 
+            }            
         });
 
         async function calcularSerieTaylor() {
@@ -60,11 +78,10 @@
             }
         }
 
-        document.getElementById("mostrar").addEventListener("click", function() {
-            console.log('entro')
-            let elemento = document.getElementById("result");
-            elemento.style.display = "block";
-        });
+        function borrarParrafo(idMensaje) {
+            const mensaje = document.getElementById(idMensaje);
+            mensaje.textContent = ""; // Borra el contenido
+        }
     </script>
     <br>
 

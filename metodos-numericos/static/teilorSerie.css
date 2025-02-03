@@ -53,6 +53,11 @@ input{
     width: 70%;
 }
 
+#errorN{
+    color: red;
+    font-family: "Poppins", serif;
+}
+
 button{
     width: 18%;
     font-size: medium;

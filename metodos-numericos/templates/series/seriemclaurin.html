@@ -18,6 +18,7 @@
         
         <label for="numero_n">Ingrese el número de términos (n): </label>
         <input type="number" id="numero_n" name="numero_n" required><br>
+        <p id="errorN"></p> 
         <button id="mostrar" type="submit">Calcular</button>
     </form>
 
@@ -28,8 +29,22 @@
 
     <script>
         document.getElementById("formulario").addEventListener("submit", function(event) {
+            let numero_n = document.getElementById('numero_n')
+
             event.preventDefault();
-            calcularSeriemclaurin(); 
+
+            if (numero_n.value <= 0){
+                document.getElementById('errorN').innerText = 'Por favor, ingrese un número mayor a 0'
+                valido = false
+            } else{
+                valido = true
+            }
+
+            if (numero_n.value != '' && valido){
+                let elemento = document.getElementById("result");
+                elemento.style.display = "block";
+                calcularSeriemclaurin(); 
+            }          
         });
 
         async function calcularSeriemclaurin() {
@@ -55,12 +70,6 @@
                 document.getElementById("ResultadoSeriemclaurin").innerText = data.error;
             }
         }
-
-        document.getElementById("mostrar").addEventListener("click", function() {
-            console.log('entro')
-            let elemento = document.getElementById("result");
-            elemento.style.display = "block";
-        });
     </script>
     <br>
 </body>
