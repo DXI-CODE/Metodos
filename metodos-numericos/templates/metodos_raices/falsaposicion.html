@@ -12,30 +12,33 @@
         
         <!-- Formulario de entrada -->
         <form id="falsa_posicion_form">
-            <label for="funcion">Función (en términos de x):</label><br>
+            <label for="funcion">Función (en términos de x):</label>
             <input type="text" id="funcion" name="funcion" required><br>
 
-            <label for="valor_a">Valor de a:</label><br>
+            <label for="valor_a">Valor de a:</label>
             <input type="number" id="valor_a" name="valor_a" required><br>
 
-            <label for="valor_b">Valor de b:</label><br>
+            <label for="valor_b">Valor de b:</label>
             <input type="number" id="valor_b" name="valor_b" required><br>
 
-            <label for="tolerancia">Tolerancia:</label><br>
+            <label for="tolerancia">Tolerancia:</label>
             <input type="number" step="any" id="tolerancia" name="tolerancia" required><br>
 
-            <label for="iteraciones">Número de iteraciones:</label><br>
+            <label for="iteraciones">Número de iteraciones:</label>
             <input type="number" id="iteraciones" name="iteraciones" required><br>
 
             <button type="submit">Calcular</button>
         </form>
 
-        <div class="result" id="resultado_raiz">Raíz encontrada: <span id="raiz"></span></div>
+        <br>
+        <br>
+
+        <div class="resultr" id="resultado_raiz">Raíz encontrada: <span id="raiz"></span></div>
         
         <!-- Mostrar gráfica -->
         <img id="grafica" alt="Gráfica del método de falsa posición" style="display: none;">
-    </div>
-
+        <br>
+        <br>
     <script>
         document.getElementById('falsa_posicion_form').onsubmit = async function(event) {
             event.preventDefault();
