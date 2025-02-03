@@ -20,7 +20,7 @@ h1{
     
 }
 
-#regresion_form{
+#regresion_form, #formulario{
     border: solid black;
     display: flex;
     flex-direction: column;
@@ -87,7 +87,7 @@ p, h3 {
   align-items: center;
 }
 
-#grafica {
+#grafica, #grafico {
   font-size: large;
   text-align: center;
   align-items: center;
