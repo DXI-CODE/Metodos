@@ -4,52 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interpolación por Sistemas Matriciales</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            margin-top: 20px;
-        }
-        .matrix-container {
-            display: grid;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-        table {
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="./static/InterMatrices.css">
+    
     <script type="text/javascript" async
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 </head>
 <body>
     <h1>Interpolación por Sistemas Matriciales</h1>
-
+    <div>
+    <form id="formulario">
     <label for="orden">Seleccione el orden de interpolación (1-4):</label>
     <input type="number" id="orden" min="1" max="4" value="1">
-    <button onclick="generarCampos()">Generar Campos</button>
+    <button id= "btn1" onclick="generarCampos()">Generar Campos</button>
 
-    <form id="formulario">
+    
         <div id="input-container" class="container"></div>
         <label for="evaluar">Valor a evaluar:</label>
         <input type="number" id="evaluar" step="any">
         <div id="calcular-actions" class="hidden">
-            <button type="submit">Calcular Interpolación</button>
+            <button id= "btn2" type="submit">Calcular Interpolación</button>
         </div>
     </form>
-
+    </div>
+<br>
+    <br>
     <div id="resultado"></div>
 
     <script>
