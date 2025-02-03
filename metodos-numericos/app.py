@@ -52,13 +52,22 @@ def home():
             ]
         },
         {
-            "categoria": "Métodos Numéricos",
+            "categoria": "Matrices",
             "metodos": [
                 {"nombre": "Matriz Inversa", "url": "/matriz_inversa"},
-                {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
                 {"nombre": "Metodo Gauss-Jordan", "url": "/gauss_jordan"},
                 {"nombre": "Metodo Gauss Simple", "url": "/gauss_simple"},
                 {"nombre": "Método Eliminación Gaussiana", "url": "/eliminacion_gaussiana"},
+            ]
+        },
+        {
+            "categoria": "Raices",
+            "metodos": [
+                {"nombre": "Metodo Punto Fijo", "url": "/metodo-punto-fijo"},
+                {"nombre": "Metodo de biseccion", "url":"/biseccion"},
+                {"nombre": "Metodo de Newton", "url":"/newton"},
+                {"nombre": "Metodo de Biseccion", "url":"/biseccion"},
+                {"nombre": "Metodo de Falsa Posicion", "url":"/metodo-falsa-posicion"},
             ]
         },
         {
@@ -106,8 +115,6 @@ def home():
                 {"nombre": "Diferenciacion numerica hacia atras", "url":"/derivada-atras"},
                 {"nombre": "Diferenciacion numerica hacia adelante", "url":"/derivada-adelante"},
                 {"nombre": "Diferenciacion numerica central", "url":"/derivada-central"},
-                {"nombre": "Metodo de biseccion", "url":"/biseccion"},
-                {"nombre": "Metodo de Newton", "url":"/newton"},
             ]
         },
         {
