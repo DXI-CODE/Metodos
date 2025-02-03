@@ -4,25 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Método de Bisección</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            margin-top: 20px;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+    <!--<link rel="stylesheet" href="./static/biseccion.css">-->
 </head>
 <body>
     <h1>Método de Bisección</h1>
@@ -53,8 +35,10 @@
         <br><br>
         <button type="submit">Calcular</button>
     </form>
+    <br>
+
+    <h2>Resultados:</h2>
     <div id="resultados" class="hidden">
-        <h2>Resultados:</h2>
         <table>
             <thead>
                 <tr>
@@ -66,10 +50,15 @@
             </thead>
             <tbody id="tabla-resultados"></tbody>
         </table>
-        <h3>Resultado Final</h3>
+        <h3>RESULTADO FINAL</h3>
         <p><strong>Raíz encontrada:</strong> <span id="raiz"></span></p>
         <p><strong>Número de iteraciones:</strong> <span id="iteraciones"></span></p>
+
+        <!-- Espacio para la gráfica -->
+        <h3>GRAFICA DE CONVERGENCIA</h3>
+        <img id="grafica" src="" alt="Gráfica de Convergencia" style="width:100%; max-width:600px;">
     </div>
+
     <script>
         document.getElementById("biseccion-form").addEventListener("submit", async function(event) {
             event.preventDefault();
@@ -105,6 +94,10 @@
                     document.getElementById("tabla-resultados").innerHTML = tablaHTML;
                     document.getElementById("raiz").textContent = resultado.raiz;
                     document.getElementById("iteraciones").textContent = resultado.iteraciones;
+
+                    // Mostrar la gráfica
+                    document.getElementById("grafica").src = "data:image/png;base64," + resultado.grafica;
+
                     document.getElementById("resultados").classList.remove("hidden");
                 }
             } catch (error) {
