@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,35 +10,38 @@
     <h1>Método de Bisección</h1>
     <form id="biseccion-form">
         <label for="xl">Valor de xl:</label>
-        <input type="number" id="xl" step="0.01" required>
-        <br><br>
+        <input type="number" id="xl" step="0.01" required><br><br>
+
         <label for="xu">Valor de xu:</label>
-        <input type="number" id="xu" step="0.01" required>
-        <br><br>
+        <input type="number" id="xu" step="0.01" required><br><br>
+
         <label for="tol">Tolerancia:</label>
-        <input type="number" id="tol" step="0.0001" required>
-        <br><br>
+        <input type="number" id="tol" step="0.0001" required><br><br>
+
         <label for="max_iter">Iteraciones máximas:</label>
-        <input type="number" id="max_iter" required>
-        <br><br>
+        <input type="number" id="max_iter" required><br><br>
+
         <label for="g">Valor de g:</label>
-        <input type="number" id="g" step="0.01" required>
-        <br><br>
+        <input type="number" id="g" step="0.01" required><br><br>
+
         <label for="m">Valor de m:</label>
-        <input type="number" id="m" step="0.01" required>
-        <br><br>
+        <input type="number" id="m" step="0.01" required><br><br>
+
         <label for="t">Valor de t:</label>
-        <input type="number" id="t" step="0.01" required>
-        <br><br>
+        <input type="number" id="t" step="0.01" required><br><br>
+
         <label for="v">Valor de v:</label>
-        <input type="number" id="v" step="0.01" required>
-        <br><br>
+        <input type="number" id="v" step="0.01" required><br><br>
+
         <button type="submit">Calcular</button>
     </form>
-<br>
+    <br>
 
     <h2>Resultados:</h2>
     <div id="resultados" class="hidden">
+        <p><strong>Raíz encontrada:</strong> <span id="raiz"></span></p>
+        <p><strong>Número de iteraciones:</strong> <span id="iteraciones"></span></p>
+        <h3>Tabla de Iteraciones</h3>
         <table>
             <thead>
                 <tr>
@@ -50,10 +53,14 @@
             </thead>
             <tbody id="tabla-resultados"></tbody>
         </table>
-        <h3>Resultado Final</h3>
-        <p><strong>Raíz encontrada:</strong> <span id="raiz"></span></p>
-        <p><strong>Número de iteraciones:</strong> <span id="iteraciones"></span></p>
+
+        <h3>Gráfica de Convergencia</h3>
+        <img id="grafica-convergencia" alt="Gráfica de convergencia"><br><br>
+
+        <h3>Gráfica de la Función</h3>
+        <img id="grafica-funcion" alt="Gráfica de la función">
     </div>
+
     <script>
         document.getElementById("biseccion-form").addEventListener("submit", async function(event) {
             event.preventDefault();
@@ -67,33 +74,16 @@
                 t: parseFloat(document.getElementById("t").value),
                 v: parseFloat(document.getElementById("v").value)
             };
-            try {
-                const response = await fetch("/biseccion", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(datos)
-                });
-                const resultado = await response.json();
-                if (resultado.error) {
-                    alert("Error: " + resultado.error);
-                } else {
-                    let tablaHTML = "";
-                    resultado.resultados.forEach(res => {
-                        tablaHTML += `<tr>
-                            <td>${res.iteracion}</td>
-                            <td>${res.xl}</td>
-                            <td>${res.xu}</td>
-                            <td>${res.xr}</td>
-                        </tr>`;
-                    });
-                    document.getElementById("tabla-resultados").innerHTML = tablaHTML;
-                    document.getElementById("raiz").textContent = resultado.raiz;
-                    document.getElementById("iteraciones").textContent = resultado.iteraciones;
-                    document.getElementById("resultados").classList.remove("hidden");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
+
+            const response = await fetch("/biseccion", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            });
+
+            const resultado = await response.json();
+            document.getElementById("grafica-convergencia").src = "data:image/png;base64," + resultado.grafica_convergencia;
+            document.getElementById("grafica-funcion").src = "data:image/png;base64," + resultado.grafica_funcion;
         });
     </script>
 </body>

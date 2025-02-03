@@ -1,15 +1,20 @@
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+import io
+import base64
 
 def f(c, g, m, t, v):
     """Función para la cual se calcula la raíz."""
     return (g * m / c) * (1 - math.exp(-c * t / m)) - v
 
 def biseccion(f, xl, xu, tol, max_iter, g, m, t, v):
-    """Método de Bisección para encontrar la raíz de una función."""
+    """Método de Bisección con generación de gráficas."""
     iteraciones = 0
     xr = (xl + xu) / 2.0
     resultados = []
-    
+    x_values = []  # Almacenar valores de xr para graficar la convergencia
+
     while abs(f(xr, g, m, t, v)) > tol and iteraciones < max_iter:
         xr = (xl + xu) / 2.0
         resultado = {
@@ -22,7 +27,8 @@ def biseccion(f, xl, xu, tol, max_iter, g, m, t, v):
             'f_xr': f(xr, g, m, t, v)
         }
         resultados.append(resultado)
-        
+        x_values.append(xr)
+
         if f(xl, g, m, t, v) * f(xr, g, m, t, v) < 0:
             xu = xr
         else:
@@ -30,27 +36,53 @@ def biseccion(f, xl, xu, tol, max_iter, g, m, t, v):
         
         iteraciones += 1
 
+    # Generar las gráficas
+    grafica_convergencia = generar_grafica_convergencia(x_values)
+    grafica_funcion = generar_grafica_funcion(f, xl, xu, g, m, t, v, xr)
+
     return {
         'raiz': xr,
         'iteraciones': iteraciones,
-        'resultados': resultados
+        'resultados': resultados,
+        'grafica_convergencia': grafica_convergencia,
+        'grafica_funcion': grafica_funcion
     }
 
-def convertir_resultados_a_html(resultados):
-    """Convierte los resultados de las iteraciones a una tabla HTML."""
-    html = "<table border='1' style='border-collapse: collapse; width: 100%;'>"
-    html += "<tr><th>Iteración</th><th>xl</th><th>xu</th><th>xr</th><th>f(xl)</th><th>f(xu)</th><th>f(xr)</th></tr>"
-    for res in resultados:
-        html += (
-            f"<tr>"
-            f"<td>{res['iteracion']}</td>"
-            f"<td>{res['xl']:.6f}</td>"
-            f"<td>{res['xu']:.6f}</td>"
-            f"<td>{res['xr']:.6f}</td>"
-            f"<td>{res['f_xl']:.6f}</td>"
-            f"<td>{res['f_xu']:.6f}</td>"
-            f"<td>{res['f_xr']:.6f}</td>"
-            f"</tr>"
-        )
-    html += "</table>"
-    return html
+def generar_grafica_convergencia(x_values):
+    """Genera la gráfica de convergencia del método de Bisección."""
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(1, len(x_values) + 1), x_values, marker='o', linestyle='-', color='b')
+    plt.xlabel('Iteración')
+    plt.ylabel('Valor de xr')
+    plt.title('Convergencia del Método de Bisección')
+    plt.grid()
+
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plt.close()
+
+    return base64.b64encode(img.getvalue()).decode()
+
+def generar_grafica_funcion(f, xl, xu, g, m, t, v, raiz):
+    """Genera la gráfica de la función con la raíz encontrada."""
+    x_vals = np.linspace(xl, xu, 100)
+    y_vals = [f(x, g, m, t, v) for x in x_vals]
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(x_vals, y_vals, label='f(x)', color='blue')
+    plt.axhline(0, color='black', linewidth=1)
+    plt.axvline(raiz, color='red', linestyle='--', label=f'Raíz ≈ {raiz:.6f}')
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    plt.title('Gráfica de la Función y la Raíz')
+    plt.legend()
+    plt.grid()
+
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plt.close()
+
+    return base64.b64encode(img.getvalue()).decode()
+
