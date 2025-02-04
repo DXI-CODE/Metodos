@@ -4,51 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gauss-Jordan</title>
+    <link rel="stylesheet" href="./static/GaussJordan.css">
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .matrix-container {
-            margin-top: 20px;
-            display: grid;
-            gap: 5px;
-        }
-        .actions {
-            margin-top: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-        table {
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <h1>Metodo de gauss jordan</h1>
-    <label for="matrix-size">Ingrese el tamaño de la matriz aumentada (mayor a 1):</label>
-    <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3">
+    <form id="formulario">
+    <label for="matrix-size">Ingrese el tamaño de la matriz aumentada (mayor a 1):</label><br>
+    <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3"><br>
     <button onclick="generateMatrix()">Generar Matriz</button>
 
-    <form id="formulario">
         <div id="matrix-container" class="matrix-container"></div>
         <div class="actions hidden" id="calcular-actions">
-            <button type="submit">Calcular Gauss-Jordan</button>
+            <button id="btn2" type="submit">Calcular Gauss-Jordan</button>
         </div>
     </form>
-
+    <br>
+    <br>
     <div id="ResultadoGaussJordan"></div>
-
+    <br>
+    <br>
     <script>
         function generateMatrix() {
             const container = document.getElementById('matrix-container');
