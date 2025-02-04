@@ -472,7 +472,7 @@ def calcular_derivada_central_post():
 ##REGRESION POR CRECIMIENTO DE SATURACION
 @app.route('/regresion-crecimiento-saturado', methods=['GET'])
 def calcular_regresion_saturado_get():
-    return render_template('Regresion/RegresionSaturado.html')
+    return render_template('regresion/RegresionSaturado.html')
 @app.route('/regresion-crecimiento-saturado', methods=['POST'])
 def calcular_regresion_saturado_post():
     try:
