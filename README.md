@@ -2,7 +2,8 @@
 ![Y-BOYS](https://github.com/user-attachments/assets/48d3052d-f27b-4a85-b614-88e88c2e9aaf)
 
 Este es un proyecto escolar para la materia de Métodos Numéricos.
-La página está desarrollada para resolver problemas referentes a los siguientes temas:
+
+### La página está desarrollada para resolver problemas referentes a los siguientes temas:
 - Integración
 - Derivación
 - Ecuaciones diferenciales
@@ -12,7 +13,7 @@ La página está desarrollada para resolver problemas referentes a los siguiente
 - Matrices
 - Linealización
 
-Tecnologías empleadas:
+### Tecnologías empleadas:
 - Python: Lenguaje de programación interpretado, sencillo y versátil.
 - HTML: Estructura web.
 - CSS: Estilo y diseño.
@@ -20,7 +21,7 @@ Tecnologías empleadas:
 - Render: Plataforma en la nube para desplegar aplicaciones web.
 - MathJax: Biblioteca JavaScript para mostrar notación matemática en web.
 
-Desarrollado por:
+### Desarrollado por:
 
 # DxiCode
 
