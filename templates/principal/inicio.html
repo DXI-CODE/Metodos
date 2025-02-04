@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú de Métodos</title>
-    <link rel="stylesheet" href="/static\inicio.css"> 
+    <link rel="icon" href="static/yb.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/yb.ico" type="image/x-icon">
     
+    <title>Métodos Numéricos</title>
+    <link rel="stylesheet" href="/static/inicio.css">
 </head>
 <body>
-    <div class ="banner">
+    <div class="banner">
         <img src="/static/Y-BOYS.png" alt="Logo" id="logo">
     </div>
-    <h1>Bienvenido a los Métodos Matemáticos</h1>
+    <h1>Métodos Numéricos</h1>
     <div class="container">
         {% for categoria in rutas %}
         <div class="categoria">
-            <h3>{{ categoria.categoria }}</h3>
+            <div class="categoria-header">
+                <h3>{{ categoria.categoria }}</h3>
+                <span class="toggle">+</span>
+            </div>
             <div class="metodos">
                 {% for metodo in categoria.metodos %}
                 <div class="metodo">
@@ -26,5 +31,17 @@
         </div>
         {% endfor %}
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const categorias = document.querySelectorAll(".categoria-header");
+
+        categorias.forEach((categoria) => {
+            categoria.addEventListener("click", () => {
+                const parent = categoria.parentElement;
+                parent.classList.toggle("active");
+            });
+        });
+    });
+    </script>
 </body>
 </html>
