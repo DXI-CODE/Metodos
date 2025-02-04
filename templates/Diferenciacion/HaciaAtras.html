@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculo de Derivadas</title>
+    <link rel="stylesheet" href="./static/haciaAtras.css">
 </head>
 <body>
     <!-- Encabezado principal -->
     <header>
-        <h1>Cálculo de Derivadas</h1>
+        <h1>Cálculo de derivadas</h1>
         <p>Selecciona si deseas ingresar una función o proporcionar datos.</p>
+        <br><br>
     </header>
 
     <!-- Sección principal -->
@@ -27,22 +29,32 @@
                     Ingresar datos
                 </label>
                 <br>
+                <br>
                 <button type="button" onclick="mostrarSeccion()">Continuar</button>
             </form>
         </section>
+        <br>
+        <br>
+        <br>
 
         <!-- Sección para ingresar función -->
         <section id="seccionFuncion" style="display: none;">
-            <h2>Ingreso de Función</h2>
+            <h2>Ingreso de Función</h2><br>
             <form id="funcionForm">
                 <label for="funcion">Función:</label>
                 <input type="text" id="funcion" name="funcion" placeholder="Ejemplo: x**2 + 3*x + 2" required>
                 <br>
+                <br>
+                <br>
                 <label for="valor">Valor para calcular la derivada:</label>
                 <input type="number" id="valor" name="valor" required>
                 <br>
+                <br>
+                <br>
                 <label for="paso">Tamaño de paso (h, precision):</label>
                 <input type="number" id="paso" name="paso" step="any" required>
+                <br>
+                <br>
                 <br>
                 <fieldset>
                     <legend>Selecciona las derivadas a calcular:</legend>
@@ -70,19 +82,26 @@
                 <button type="submit">Calcular</button>
             </form>
         </section>
+        <br>
 
         <!-- Sección para ingresar datos -->
         <section id="seccionDatos" style="display: none;">
-            <h2>Ingreso de Datos</h2>
+            <h2>Ingreso de Datos</h2><br><br>
             <form id="datosForm">
                 <label for="cantidadDatos">Cantidad de datos:</label>
                 <input type="number" id="cantidadDatos" name="cantidadDatos" required>
                 <br>
-                <button type="button" onclick="generarCamposDatos()">Generar campos</button>
+                <br>
+                <br>
+                <button type="button" onclick="generarCamposDatos()">Generar campos</button><br>
                 <div id="camposDatos"></div>
+                <br>
+                <br>
                 <br>
                 <label for="valorDatos">Valor para calcular la derivada (opcional):</label>
                 <input type="number" id="valorDatos" name="valorDatos" step="any">
+                <br>
+                <br>
                 <br>
                 <fieldset>
                     <legend>Selecciona las derivadas a calcular:</legend>
