@@ -43,6 +43,10 @@
             }
 
             try {
+                let resultadoD = document.getElementById("resultado");
+                resultadoD.style.display = "none";  // Ocultar el div donde se muestra la gráfica
+                resultadoD.innerHTML = "";
+                
                 const response = await fetch('/metodo-punto-fijo', {
                     method: 'POST',
                     headers: {
