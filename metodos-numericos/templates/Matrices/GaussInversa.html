@@ -4,50 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gauss Inversa</title>
+    <link rel="stylesheet" href="./static/gaussinversa.css">
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
-    <style> /*Diseño necesario que requiere el css, aparte de lo que le agregaras*/
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .matrix-container {
-            margin-top: 20px;
-            display: grid;
-            gap: 5px;
-        }
-        .actions {
-            margin-top: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-        table {
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <h1>Gauss Inversa</h1>
+    <form id="formulario">
     <label for="matrix-size">Ingrese el tamaño de la matriz (mayor a 1):</label>
     <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3">
     <button onclick="generateMatrix()">Generar Matriz</button>
 
-    <form id="formulario">
         <div id="matrix-container" class="matrix-container"></div>
         <div class="actions hidden" id="calcular-actions">
-            <button type="submit">Calcular Inversa</button>
+            <button id="btn2" type="submit">Calcular Inversa</button>
         </div>
     </form>
 
+    <br>
+    <br>
+
     <div id="ResultadoInversa"></div>
+     
+    <br>
+    <br>
+
 
     <script>
         function generateMatrix() {
