@@ -952,4 +952,4 @@ def regresion_no_lineal_view():
     return render_template('regresion/regresion_no_lineal.html')
 #------------------------------------------------------------
 if __name__ == '__main__':
-    app.run(debug=True,  host='127.0.0.1', port=5000)
+    app.run()
