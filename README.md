@@ -1,14 +1,22 @@
+# CALCULADORA Y-BOYS
+![Y-BOYS](https://github.com/user-attachments/assets/48d3052d-f27b-4a85-b614-88e88c2e9aaf)
+
+Este es un proyecto escolar para la materia de Métodos Numéricos.
+La página está desarrollada para resolver problemas referentes a los siguientes temas:
+- Integración
+- Derivación
+- Ecuaciones diferenciales
+- Raíces de ecuaciones
+- Regresión de datos
+- Interpolación de datos
+- Matrices
+- Linealización
+
+Desarrollado por:
+
 # DxiCode
 
 ![Logotipo de DxiCode](https://i.ibb.co/FhcdjyJ/Logo-dxicode-transformed.png "DxiCode")
-
-### **Misión**  
-Nuestra misión es crear soluciones de software de alta calidad que superen las expectativas de nuestros clientes, impulsando su crecimiento y éxito. Nos enfocamos en la innovación y en el uso de tecnologías de vanguardia para ofrecer un servicio excepcional, asegurando una mejora continua y el máximo valor en cada proyecto.
-
----
-
-### **Visión**  
-Convertirnos en una empresa líder en ingeniería de software, reconocida por ofrecer soluciones tecnológicas innovadoras que transformen las operaciones y el crecimiento de nuestros clientes. Aspiramos a un futuro donde la tecnología sea accesible y útil para todos, promoviendo la innovación y el progreso en cada proyecto.
 
 ---
 
