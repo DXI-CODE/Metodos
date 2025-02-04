@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Métodos Numéricos</title>
+    <link rel="stylesheet" href="./static/lagrange.css">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<<<<<<< HEAD:metodos-numericos/templates/interpolacion/lagrange.html
+    <header>
+        <h1>CALCULADORA DE MÉTODOS NUMÉRICOS</h1>
+        <nav>
+            <ul>
+                <li><a href="#interpolacion">Interpolación</a></li>
+                <li><a href="#ec_nolineales">Ecuaciones No Lineales</a></li>
+                <li><a href="#sistemas_ec">Sistemas de Ecuaciones</a></li>
+                <li><a href="#diferenciacion_integracion">Diferenciación e Integración</a></li>
+                <li><a href="#aproximacion">Aproximación</a></li>
+                <li><a href="#ecuaciones_diferenciales">Ecuaciones Diferenciales</a></li>
+            </ul>
+        </nav>
+    </header>
+=======
+>>>>>>> 8cd3d04009d1801c434f0651e263d6c9c8d9352c:templates/interpolacion/lagrange.html
+
+    <main>
+        <section id="interpolacion">
+            <h2>Interpolación de Lagrange</h2>
+            <p>Ingrese un conjunto de puntos (x, y) separados por comas:</p>
+            <textarea id="input-points" placeholder="Ejemplo:\n1,2\n3,5\n9,5" rows="8"></textarea>
+            <p>Ingrese el valor de x que se desea interpolar:</p>
+            <input id="valorx" type="number" />
+            <p>Ingrese el grado con el que se va a interpolar:</p>
+            <input id="grado" type="number" />
+            <button id="calculate-btn">Calcular</button>
+
+            <h3>Resultado:</h3>
+            <div id="result">
+                <p>El resultado aparecerá aquí.</p>
+            </div>
+            <img id="grafica" alt="Gráfica del método de interpolación de lagrange" style="display:none;">
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Calculadora de Métodos Numéricos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', async () => {
+            const input = document.getElementById('input-points').value;
+            const valorx = document.getElementById('valorx').value;
+            const grado = document.getElementById('grado').value;
+
+            // Parse the input into an array of points, ensure proper formatting
+            const points = input.split('\n').map(line => {
+                const [x, y] = line.split(',').map(Number);
+                if (isNaN(x) || isNaN(y)) {
+                    return null;
+                }
+                return [x, y];
+            }).filter(Boolean);  // Remove null values from the array
+
+            // Send data to the server
+            try {
+                const response = await fetch('/calcular_lagrange', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ puntos: points, grado: parseInt(grado), valorx: parseFloat(valorx) })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = `<pre>${result.funcion}</pre>`;
+                    document.getElementById('grafica').src = `data:image/png;base64,${result.grafico_base64}`;
+                    document.getElementById('grafica').style.display = 'block';
+                } else {
+                    document.getElementById('error').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color:red;">Error en la conexión con el servidor.</p><p>${error}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

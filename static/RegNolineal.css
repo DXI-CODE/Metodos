@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Exo 2', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 50px;
+    color: #321aa0;
+    margin-bottom: 15px;
+}
+
+form {
+    background: white;
+    color: #1b0d57;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+
+    border: 2px solid rgb(250, 69, 211);
+      border-radius: 5px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 
+        0 0 5px rgb(247, 67, 172),
+        0 0 10px rgb(247, 67, 172),
+        0 0 20px rgb(247, 67, 172),
+        0 0 30px rgb(182, 8, 109);
+      transition: 0.3s ease;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background-color: #f062b9;
+    transform: scale(0.9);
+    box-shadow: 0 4px 10px rgb(255, 0, 234);
+}
+
+#datos {
+    margin: 20px 0;
+}
+
+#datos table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#datos th, #datos td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+#datos th {
+    background-color: #4a90e2;
+    color: white;
+}
+
+#resultados {
+    background-color: #e9f5ff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+#resultados h2 {
+    color: #4a90e2;
+}
+
+#resultados p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+#resultados img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+}

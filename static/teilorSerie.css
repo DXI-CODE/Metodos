@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Covered+By+Your+Grace&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Mochiy+Pop+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    background: rgb(238, 245, 250);
+    margin: auto;
+}
+
+h1{
+  
+    font-family: "Exo 2", serif;
+    font-optical-sizing: auto;
+    font-weight:weight;
+    font-style:normal;
+    margin: 30px;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 3.7rem;
+    color: rgb(1, 1, 196);
+    
+}
+
+form{
+    border: solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    position: relative;
+    padding: 15px;
+    gap: 10px;
+    border: 2px solid #0ff;
+    border-radius: 5px;
+    box-shadow: 
+        0 0 5px #0ff,
+        0 0 10px #0ff,
+        0 0 18px #00f;
+    transition: 0.3s ease;
+}
+
+label{
+    font-size: large;
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+input{
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 70%;
+}
+
+#errorN{
+    color: red;
+    font-family: "Poppins", serif;
+}
+
+button{
+    width: 18%;
+    font-size: medium;
+    color: white;
+    background: cornflowerblue;
+    border: solid #40a5cc;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+h2{
+    text-align: center;
+    font-size: x-large;
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: normal; 
+}
+
+#result{
+    display: none;
+}
+
+#ResultadoSerieTaylor {
+    font-size: large;
+    max-width: 1265px;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+#ResultadoSeriemclaurin {
+    font-size: large;
+    max-width: 1265px;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+img{
+    width: 50%;
+    height: auto;
+    margin-top: 40px;
+    border: solid #69a4ef;
+    border-radius: 10px;
+}
