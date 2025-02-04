@@ -14,7 +14,7 @@
     <form id="formulario">
     <label for="matrix-size">Ingrese el tamaño de la matriz (mayor a 1):</label>
     <input type="number" id="matrix-size" min="2" placeholder="Ejemplo: 3">
-    <button onclick="generateMatrix()">Generar Matriz</button>
+    <button type="button" onclick="generateMatrix()">Generar Matriz</button>
 
         <div id="matrix-container" class="matrix-container"></div>
         <div class="actions hidden" id="calcular-actions">
@@ -49,7 +49,8 @@
             for (let i = 0; i < size; i++) {
                 for (let j = 0; j < size; j++) {
                     const input = document.createElement('input');
-                    input.type = 'number';
+                    input.type = 'number';  // 🔹 Ahora solo permite números
+                    input.step = 'any';      // 🔹 Permite números flotantes
                     input.placeholder = `(${i + 1},${j + 1})`;
                     input.className = 'matrix-input';
                     input.dataset.row = i;
