@@ -90,3 +90,40 @@ td {
     padding: 10px;
     text-align: center;
 }
+
+#ResultadoEliminacion{
+    font-family: "Exo 2", serif;
+    font-optical-sizing: auto;
+    font-weight:weight;
+    font-style:normal;
+    color: rgb(78, 15, 122);
+}
+
+.matrix-container {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));  /* Distribuye las columnas de forma uniforme */
+    gap: 10px;  /* Más espacio entre los inputs */
+    justify-content: center;  /* Centra la matriz */
+}
+
+/* Estilo para cada celda de la matriz */
+.matrix-container input {
+    width: 60px;
+    height: 40px;
+    text-align: center;  /* Centra el texto dentro del input */
+    border: 2px solid #851ce8;  /* Bordes en tono rosa/magenta */
+    border-radius: 8px;  /* Bordes redondeados */
+    background-color: #f9f9f9;  /* Fondo suave */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Sombra ligera */
+    font-size: 16px;
+    transition: all 0.3s ease;  /* Transición suave al interactuar */
+}
+
+/* Estilo al hacer focus en el input */
+.matrix-container input:focus {
+    border-color: #942de2;  /* Cambia el color del borde al morado */
+    box-shadow: 0 4px 8px rgba(160, 45, 226, 0.4);  /* Sombra morada al seleccionar */
+    outline: none;  /* Elimina el contorno predeterminado */
+    background-color: #fff;  /* Fondo blanco al seleccionar */
+}
