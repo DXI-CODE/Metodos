@@ -8,22 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-<<<<<<< HEAD:metodos-numericos/templates/interpolacion/lagrange.html
-    <header>
-        <h1>CALCULADORA DE MÉTODOS NUMÉRICOS</h1>
-        <nav>
-            <ul>
-                <li><a href="#interpolacion">Interpolación</a></li>
-                <li><a href="#ec_nolineales">Ecuaciones No Lineales</a></li>
-                <li><a href="#sistemas_ec">Sistemas de Ecuaciones</a></li>
-                <li><a href="#diferenciacion_integracion">Diferenciación e Integración</a></li>
-                <li><a href="#aproximacion">Aproximación</a></li>
-                <li><a href="#ecuaciones_diferenciales">Ecuaciones Diferenciales</a></li>
-            </ul>
-        </nav>
-    </header>
-=======
->>>>>>> 8cd3d04009d1801c434f0651e263d6c9c8d9352c:templates/interpolacion/lagrange.html
 
     <main>
         <section id="interpolacion">
@@ -80,7 +64,7 @@
                     document.getElementById('grafica').src = `data:image/png;base64,${result.grafico_base64}`;
                     document.getElementById('grafica').style.display = 'block';
                 } else {
-                    document.getElementById('error').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
+                    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${result.error}</p>`;
                 }
             } catch (error) {
                 document.getElementById('result').innerHTML = `<p style="color:red;">Error en la conexión con el servidor.</p><p>${error}</p>`;
