@@ -309,7 +309,7 @@ def runge_kutta_post():
 ##METODO DE SERIE DE TAYLOR
 @app.route('/serie-taylor', methods=['GET'])
 def calcular_taylor_get():
-    return render_template('series/serietaylor.html')
+    return render_template('series/SerieTaylor.html')
 @app.route('/serie-taylor', methods=['POST'])
 def calcular_taylor_post():
     datos = request.json
@@ -391,7 +391,7 @@ def metodo_punto_fijo():
 ##LINEALIZACION A RAZON DE CRECIMIENTO
 @app.route('/linealizacion-a-razon-crecimiento', methods=['GET'])
 def calcular_linealizacion_razon_crecimiento_get():
-    return render_template('Linealizacion/RazonCrecimiento.html')
+    return render_template('linealizacion/RazonCrecimiento.html')
 @app.route('/linealizacion-a-razon-crecimiento', methods=['POST'])
 def calcular_linealizacion_razon_crecimiento_post():
     try:
@@ -520,7 +520,7 @@ def calcular_metodo_euler_post():
 
 @app.route('/metodo-simpson-3_8', methods=['GET'])
 def metodo_simpson_38_get():
-    return render_template('Integracion/Simpson3-8.html')
+    return render_template('integracion/Simpson3-8.html')
 @app.route('/metodo-simpson-3_8', methods=['POST'])
 def metodo_simpson_38_post():
     try:
@@ -543,7 +543,7 @@ def metodo_simpson_38_post():
 ##REGRESION MULTILINEAL
 @app.route('/regresion-multilineal', methods=['GET'])
 def regresion_multilineal_get():
-    return render_template('Regresion/RegresionMultilineal.html')
+    return render_template('regresion/RegresionMultilineal.html')
 @app.route("/regresion-multilineal", methods=["POST"])
 def regresion_multilineal():
     data = request.get_json()  
@@ -578,7 +578,7 @@ def regresion_multilineal():
 
 @app.route('/simpson1_3', methods=['GET'])
 def calcular_simpson1_3_get():
-    return render_template('Integracion/Simpson1_3.html')
+    return render_template('integracion/Simpson1_3.html')
 @app.route('/simpson1_3', methods=['POST'])
 def calcular_simpson1_3_post():
     datos = request.json
@@ -634,7 +634,7 @@ def calcular_lagrange_post():
 
 @app.route('/exponencial', methods=['GET'])
 def calcular_exponencial_get():
-    return render_template('Linealizacion/Exponencial.html')
+    return render_template('linealizacion/Exponencial.html')
 @app.route('/exponencial', methods=['POST'])
 def calcular_exponencial_post():
     datos = request.json
@@ -662,7 +662,7 @@ def calcular_exponencial_post():
 
 @app.route('/potencial', methods=['GET'])
 def calcular_potencial_get():
-    return render_template('Linealizacion/Potencial.html')
+    return render_template('linealizacion/Potencial.html')
 @app.route('/potencial', methods=['POST'])
 def calcular_potencial_post():
     datos = request.json
@@ -685,7 +685,7 @@ def calcular_potencial_post():
 
 @app.route('/integracionmultiple', methods=['GET'])
 def calcular_integracionmultiple_get():
-    return render_template('Integracion/integracionmultiple.html')
+    return render_template('integracion/integracionmultiple.html')
 @app.route('/integracionmultiple', methods=['POST'])
 def calcular_integracionmultiple_post():
     datos = request.json
@@ -788,7 +788,7 @@ def calcular_interpolacionNewton_post():
 
 @app.route('/regresion_lineal', methods=['GET'])
 def calcular_regresion_get():
-    return render_template('Regresion/RegresionLineal.html')
+    return render_template('regresion/RegresionLineal.html')
 
 
 @app.route('/regresion_lineal', methods=['POST'])
@@ -810,7 +810,7 @@ def calcular_regresion_post():
 
 @app.route('/regresion_matrices', methods=['GET'])
 def calcular_regresionM_get():
-    return render_template('Regresion/MinimosCuadrados.html')
+    return render_template('regresion/MinimosCuadrados.html')
 
 
 
@@ -921,7 +921,7 @@ def biseccion_post():
 @app.route("/newton", methods=["GET", "POST"])
 def newton():
     if request.method == "GET":
-        return render_template("metodos_raices/newton.html")
+        return render_template("metodos_raices/Newton.html")
     elif request.method == "POST":
         datos = request.json
         x0 = float(datos["x0"])
