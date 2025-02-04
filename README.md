@@ -12,6 +12,14 @@ La página está desarrollada para resolver problemas referentes a los siguiente
 - Matrices
 - Linealización
 
+Tecnologías empleadas:
+- Python: Lenguaje de programación interpretado, sencillo y versátil.
+- HTML: Estructura web.
+- CSS: Estilo y diseño.
+- Flask: Microframework web en Python para aplicaciones ligeras.
+- Render: Plataforma en la nube para desplegar aplicaciones web.
+- MathJax: Biblioteca JavaScript para mostrar notación matemática en web.
+
 Desarrollado por:
 
 # DxiCode
