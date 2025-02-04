@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Covered+By+Your+Grace&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Mochiy+Pop+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    background: rgb(237, 232, 241);
+    margin: auto;
+}
+
+h1{
+  
+    font-family: "Exo 2", serif;
+    font-optical-sizing: auto;
+    font-weight:weight;
+    font-style:normal;
+    margin: 30px;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 3.7rem;
+    color: rgb(123, 13, 179);
+    
+}
+
+h2{
+    text-align: center;
+    font-size: large;
+    font-family: "Poppins", serif;
+    font-weight: bold;
+    font-style: normal;
+    color: #3b074e;
+    background-color:  rgb(237, 232, 241);
+    background: linear-gradient(to bottom, transparent 60%, #d9b5e8 60%); /* Color amarillo marcatexto */
+}
+
+p{
+    font-size: large;
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #4e0760;
+    padding: 6px 2;
+    text-align: center;
+    
+}
+
+section{
+    border: solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    position: relative;
+    padding: 15px;
+    gap: 10px;
+    border: 2px solid rgb(111, 17, 119);
+    border-radius: 5px;
+    box-shadow: 
+        0 0 10px rgb(198, 22, 221),
+        0 0 15px rgb(128, 16, 162),
+        0 0 25px rgb(218, 5, 255);
+    transition: 0.3s ease;
+}
+
+label{
+    font-size: large;
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #4e0760;
+    padding: 6px 2;
+}
+
+input{
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 5%;
+}
+
+button{
+    width: 50%;
+    font-size: medium;
+    color: white;
+    background: rgb(121, 16, 182);
+    border: solid #a116fd;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    /* Centrado horizontal */
+    display: block;  /* Asegura que el botón se comporte como un bloque */
+    margin: 0 auto;  /* Márgenes automáticos para centrar */
+}
+
+#seccionFuncion{
+    border: solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    position: relative;
+    padding: 15px;
+    gap: 10px;
+    border: 2px solid rgb(111, 17, 119);
+    border-radius: 5px;
+    box-shadow: 
+        0 0 10px rgb(198, 22, 221),
+        0 0 15px rgb(128, 16, 162),
+        0 0 25px rgb(218, 5, 255);
+    transition: 0.3s ease;
+}
+
+#funcion{
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 30%;
+}
+
+#valor{
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 30%;
+}
+
+#paso{
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 30%;
+}
+
+legend{
+    text-align: center;
+    font-size: large;
+    font-family: "Poppins", serif;
+    font-weight: bold;
+    font-style: normal;
+    color: #3b074e;
+    background-color:  rgb(237, 232, 241);
+    background: linear-gradient(to bottom, transparent 60%, #d9b5e8 60%); /* Color amarillo marcatexto */ 
+}
+
+.result {
+    display: none;
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    font-size: 16px;
+    background: rgb(237, 232, 241);
+    text-align: center;
+}
+
+strong{
+    text-align: center;
+    font-size: large;
+    font-family: "Poppins", serif;
+    font-weight: bold;
+    font-style: normal;
+    color: #3b074e;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    text-align: center;
+    font-size: large;
+    font-family: "Poppins", serif;
+    font-weight: bold;
+    font-style: normal;
+    color: #3b074e;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #ae3bf5;
+    color: white;
+}
+
+#cantidadDatos{
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 30%;
+}
+
+#valorDatos{
+    padding: 10px;
+    font-size: medium;
+    letter-spacing: 1px;
+    width: 30%;
+}
+
+#camposDatos{
+    display: flex;
+    justify-content: center;  /* Centra horizontalmente */
+    align-items: center;      /* Centra verticalmente */
+    height: 100%;             /* Ajusta esto según el espacio que necesites */
+    margin-top: 20px;         /* Puedes ajustar el margen superior si es necesario */
+}
+
+#camposDatos label {
+    font-weight: bold;
+    color: #6a1b9a;
+}
+
+#camposDatos input {
+    width: 80px;
+    padding: 5px;
+    border: 2px solid #8e24aa;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f8eaf6;
+    color: #4a148c;
+}
+
+#camposDatos input:focus {
+    outline: none;
+    border-color: #4a148c;
+    box-shadow: 0 0 5px #8e24aa;
+}
+
