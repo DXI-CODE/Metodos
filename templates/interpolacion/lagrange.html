@@ -12,27 +12,25 @@
 <body>
 
     <main>
+        <h1>Interpolación de Lagrange</h1>
         <section id="interpolacion">
-            <h2>Interpolación de Lagrange</h2>
             <p>Ingrese un conjunto de puntos (x, y) separados por comas:</p>
             <textarea id="input-points" placeholder="Ejemplo:\n1,2\n3,5\n9,5" rows="8"></textarea>
             <p>Ingrese el valor de x que se desea interpolar:</p>
             <input id="valorx" type="number" />
             <p>Ingrese el grado con el que se va a interpolar:</p>
-            <input id="grado" type="number" />
+            <input id="grado" type="number" /> <br>
             <button id="calculate-btn">Calcular</button>
-
-            <h3>Resultado:</h3>
-            <div id="result">
-                <p>El resultado aparecerá aquí.</p>
-            </div>
-            <img id="grafica" alt="Gráfica del método de interpolación de lagrange" style="display:none;">
         </section>
+        <br>
+        <br>
+            <h2>Resultado:</h2>
+            <div id="result">
+            </div>
+            <br>
+            <img id="grafica" alt="Gráfica del método de interpolación de lagrange" style="display:none;">
     </main>
 
-    <footer>
-        <p>© 2025 Calculadora de Métodos Numéricos. Todos los derechos reservados.</p>
-    </footer>
 
     <script>
         document.getElementById('calculate-btn').addEventListener('click', async () => {

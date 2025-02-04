@@ -200,12 +200,18 @@ th {
     width: 30%;
 }
 
-#camposDatos{
+#camposDatos {
     display: flex;
-    justify-content: center;  /* Centra horizontalmente */
-    align-items: center;      /* Centra verticalmente */
-    height: 100%;             /* Ajusta esto según el espacio que necesites */
-    margin-top: 20px;         /* Puedes ajustar el margen superior si es necesario */
+    flex-direction: column;  /* Organiza los elementos en columna */
+    gap: 10px;               /* Espaciado entre los campos */
+    align-items: flex-start; /* Alinea los campos a la izquierda */
+    background-color: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #7e57c2;
+    max-width: 300px;        /* Ajusta el ancho para que luzca como lista */
+    margin: 0 auto;          /* Centra horizontalmente el contenedor */
 }
 
 #camposDatos label {
@@ -214,7 +220,7 @@ th {
 }
 
 #camposDatos input {
-    width: 80px;
+    width: 100px;
     padding: 5px;
     border: 2px solid #8e24aa;
     border-radius: 5px;
