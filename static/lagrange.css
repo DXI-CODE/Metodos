@@ -29,7 +29,7 @@ h2{
     font-weight: bold;
     font-style: normal;
     color: #074e20;
-    background-color:  rgb(237, 245, 239);
+    background-color:  rgb(232, 241, 233);
 }
 
 #interpolacion{
@@ -37,7 +37,7 @@ h2{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30%;
+    width: 40%;
     position: relative;
     padding: 15px;
     gap: 10px;
@@ -65,6 +65,7 @@ p{
     font-family: "Poppins", serif;
     font-weight: 500;
     font-style: normal;
+    width: 60%;
 }
 
 input{
@@ -79,8 +80,8 @@ input{
 }
 
 
-#btn2{
-    width: 80%;
+button{
+    width: 30%;
     font-size: medium;
     color: white;
     background: rgb(90, 145, 103);
@@ -95,16 +96,6 @@ input{
 
 }
 
-#btn1{
-    width: 35%;
-    font-size: medium;
-    color: white;
-    background: rgb(90, 145, 103);
-    border: solid #1ce837;
-    padding: 6px;
-    border-radius: 6px;
-    cursor: pointer;
-}
 
 #input-container table {
     width: 100%;
@@ -135,23 +126,21 @@ input{
     color: white;
 }
 
-#resultado {
-    background-color: rgb(237, 245, 239); /* Fondo suave para la sección */
-    
-   
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+#result {
+    background-color: rgb(232, 241, 233); /* Fondo suave para la sección */
     color: #00661b;
+
 }
 
-#resultado p {
+#result pre{
     text-align: center;
     color: #00661b;
     margin-bottom: 15px;
-    background-color:  rgb(237, 245, 239);
+    background-color: rgb(232, 241, 233);
     text-align: center;
     font-size:large;
     font-family: "Poppins", serif;
-    font-weight: 500;
+    font-weight: bold;
     font-style: normal;
 }
 
