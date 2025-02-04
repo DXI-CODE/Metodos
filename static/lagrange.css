@@ -58,6 +58,7 @@ p{
     color: #074e2e;
     background: linear-gradient(to bottom, transparent 60%, #b5e8be 60%); /* Color amarillo marcatexto */
     padding: 6px 2;
+    text-align: center;
 }
 
 #input-points{
