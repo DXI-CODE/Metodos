@@ -36,8 +36,11 @@
     <br>
     <script>
         function agregarFila() {
+            
             const tabla = document.getElementById('tabla-datos');
             const fila = document.createElement('tr');
+
+            tabla.style.display = 'table'
 
             fila.innerHTML = `
                 <td><input type="number" class="input-x" step="any" required></td>

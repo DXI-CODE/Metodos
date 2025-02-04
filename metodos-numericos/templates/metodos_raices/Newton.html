@@ -10,8 +10,9 @@
         
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("newton-form").addEventListener("submit", async function(event) {
+                
                 event.preventDefault();
-
+                
                 const datos = {
                     x0: parseFloat(document.getElementById("x0").value),
                     tol: parseFloat(document.getElementById("tol").value),
@@ -67,6 +68,7 @@
             <div class="form-group">
                 <label for="max_iter">Máx. Iteraciones:</label>
                 <input type="number" id="max_iter" required><br>
+                <p id="errorI"></p> 
             </div>
 
             <button id="mostrar" type="submit">Calcular</button>
@@ -99,11 +101,42 @@
     </div>
     <br>
 </body>
-    <script>
-        document.getElementById("mostrar").addEventListener("click", function() {
-            let elemento = document.getElementById("resultados");
-            elemento.style.display = "grid"; // Cambia a display grid
-        });
-    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let numero_i = document.getElementById('max_iter');
+        let equis = document.getElementById('x0');
+        let tole = document.getElementById('tol');
+        let errorN = document.getElementById('errorI');
+        let mostrarBtn = document.getElementById("mostrar");
+        let resultados = document.getElementById("resultados");
+
+        function validarFormulario() {
+            let valido = true;
+
+            if (numero_i.value <= 0) {
+                errorN.innerText = 'Por favor, ingrese un número mayor a 0';
+                valido = false;
+            } else {
+                errorN.innerText = ''; // Borra el mensaje de error si el valor es válido
+            }
+
+            // Si todos los campos están llenos y la validación es correcta, mostrar el botón
+            if (numero_i.value !== '' && equis.value !== '' && tole.value !== '' && valido) {
+                mostrarBtn.addEventListener("click", function () {
+                    resultados.style.display = "grid"; // Mostrar resultados
+                });
+            }
+        }
+
+        // Ejecutar la validación cada vez que los valores cambien
+        numero_i.addEventListener("input", validarFormulario);
+        equis.addEventListener("input", validarFormulario);
+        tole.addEventListener("input", validarFormulario);
+
+        // Ejecutar la validación una vez al cargar la página
+        validarFormulario();
+    });
+</script>
+
 
 </html>

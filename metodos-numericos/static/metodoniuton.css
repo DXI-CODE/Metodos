@@ -113,6 +113,11 @@ h3 {
     text-align: center;
 }
 
+#errorI{
+    color: red;
+    font-family: "Poppins", serif;
+}
+
 h3 {
     font-weight: 400;
     font-size: large;
