@@ -8,9 +8,11 @@ def lagrange(puntos, grado, x):
     
     if(grado < 1 or grado > 4):
         raise ValueError('Elige un grado entre 1 y 4.')
+    
+    puntos_ord = sorted(puntos)
 
-    x_vals = np.array([p[0] for p in puntos])
-    y_vals = np.array([p[1] for p in puntos])
+    x_vals = np.array([p[0] for p in puntos_ord])
+    y_vals = np.array([p[1] for p in puntos_ord])
 
     if len(set(x_vals)) != len(x_vals):
         raise ValueError('Los valores de X deben ser únicos.')
@@ -27,8 +29,9 @@ def lagrange(puntos, grado, x):
         sum += product
 
     try:
+        
         fig, ax = plt.subplots()
-        ax.plot([fila[0] for fila in puntos], [fila[1] for fila in puntos], marker='o', linewidth=0.2, label="Puntos originales")
+        ax.plot([fila[0] for fila in puntos_ord], [fila[1] for fila in puntos_ord], marker='o', linewidth=0.2, label="Puntos originales")
         ax.plot(x, sum, marker='o' ,label=f'Resultado obtenido con interpolación de grado {grado}')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
@@ -40,7 +43,6 @@ def lagrange(puntos, grado, x):
         img.seek(0)
         grafico_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
         plt.close(fig)
-        print("Gráfica generada correctamente.")
     except Exception as e:
         print(f"Error al generar la gráfica: {e}")
         grafico_base64 = None
